@@ -1,0 +1,19 @@
+query login($data: LoginUserInput!){
+  login(data: $data){
+    access_token,
+    expiresAt,
+    user{
+      id
+      email
+      username
+      language
+      walletAddress
+      watch{
+        id,
+        serialNum
+        metadataURI
+        ownerId
+      },
+    }
+  }
+}

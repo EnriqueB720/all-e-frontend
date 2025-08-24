@@ -7,10 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "generate-graphql-schema": "graphql-codegen --config codegen.yml -r dotenv/config"
+    "generate-graphql-schema": "graphql-codegen"
   },
   "dependencies": {
-    "@apollo/client": "^4.0.0",
+    "@apollo/client": "^3.9.11",
     "@chakra-ui/react": "^3.25.0",
     "formik": "^2.4.6",
     "next": "15.5.0",
@@ -21,6 +21,12 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@graphql-codegen/cli": "^3.3.1",
+    "@graphql-codegen/client-preset": "^4.8.3",
+    "@graphql-codegen/introspection": "^3.0.1",
+    "@graphql-codegen/typescript": "^3.0.4",
+    "@graphql-codegen/typescript-operations": "^3.0.4",
+    "@graphql-codegen/typescript-react-apollo": "^3.3.7",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
