@@ -177,14 +177,14 @@ export type LoginQueryVariables = Exact<{
 }>;
 
 
-export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, walletAddress: string, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: number | null, metadataURI?: string | null, ownerId: number }> | null } } };
+export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, walletAddress: string, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: number | null, metadataURI?: string | null, ownerId: number, lastSynced: any }> | null } } };
 
 export type RefreshUserQueryVariables = Exact<{
   data: Scalars['String'];
 }>;
 
 
-export type RefreshUserQuery = { __typename?: 'Query', refreshUser: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, walletAddress: string, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: number | null, metadataURI?: string | null, ownerId: number }> | null } } };
+export type RefreshUserQuery = { __typename?: 'Query', refreshUser: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, walletAddress: string, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: number | null, metadataURI?: string | null, ownerId: number, lastSynced: any }> | null } } };
 
 export type SignupMutationVariables = Exact<{
   data: SignUpInput;
@@ -204,12 +204,14 @@ export const LoginDocument = gql`
       email
       username
       language
+      createdAt
       walletAddress
       watch {
         id
         serialNum
         metadataURI
         ownerId
+        lastSynced
       }
     }
   }
@@ -253,12 +255,14 @@ export const RefreshUserDocument = gql`
       email
       username
       language
+      createdAt
       walletAddress
       watch {
         id
         serialNum
         metadataURI
         ownerId
+        lastSynced
       }
     }
   }

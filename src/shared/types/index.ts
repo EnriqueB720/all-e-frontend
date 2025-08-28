@@ -7,3 +7,4 @@ export type {
 }
 
 export * from './global-states.type';
+export * from './auth-provider.type';

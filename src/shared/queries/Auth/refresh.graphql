@@ -7,12 +7,14 @@ query refreshUser($data: String!){
       email
       username
       language
+      createdAt
       walletAddress
       watch{
         id,
         serialNum
         metadataURI
         ownerId
+        lastSynced
       },
     }
   }

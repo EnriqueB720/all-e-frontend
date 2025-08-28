@@ -7,12 +7,14 @@ query login($data: LoginUserInput!){
       email
       username
       language
+      createdAt
       walletAddress
       watch{
         id,
         serialNum
         metadataURI
         ownerId
+        lastSynced
       },
     }
   }
