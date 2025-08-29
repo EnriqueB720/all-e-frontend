@@ -1,10 +1,8 @@
-import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import { ChakraProvider, defaultSystem } from '@chakra-ui/react'
 import AuthProvider from '@/shared/contexts/auth.provider'
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
 import { ApolloProvider } from "@apollo/client/react";
-import { RecoilRoot } from 'recoil'
 
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -13,14 +11,12 @@ export default function App({ Component, pageProps }: AppProps) {
     cache: new InMemoryCache(),
   });
 
-  return <RecoilRoot>
-    <ChakraProvider value={defaultSystem}>
+  return <ChakraProvider value={defaultSystem}>
       <ApolloProvider client={client}>
         <AuthProvider>
           <Component {...pageProps} />
         </AuthProvider>
       </ApolloProvider>
     </ChakraProvider>
-  </RecoilRoot>
 
 }

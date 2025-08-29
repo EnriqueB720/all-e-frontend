@@ -55,6 +55,12 @@
       ],
       "@organisms":[
         "src/shared/components/organisms/index"
+      ],
+      "@templates":[
+        "src/shared/components/templates/index"
+      ],
+      "@hooks":[
+        "src/shared/hooks/index"
       ]
     }
   },

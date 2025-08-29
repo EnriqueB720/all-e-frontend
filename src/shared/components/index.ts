@@ -11,6 +11,11 @@ import {
   Form,
   PasswordInput } from "@molecules";
 
+
+import {
+  Layout
+} from '@templates'
+
 export {
   Button,
   Box,
@@ -20,5 +25,6 @@ export {
   Input,
   IconButton,
   Icon,
-  PasswordInput
+  PasswordInput,
+  Layout
 }

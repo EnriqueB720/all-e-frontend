@@ -8,7 +8,7 @@ import { AuthService } from '@services';
 import { AuthProviderProps } from '@types';
 import { useLoginLazyQuery, useSignupMutation, useRefreshUserLazyQuery } from '@generated';
 import { StorageService } from '@services';
-import { useTranslation } from '../hooks';
+import { useTranslation } from '@hooks';
 
 
 const AuthProvider: FC<AuthProviderProps> = ({ children }) => {

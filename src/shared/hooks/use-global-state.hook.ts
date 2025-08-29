@@ -1,11 +1,12 @@
-import { useRecoilState } from 'recoil';
-
+import { useAtom } from 'jotai';
+import { languageState, userState } from '../jotai/index';
 import { GlobalState } from '@constants';
 
-import { RecoilStateDictionary } from '../recoil';
-
-const useGlobalState = <T>(state: GlobalState) => {
-  return useRecoilState<T>(RecoilStateDictionary[state] as any);
+const AtomDictionary = {
+  [GlobalState.LANGUAGE]: languageState,
+  [GlobalState.USER]: userState,
 };
 
-export default useGlobalState;
+export const useGlobalState = (key: GlobalState) => {
+  return useAtom(AtomDictionary[key]) as any;
+};

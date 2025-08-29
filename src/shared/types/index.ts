@@ -6,7 +6,6 @@ export type {
   Dictionary
 }
 
-export * from './global-states.type';
 export * from './auth-provider.type';
 export * from './box.type';
 export * from './button.type';

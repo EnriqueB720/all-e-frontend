@@ -2,7 +2,7 @@ import { Language } from '@generated';
 
 export * from './global-state.constant';
 
-const DEFAULT_LANGUAGE: Language = Language.Spanish;
+const DEFAULT_LANGUAGE: Language = Language.English;
 const PARAM: string = '';
 
 const Constants = {
