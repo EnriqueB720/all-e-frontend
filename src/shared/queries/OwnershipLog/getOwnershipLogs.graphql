@@ -1,0 +1,8 @@
+query getOwnershipLogs($where: OwnershipLogWhereInput!) {
+  OwnershipLogs(where: $where) {
+    id
+    ownerId
+    watchId
+    timestamp
+  }
+}

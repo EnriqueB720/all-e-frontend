@@ -147,7 +147,7 @@ export type Watch = {
   metadataURI?: Maybe<Scalars['String']>;
   ownerId: Scalars['Float'];
   ownershipLog?: Maybe<Array<OwnershipLog>>;
-  serialNum?: Maybe<Scalars['Float']>;
+  serialNum?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
 };
 
@@ -155,7 +155,7 @@ export type WatchCreateInput = {
   lastSynced: Scalars['DateTime'];
   metadataURI?: InputMaybe<Scalars['String']>;
   ownerId: Scalars['Int'];
-  serialNum?: InputMaybe<Scalars['Int']>;
+  serialNum?: InputMaybe<Scalars['String']>;
 };
 
 export type WatchUpdateInput = {
@@ -163,13 +163,13 @@ export type WatchUpdateInput = {
   lastSynced: Scalars['DateTime'];
   metadataURI: Scalars['String'];
   ownerId: Scalars['Int'];
-  serialNum: Scalars['Int'];
+  serialNum: Scalars['String'];
 };
 
 export type WatchWhereInput = {
   id: Scalars['Int'];
   ownerId: Scalars['Int'];
-  serialNum?: InputMaybe<Scalars['Int']>;
+  serialNum?: InputMaybe<Scalars['String']>;
 };
 
 export type LoginQueryVariables = Exact<{
@@ -177,14 +177,14 @@ export type LoginQueryVariables = Exact<{
 }>;
 
 
-export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, walletAddress: string, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: number | null, metadataURI?: string | null, ownerId: number, lastSynced: any }> | null } } };
+export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, walletAddress: string, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, ownerId: number, lastSynced: any }> | null } } };
 
 export type RefreshUserQueryVariables = Exact<{
   data: Scalars['String'];
 }>;
 
 
-export type RefreshUserQuery = { __typename?: 'Query', refreshUser: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, walletAddress: string, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: number | null, metadataURI?: string | null, ownerId: number, lastSynced: any }> | null } } };
+export type RefreshUserQuery = { __typename?: 'Query', refreshUser: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, walletAddress: string, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, ownerId: number, lastSynced: any }> | null } } };
 
 export type SignupMutationVariables = Exact<{
   data: SignUpInput;
@@ -192,6 +192,41 @@ export type SignupMutationVariables = Exact<{
 
 
 export type SignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'User', email: string, id: number } };
+
+export type GetOwnershipLogsQueryVariables = Exact<{
+  where: OwnershipLogWhereInput;
+}>;
+
+
+export type GetOwnershipLogsQuery = { __typename?: 'Query', OwnershipLogs: Array<{ __typename?: 'OwnershipLog', id: number, ownerId: number, watchId: number, timestamp: any }> };
+
+export type GetUserQueryVariables = Exact<{
+  where: UserWhereInput;
+}>;
+
+
+export type GetUserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, email: string, username: string, walletAddress: string, createdAt: any, language: Language, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, ownerId: number, lastSynced: any }> | null } };
+
+export type ChangeWatchOwnershipMutationVariables = Exact<{
+  data: WatchUpdateInput;
+}>;
+
+
+export type ChangeWatchOwnershipMutation = { __typename?: 'Mutation', changeWatchOwnership: { __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, ownerId: number, lastSynced: any } };
+
+export type CreateWatchMutationVariables = Exact<{
+  data: WatchCreateInput;
+}>;
+
+
+export type CreateWatchMutation = { __typename?: 'Mutation', createWatch: { __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, ownerId: number, lastSynced: any } };
+
+export type GetWatchQueryVariables = Exact<{
+  where: WatchWhereInput;
+}>;
+
+
+export type GetWatchQuery = { __typename?: 'Query', watch: { __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, ownerId: number, lastSynced: any, user?: { __typename?: 'User', id: number, username: string, email: string, walletAddress: string } | null, ownershipLog?: Array<{ __typename?: 'OwnershipLog', id: number, ownerId: number, timestamp: any }> | null } };
 
 
 export const LoginDocument = gql`
@@ -330,3 +365,212 @@ export function useSignupMutation(baseOptions?: Apollo.MutationHookOptions<Signu
 export type SignupMutationHookResult = ReturnType<typeof useSignupMutation>;
 export type SignupMutationResult = Apollo.MutationResult<SignupMutation>;
 export type SignupMutationOptions = Apollo.BaseMutationOptions<SignupMutation, SignupMutationVariables>;
+export const GetOwnershipLogsDocument = gql`
+    query getOwnershipLogs($where: OwnershipLogWhereInput!) {
+  OwnershipLogs(where: $where) {
+    id
+    ownerId
+    watchId
+    timestamp
+  }
+}
+    `;
+
+/**
+ * __useGetOwnershipLogsQuery__
+ *
+ * To run a query within a React component, call `useGetOwnershipLogsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOwnershipLogsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOwnershipLogsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetOwnershipLogsQuery(baseOptions: Apollo.QueryHookOptions<GetOwnershipLogsQuery, GetOwnershipLogsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOwnershipLogsQuery, GetOwnershipLogsQueryVariables>(GetOwnershipLogsDocument, options);
+      }
+export function useGetOwnershipLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOwnershipLogsQuery, GetOwnershipLogsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOwnershipLogsQuery, GetOwnershipLogsQueryVariables>(GetOwnershipLogsDocument, options);
+        }
+export type GetOwnershipLogsQueryHookResult = ReturnType<typeof useGetOwnershipLogsQuery>;
+export type GetOwnershipLogsLazyQueryHookResult = ReturnType<typeof useGetOwnershipLogsLazyQuery>;
+export type GetOwnershipLogsQueryResult = Apollo.QueryResult<GetOwnershipLogsQuery, GetOwnershipLogsQueryVariables>;
+export const GetUserDocument = gql`
+    query getUser($where: UserWhereInput!) {
+  user(where: $where) {
+    id
+    email
+    username
+    walletAddress
+    createdAt
+    language
+    watch {
+      id
+      serialNum
+      metadataURI
+      ownerId
+      lastSynced
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUserQuery__
+ *
+ * To run a query within a React component, call `useGetUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetUserQuery(baseOptions: Apollo.QueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
+      }
+export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
+        }
+export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
+export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
+export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;
+export const ChangeWatchOwnershipDocument = gql`
+    mutation changeWatchOwnership($data: WatchUpdateInput!) {
+  changeWatchOwnership(data: $data) {
+    id
+    serialNum
+    metadataURI
+    ownerId
+    lastSynced
+  }
+}
+    `;
+export type ChangeWatchOwnershipMutationFn = Apollo.MutationFunction<ChangeWatchOwnershipMutation, ChangeWatchOwnershipMutationVariables>;
+
+/**
+ * __useChangeWatchOwnershipMutation__
+ *
+ * To run a mutation, you first call `useChangeWatchOwnershipMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeWatchOwnershipMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeWatchOwnershipMutation, { data, loading, error }] = useChangeWatchOwnershipMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useChangeWatchOwnershipMutation(baseOptions?: Apollo.MutationHookOptions<ChangeWatchOwnershipMutation, ChangeWatchOwnershipMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangeWatchOwnershipMutation, ChangeWatchOwnershipMutationVariables>(ChangeWatchOwnershipDocument, options);
+      }
+export type ChangeWatchOwnershipMutationHookResult = ReturnType<typeof useChangeWatchOwnershipMutation>;
+export type ChangeWatchOwnershipMutationResult = Apollo.MutationResult<ChangeWatchOwnershipMutation>;
+export type ChangeWatchOwnershipMutationOptions = Apollo.BaseMutationOptions<ChangeWatchOwnershipMutation, ChangeWatchOwnershipMutationVariables>;
+export const CreateWatchDocument = gql`
+    mutation createWatch($data: WatchCreateInput!) {
+  createWatch(data: $data) {
+    id
+    serialNum
+    metadataURI
+    ownerId
+    lastSynced
+  }
+}
+    `;
+export type CreateWatchMutationFn = Apollo.MutationFunction<CreateWatchMutation, CreateWatchMutationVariables>;
+
+/**
+ * __useCreateWatchMutation__
+ *
+ * To run a mutation, you first call `useCreateWatchMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateWatchMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createWatchMutation, { data, loading, error }] = useCreateWatchMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateWatchMutation(baseOptions?: Apollo.MutationHookOptions<CreateWatchMutation, CreateWatchMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateWatchMutation, CreateWatchMutationVariables>(CreateWatchDocument, options);
+      }
+export type CreateWatchMutationHookResult = ReturnType<typeof useCreateWatchMutation>;
+export type CreateWatchMutationResult = Apollo.MutationResult<CreateWatchMutation>;
+export type CreateWatchMutationOptions = Apollo.BaseMutationOptions<CreateWatchMutation, CreateWatchMutationVariables>;
+export const GetWatchDocument = gql`
+    query getWatch($where: WatchWhereInput!) {
+  watch(where: $where) {
+    id
+    serialNum
+    metadataURI
+    ownerId
+    lastSynced
+    user {
+      id
+      username
+      email
+      walletAddress
+    }
+    ownershipLog {
+      id
+      ownerId
+      timestamp
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetWatchQuery__
+ *
+ * To run a query within a React component, call `useGetWatchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWatchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWatchQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetWatchQuery(baseOptions: Apollo.QueryHookOptions<GetWatchQuery, GetWatchQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetWatchQuery, GetWatchQueryVariables>(GetWatchDocument, options);
+      }
+export function useGetWatchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWatchQuery, GetWatchQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetWatchQuery, GetWatchQueryVariables>(GetWatchDocument, options);
+        }
+export type GetWatchQueryHookResult = ReturnType<typeof useGetWatchQuery>;
+export type GetWatchLazyQueryHookResult = ReturnType<typeof useGetWatchLazyQuery>;
+export type GetWatchQueryResult = Apollo.QueryResult<GetWatchQuery, GetWatchQueryVariables>;

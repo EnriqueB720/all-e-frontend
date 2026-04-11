@@ -1,0 +1,9 @@
+mutation createWatch($data: WatchCreateInput!) {
+  createWatch(data: $data) {
+    id
+    serialNum
+    metadataURI
+    ownerId
+    lastSynced
+  }
+}

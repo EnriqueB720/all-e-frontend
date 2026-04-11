@@ -1,0 +1,9 @@
+mutation changeWatchOwnership($data: WatchUpdateInput!) {
+  changeWatchOwnership(data: $data) {
+    id
+    serialNum
+    metadataURI
+    ownerId
+    lastSynced
+  }
+}

@@ -1,0 +1,17 @@
+query getUser($where: UserWhereInput!) {
+  user(where: $where) {
+    id
+    email
+    username
+    walletAddress
+    createdAt
+    language
+    watch {
+      id
+      serialNum
+      metadataURI
+      ownerId
+      lastSynced
+    }
+  }
+}
