@@ -14,6 +14,7 @@ import { useTranslation } from '@hooks';
 const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [error, setError] = useState<string | undefined>(undefined);
 
   const client = useApolloClient();
 
@@ -41,11 +42,16 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
   }, []);
 
+  const clearError = useCallback(() => {
+    setError(undefined);
+  }, []);
+
   const login = useCallback(async ({ credentials }: AuthCredentials): Promise<boolean> => {
     try {
       const { email, password } = credentials;
 
       setIsLoading(true);
+      setError(undefined);
 
       let { data, error } = await loginQuery({
         variables: {
@@ -58,6 +64,8 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
       if (error) {
         setIsLoading(false);
+        const message = error.message || 'Login failed';
+        setError(message);
         return false;
       }
 
@@ -75,13 +83,15 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
     } catch (error: any) {
       setIsLoading(false);
+      setError(error.message || 'Login failed');
       return false;
     }
   }, [loginQuery, setIsLoading, setIsAuthenticated, setUser]);
 
-  const register = useCallback(async ({ data }: SignUpUser) => {
+  const register = useCallback(async ({ data }: SignUpUser): Promise<boolean> => {
     try {
       setIsLoading(true);
+      setError(undefined);
 
       let result = await signupQuery({
         variables: {
@@ -90,13 +100,19 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       });
 
       if (result.errors) {
-        console.log(result.errors);
-      }else{
+        const message = result.errors.map(e => e.message).join(', ');
+        setError(message);
         setIsLoading(false);
+        return false;
       }
+
+      setIsLoading(false);
+      return true;
 
     } catch (error: any) {
       setIsLoading(false);
+      setError(error.message || 'Registration failed');
+      return false;
     }
   }, [signupQuery, setIsLoading]);
 
@@ -151,10 +167,12 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         user,
         isLoading,
         isAuthenticated,
+        error,
         login,
         register,
         logout,
-        refreshUserToken
+        refreshUserToken,
+        clearError
       }}
     >
       {children}
