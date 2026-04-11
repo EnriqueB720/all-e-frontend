@@ -1,0 +1,20 @@
+query getWatches($where: WatchWhereInput!) {
+  watches(where: $where) {
+    id
+    serialNum
+    metadataURI
+    ownerId
+    lastSynced
+    user {
+      id
+      username
+      email
+      walletAddress
+    }
+    ownershipLog {
+      id
+      ownerId
+      timestamp
+    }
+  }
+}

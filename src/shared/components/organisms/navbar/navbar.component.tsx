@@ -1,7 +1,18 @@
 import * as React from 'react';
 import { useContext } from 'react';
 import { useRouter } from 'next/router';
-import { Heading, Text } from '@chakra-ui/react';
+import {
+  Heading,
+  Text,
+  Separator,
+  PopoverRoot,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverPositioner,
+  PopoverArrow,
+  PopoverArrowTip,
+} from '@chakra-ui/react';
+import { useColorMode } from '@/shared/contexts/color-mode.context';
 import NextLink from 'next/link';
 
 import { AuthContext } from '@contexts';
@@ -12,6 +23,7 @@ import { Language } from '@generated';
 const Navbar: React.FC = () => {
   const { isAuthenticated, user, logout } = useContext(AuthContext);
   const { t, language, switchLanguage } = useTranslation();
+  const { colorMode, toggleColorMode } = useColorMode();
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -25,7 +37,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <Box bg="gray.800" px={6} py={3} boxShadow="md">
+    <Box bg={{ base: 'white', _dark: 'gray.800' }} px={6} py={3} boxShadow="md">
       <Flex justify="space-between" align="center" maxW="1200px" mx="auto">
         <NextLink href="/">
           <Heading size="md" color="#00a884" cursor="pointer">
@@ -37,23 +49,78 @@ const Navbar: React.FC = () => {
           {isAuthenticated ? (
             <>
               <NextLink href="/">
-                <Text color="gray.300" _hover={{ color: 'white' }} cursor="pointer" fontSize="sm">
+                <Text color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
                   Dashboard
                 </Text>
               </NextLink>
               <NextLink href="/register-watch">
-                <Text color="gray.300" _hover={{ color: 'white' }} cursor="pointer" fontSize="sm">
+                <Text color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
                   {t('registerAWatchButton')}
                 </Text>
               </NextLink>
               <NextLink href="/transfer-watch">
-                <Text color="gray.300" _hover={{ color: 'white' }} cursor="pointer" fontSize="sm">
+                <Text color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
                   {t('transferAWatchButton')}
                 </Text>
               </NextLink>
-              <Text color="gray.400" fontSize="sm">
-                {user?.username}
-              </Text>
+               <NextLink href="/check-ownership">
+                <Text color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
+                  Check Ownership
+                </Text>
+              </NextLink>
+
+              <PopoverRoot>
+                <PopoverTrigger asChild>
+                  <Text
+                    color={{ base: 'gray.500', _dark: 'gray.400' }}
+                    fontSize="sm"
+                    cursor="pointer"
+                    _hover={{ color: '#00a884' }}
+                  >
+                    {user?.username}
+                  </Text>
+                </PopoverTrigger>
+                <PopoverPositioner>
+                  <PopoverContent
+                    bg={{ base: 'white', _dark: 'gray.700' }}
+                    borderColor={{ base: 'gray.200', _dark: 'gray.600' }}
+                    p={4}
+                    borderRadius="lg"
+                    boxShadow="lg"
+                    minW="250px"
+                  >
+                    <PopoverArrow>
+                      <PopoverArrowTip />
+                    </PopoverArrow>
+                    <Flex direction="column" gap={3}>
+                      <Text color={{ base: 'gray.900', _dark: 'white' }} fontWeight="bold" fontSize="md">
+                        {user?.username}
+                      </Text>
+
+                      <Separator borderColor={{ base: 'gray.200', _dark: 'gray.600' }} />
+
+                      <Flex direction="column" gap={1}>
+                        <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="xs" fontWeight="medium">
+                          Email
+                        </Text>
+                        <Text color={{ base: 'gray.700', _dark: 'gray.200' }} fontSize="sm">
+                          {user?.email}
+                        </Text>
+                      </Flex>
+
+                      <Flex direction="column" gap={1}>
+                        <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="xs" fontWeight="medium">
+                          Wallet
+                        </Text>
+                        <Text color={{ base: 'gray.700', _dark: 'gray.200' }} fontSize="sm" fontFamily="mono" wordBreak="break-all">
+                          {user?.data.walletAddress}
+                        </Text>
+                      </Flex>
+                    </Flex>
+                  </PopoverContent>
+                </PopoverPositioner>
+              </PopoverRoot>
+
               <Button
                 size="sm"
                 variant="outline"
@@ -82,8 +149,21 @@ const Navbar: React.FC = () => {
           <Button
             size="sm"
             variant="ghost"
-            color="gray.300"
-            _hover={{ color: 'white', bg: 'gray.700' }}
+            color={{ base: 'gray.600', _dark: 'gray.300' }}
+            _hover={{ color: { base: 'gray.900', _dark: 'white' }, bg: { base: 'gray.100', _dark: 'gray.700' } }}
+            onClick={toggleColorMode}
+            fontWeight="bold"
+            minW="auto"
+            px={2}
+          >
+            {colorMode === 'light' ? 'Dark' : 'Light'}
+          </Button>
+
+          <Button
+            size="sm"
+            variant="ghost"
+            color={{ base: 'gray.600', _dark: 'gray.300' }}
+            _hover={{ color: { base: 'gray.900', _dark: 'white' }, bg: { base: 'gray.100', _dark: 'gray.700' } }}
             onClick={handleLanguageToggle}
             fontWeight="bold"
             minW="auto"

@@ -16,10 +16,10 @@ export default function Home() {
     return (
       <Layout>
         <Flex direction="column" align="center" justify="center" minH="70vh" gap={6}>
-          <Heading size="2xl" color="white" textAlign="center">
+          <Heading size="2xl" color={{ base: 'gray.900', _dark: 'white' }} textAlign="center">
             {t('frontPage.title')}
           </Heading>
-          <Text color="gray.400" fontSize="lg" textAlign="center" maxW="600px">
+          <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="lg" textAlign="center" maxW="600px">
             {t('frontPage.description')}
           </Text>
           <Flex gap={4}>
@@ -44,7 +44,7 @@ export default function Home() {
   return (
     <Layout>
       <Flex justify="space-between" align="center" mb={6}>
-        <Heading size="lg" color="white">
+        <Heading size="lg" color={{ base: 'gray.900', _dark: 'white' }}>
           {t('frontPage.title')}
         </Heading>
         <NextLink href="/register-watch">
@@ -62,7 +62,7 @@ export default function Home() {
           minH="40vh"
           gap={4}
         >
-          <Text color="gray.500" fontSize="lg">
+          <Text color={{ base: 'gray.500', _dark: 'gray.500' }} fontSize="lg">
             {t('dashboard.noWatches')}
           </Text>
           <NextLink href="/register-watch">
@@ -76,22 +76,23 @@ export default function Home() {
           {watches.map((watch) => (
             <Box
               key={watch.id}
-              bg="gray.800"
+              bg={{ base: 'white', _dark: 'gray.800' }}
               p={5}
               borderRadius="lg"
               cursor="pointer"
-              _hover={{ bg: 'gray.700', transform: 'translateY(-2px)' }}
+              _hover={{ bg: { base: 'gray.100', _dark: 'gray.700' }, transform: 'translateY(-2px)' }}
               transition="all 0.2s"
+              boxShadow={{ base: 'sm', _dark: 'none' }}
               onClick={() => router.push(`/watch/${watch.data.serialNum}`)}
             >
               <Flex justify="space-between" align="center" mb={3}>
-                <Text color="white" fontWeight="bold" fontSize="lg">
+                <Text color={{ base: 'gray.900', _dark: 'white' }} fontWeight="bold" fontSize="lg">
                   #{watch.serialNum}
                 </Text>
                 <Badge colorPalette="green">{t('dashboard.owned')}</Badge>
               </Flex>
               {watch.metadataURI && (
-                <Text color="gray.500" fontSize="xs" truncate>
+                <Text color={{ base: 'gray.500', _dark: 'gray.500' }} fontSize="xs" truncate>
                   IPFS: {watch.metadataURI}
                 </Text>
               )}

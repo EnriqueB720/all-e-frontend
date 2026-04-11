@@ -81,35 +81,35 @@ export default function TransferWatch() {
     <Layout>
       <Flex justify="center" mt={10}>
         <Box
-          bg="gray.800"
+          bg={{ base: 'white', _dark: 'gray.800' }}
           p={8}
           borderRadius="xl"
           w="100%"
           maxW="500px"
           boxShadow="xl"
         >
-          <Heading as="h1" size="xl" color="white" mb={6} textAlign="center">
+          <Heading as="h1" size="xl" color={{ base: 'gray.900', _dark: 'white' }} mb={6} textAlign="center">
             {t('transferAWatchButton')}
           </Heading>
 
           <Flex direction="column" gap={4}>
             <Box>
-              <Text color="white" mb={2} fontSize="sm" fontWeight="medium">
+              <Text color={{ base: 'gray.700', _dark: 'white' }} mb={2} fontSize="sm" fontWeight="medium">
                 {t('transferWatch.selectAWatch')}
               </Text>
               <NativeSelect.Root>
                 <NativeSelect.Field
-                  bg="gray.700"
-                  color="white"
-                  borderColor="gray.600"
+                  bg={{ base: 'white', _dark: 'gray.700' }}
+                  color={{ base: 'gray.900', _dark: 'white' }}
+                  borderColor={{ base: 'gray.300', _dark: 'gray.600' }}
                   value={selectedWatchId}
                   onChange={(e) => setSelectedWatchId(e.target.value)}
                 >
-                  <option value="" style={{ background: '#2D3748' }}>
+                  <option value="">
                     -- {t('transferWatch.selectAWatch')} --
                   </option>
                   {watches.map((watch) => (
-                    <option key={watch.id} value={watch.id.toString()} style={{ background: '#2D3748' }}>
+                    <option key={watch.id} value={watch.id.toString()}>
                       #{watch.serialNum}
                     </option>
                   ))}
@@ -118,13 +118,13 @@ export default function TransferWatch() {
             </Box>
 
             <Box>
-              <Text color="white" mb={2} fontSize="sm" fontWeight="medium">
+              <Text color={{ base: 'gray.700', _dark: 'white' }} mb={2} fontSize="sm" fontWeight="medium">
                 {t('transferWatch.newOwnerAccount')}
               </Text>
               <Input
-                bg="gray.700"
-                color="white"
-                borderColor="gray.600"
+                bg={{ base: 'white', _dark: 'gray.700' }}
+                color={{ base: 'gray.900', _dark: 'white' }}
+                borderColor={{ base: 'gray.300', _dark: 'gray.600' }}
                 placeholder="newowner@example.com"
                 value={newOwnerEmail}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewOwnerEmail(e.target.value)}
@@ -146,11 +146,11 @@ export default function TransferWatch() {
                 {t('transferWatch.form.transfer')}
               </Button>
             ) : (
-              <Box bg="gray.700" p={4} borderRadius="md">
-                <Text color="white" fontWeight="bold" mb={2}>
+              <Box bg={{ base: 'gray.100', _dark: 'gray.700' }} p={4} borderRadius="md">
+                <Text color={{ base: 'gray.900', _dark: 'white' }} fontWeight="bold" mb={2}>
                   {t('transferWatch.confirmTransferAction.title')}
                 </Text>
-                <Text color="gray.300" fontSize="sm" mb={4}>
+                <Text color={{ base: 'gray.600', _dark: 'gray.300' }} fontSize="sm" mb={4}>
                   {t('transferWatch.confirmTransferAction.description')}
                 </Text>
                 <Flex gap={3}>
@@ -165,8 +165,8 @@ export default function TransferWatch() {
                   </Button>
                   <Button
                     variant="outline"
-                    color="gray.300"
-                    borderColor="gray.500"
+                    color={{ base: 'gray.600', _dark: 'gray.300' }}
+                    borderColor={{ base: 'gray.400', _dark: 'gray.500' }}
                     onClick={() => setShowConfirm(false)}
                     flex={1}
                   >

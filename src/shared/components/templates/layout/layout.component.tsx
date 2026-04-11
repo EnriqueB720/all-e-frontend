@@ -11,7 +11,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <Box minH="100vh" bg="gray.900">
+    <Box minH="100vh" bg={{ base: 'gray.50', _dark: 'gray.900' }}>
       <Navbar />
       <Box maxW="1200px" mx="auto" p={6}>
         {children}

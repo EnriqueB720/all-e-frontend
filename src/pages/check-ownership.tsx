@@ -3,47 +3,133 @@ import { Heading, Text, Separator } from '@chakra-ui/react';
 
 import { Layout, Box, Flex, Button, Input } from '@components';
 import { useTranslation } from '@hooks';
-import { useGetWatchLazyQuery } from '@generated';
+import { useGetWatchLazyQuery, useGetWatchesLazyQuery } from '@generated';
+
+type SearchType = 'serialNum' | 'username' | 'walletAddress';
 
 export default function CheckOwnership() {
   const { t } = useTranslation();
-  const [serialNum, setSerialNum] = useState('');
-  const [getWatch, { data, loading, error }] = useGetWatchLazyQuery();
+  const [searchType, setSearchType] = useState<SearchType>('serialNum');
+  const [searchValue, setSearchValue] = useState('');
+
+  const [getWatch, { data: singleData, loading: singleLoading, error: singleError }] =
+    useGetWatchLazyQuery({ fetchPolicy: 'network-only' });
+  const [getWatches, { data: multiData, loading: multiLoading, error: multiError }] =
+    useGetWatchesLazyQuery({ fetchPolicy: 'network-only' });
+
+  const loading = singleLoading || multiLoading;
+  const error = singleError || multiError;
 
   const handleCheck = async () => {
-    if (!serialNum) return;
+    if (!searchValue) return;
 
-    await getWatch({
-      variables: {
-        where: {
-          id: 0,
-          ownerId: 0,
-          serialNum: serialNum,
-        },
-      },
-    });
+    if (searchType === 'serialNum') {
+      await getWatch({
+        variables: { where: { serialNum: searchValue } },
+      });
+    } else {
+      await getWatches({
+        variables: { where: { [searchType]: searchValue } },
+      });
+    }
   };
 
-  const watch = data?.watch;
+  const singleWatch = singleData?.watch;
+  const multiWatches = multiData?.watches;
+
+  const showSingle = searchType === 'serialNum' && singleWatch;
+  const showMulti = searchType !== 'serialNum' && multiWatches && multiWatches.length > 0;
+  const showNoResults =
+    searchType !== 'serialNum' && multiData && (!multiWatches || multiWatches.length === 0);
+
+  const placeholderMap: Record<SearchType, string> = {
+    serialNum: t('checkAWatchOwnership.serialNumber'),
+    username: t('checkAWatchOwnership.searchBy.usernamePlaceholder'),
+    walletAddress: t('checkAWatchOwnership.searchBy.walletPlaceholder'),
+  };
+
+  const renderWatchCard = (watch: any) => (
+    <Box key={watch.id} bg={{ base: 'gray.100', _dark: 'gray.800' }} p={6} borderRadius="lg" w="100%" maxW="500px">
+      <Flex direction="column" gap={4}>
+        <Flex justify="space-between">
+          <Text color={{ base: 'gray.600', _dark: 'gray.400' }} fontSize="sm">
+            {t('checkAWatchOwnership.serialNumber')}
+          </Text>
+          <Text color={{ base: 'gray.900', _dark: 'white' }} fontWeight="bold">#{watch.serialNum}</Text>
+        </Flex>
+
+        <Separator borderColor={{ base: 'gray.300', _dark: 'gray.700' }} />
+
+        <Flex justify="space-between">
+          <Text color={{ base: 'gray.600', _dark: 'gray.400' }} fontSize="sm">
+            {t('checkAWatchOwnership.result.username')}
+          </Text>
+          <Text color={{ base: 'gray.900', _dark: 'white' }}>{watch.user?.username ?? '—'}</Text>
+        </Flex>
+
+        <Separator borderColor={{ base: 'gray.300', _dark: 'gray.700' }} />
+
+        <Flex justify="space-between">
+          <Text color={{ base: 'gray.600', _dark: 'gray.400' }} fontSize="sm">
+            {t('checkAWatchOwnership.result.walletOwner')}
+          </Text>
+          <Text color={{ base: 'gray.700', _dark: 'gray.300' }} fontSize="sm" fontFamily="mono">
+            {watch.user?.walletAddress ?? '—'}
+          </Text>
+        </Flex>
+
+        {watch.ownershipLog && watch.ownershipLog.length > 0 && (
+          <>
+            <Separator borderColor={{ base: 'gray.300', _dark: 'gray.700' }} />
+            <Text color={{ base: 'gray.600', _dark: 'gray.400' }} fontSize="sm">
+              {t('checkAWatchOwnership.result.ownerSince')}
+            </Text>
+            <Text color={{ base: 'gray.900', _dark: 'white' }} fontSize="sm">
+              {new Date(watch.ownershipLog[watch.ownershipLog.length - 1].timestamp).toLocaleDateString()}
+            </Text>
+          </>
+        )}
+      </Flex>
+    </Box>
+  );
 
   return (
     <Layout>
       <Flex direction="column" align="center" mt={10} gap={6}>
-        <Heading size="xl" color="white">
+        <Heading size="xl" color={{ base: 'gray.900', _dark: 'white' }}>
           {t('checkAWatchOwnership.title')}
         </Heading>
-        <Text color="gray.400">
+        <Text color={{ base: 'gray.600', _dark: 'gray.400' }}>
           {t('checkAWatchOwnership.description')}
         </Text>
 
+        <Flex gap={2} w="100%" maxW="500px" justify="center">
+          {(['serialNum', 'username', 'walletAddress'] as SearchType[]).map((type) => (
+            <Button
+              key={type}
+              size="sm"
+              variant={searchType === type ? 'solid' : 'outline'}
+              bg={searchType === type ? '#00a884' : 'transparent'}
+              color={searchType === type ? 'white' : '#00a884'}
+              borderColor="#00a884"
+              onClick={() => {
+                setSearchType(type);
+                setSearchValue('');
+              }}
+            >
+              {t(`checkAWatchOwnership.searchBy.${type}`)}
+            </Button>
+          ))}
+        </Flex>
+
         <Flex gap={3} w="100%" maxW="500px">
           <Input
-            bg="gray.700"
-            color="white"
-            borderColor="gray.600"
-            placeholder={t('checkAWatchOwnership.serialNumber')}
-            value={serialNum}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSerialNum(e.target.value)}
+            bg={{ base: 'white', _dark: 'gray.700' }}
+            color={{ base: 'gray.900', _dark: 'white' }}
+            borderColor={{ base: 'gray.300', _dark: 'gray.600' }}
+            placeholder={placeholderMap[searchType]}
+            value={searchValue}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value)}
             flex={1}
           />
           <Button
@@ -62,41 +148,23 @@ export default function CheckOwnership() {
           </Text>
         )}
 
-        {watch && (
-          <Box bg="gray.800" p={6} borderRadius="lg" w="100%" maxW="500px">
-            <Flex direction="column" gap={4}>
-              <Flex justify="space-between">
-                <Text color="gray.400" fontSize="sm">{t('checkAWatchOwnership.serialNumber')}</Text>
-                <Text color="white" fontWeight="bold">#{watch.serialNum}</Text>
-              </Flex>
+        {showSingle && renderWatchCard(singleWatch)}
 
-              <Separator borderColor="gray.700" />
+        {showMulti && (
+          <Flex direction="column" gap={4} align="center" w="100%">
+            <Text color={{ base: 'gray.600', _dark: 'gray.400' }} fontSize="sm">
+              {multiWatches.length} {multiWatches.length === 1
+                ? t('checkAWatchOwnership.result.watchFound')
+                : t('checkAWatchOwnership.result.watchesFound')}
+            </Text>
+            {multiWatches.map(renderWatchCard)}
+          </Flex>
+        )}
 
-              <Flex justify="space-between">
-                <Text color="gray.400" fontSize="sm">{t('checkAWatchOwnership.result.username')}</Text>
-                <Text color="white">{watch.user?.username}</Text>
-              </Flex>
-
-              <Separator borderColor="gray.700" />
-
-              <Flex justify="space-between">
-                <Text color="gray.400" fontSize="sm">{t('checkAWatchOwnership.result.walletOwner')}</Text>
-                <Text color="gray.300" fontSize="sm" fontFamily="mono">
-                  {watch.user?.walletAddress}
-                </Text>
-              </Flex>
-
-              {watch.ownershipLog && watch.ownershipLog.length > 0 && (
-                <>
-                  <Separator borderColor="gray.700" />
-                  <Text color="gray.400" fontSize="sm">{t('checkAWatchOwnership.result.ownerSince')}</Text>
-                  <Text color="white" fontSize="sm">
-                    {new Date(watch.ownershipLog[watch.ownershipLog.length - 1].timestamp).toLocaleDateString()}
-                  </Text>
-                </>
-              )}
-            </Flex>
-          </Box>
+        {showNoResults && (
+          <Text color={{ base: 'gray.600', _dark: 'gray.400' }} fontSize="sm">
+            {t('dashboard.watchNotFound')}
+          </Text>
         )}
       </Flex>
     </Layout>

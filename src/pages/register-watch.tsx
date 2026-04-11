@@ -40,7 +40,6 @@ export default function RegisterWatch() {
       name: 'serialNum',
       inputPlaceholder: '123456',
       isRequired: true,
-      fieldColor: 'white',
     },
   ];
 
@@ -73,14 +72,14 @@ export default function RegisterWatch() {
     <Layout>
       <Flex justify="center" mt={10}>
         <Box
-          bg="gray.800"
+          bg={{ base: 'white', _dark: 'gray.800' }}
           p={8}
           borderRadius="xl"
           w="100%"
           maxW="450px"
           boxShadow="xl"
         >
-          <Heading as="h1" size="xl" color="white" mb={6} textAlign="center">
+          <Heading as="h1" size="xl" color={{ base: 'gray.900', _dark: 'white' }} mb={6} textAlign="center">
             {t('watchRegistry.title')}
           </Heading>
 

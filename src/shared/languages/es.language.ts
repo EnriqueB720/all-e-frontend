@@ -140,13 +140,22 @@ export const SpanishDictionary: Dictionary = {
   checkAWatchOwnership: {
     title: 'Verificar propiedad de un reloj',
     description:
-      'Ingresa el número de serie para comprobar los detalles de propiedad',
+      'Busca por número de serie, nombre de usuario o dirección de billetera',
     serialNumber: 'Número de serie',
-    check: 'Verificar propiedad',
+    check: 'Verificar',
+    searchBy: {
+      serialNum: 'Número de serie',
+      username: 'Usuario',
+      walletAddress: 'Billetera',
+      usernamePlaceholder: 'Ingresa nombre de usuario',
+      walletPlaceholder: 'Ingresa dirección de billetera',
+    },
     result: {
       walletOwner: 'Propietario de la billetera',
       username: 'Nombre de usuario',
       ownerSince: 'Propietario desde',
+      watchFound: 'reloj encontrado',
+      watchesFound: 'relojes encontrados',
     },
   },
   email: {

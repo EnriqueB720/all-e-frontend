@@ -82,6 +82,7 @@ export type Query = {
   refreshUser: LoginOutput;
   user: User;
   watch: Watch;
+  watches: Array<Watch>;
 };
 
 
@@ -106,6 +107,11 @@ export type QueryUserArgs = {
 
 
 export type QueryWatchArgs = {
+  where: WatchWhereInput;
+};
+
+
+export type QueryWatchesArgs = {
   where: WatchWhereInput;
 };
 
@@ -167,9 +173,11 @@ export type WatchUpdateInput = {
 };
 
 export type WatchWhereInput = {
-  id: Scalars['Int'];
-  ownerId: Scalars['Int'];
+  id?: InputMaybe<Scalars['Int']>;
+  ownerId?: InputMaybe<Scalars['Int']>;
   serialNum?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
+  walletAddress?: InputMaybe<Scalars['String']>;
 };
 
 export type LoginQueryVariables = Exact<{
@@ -227,6 +235,13 @@ export type GetWatchQueryVariables = Exact<{
 
 
 export type GetWatchQuery = { __typename?: 'Query', watch: { __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, ownerId: number, lastSynced: any, user?: { __typename?: 'User', id: number, username: string, email: string, walletAddress: string } | null, ownershipLog?: Array<{ __typename?: 'OwnershipLog', id: number, ownerId: number, timestamp: any }> | null } };
+
+export type GetWatchesQueryVariables = Exact<{
+  where: WatchWhereInput;
+}>;
+
+
+export type GetWatchesQuery = { __typename?: 'Query', watches: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, ownerId: number, lastSynced: any, user?: { __typename?: 'User', id: number, username: string, email: string, walletAddress: string } | null, ownershipLog?: Array<{ __typename?: 'OwnershipLog', id: number, ownerId: number, timestamp: any }> | null }> };
 
 
 export const LoginDocument = gql`
@@ -574,3 +589,53 @@ export function useGetWatchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetWatchQueryHookResult = ReturnType<typeof useGetWatchQuery>;
 export type GetWatchLazyQueryHookResult = ReturnType<typeof useGetWatchLazyQuery>;
 export type GetWatchQueryResult = Apollo.QueryResult<GetWatchQuery, GetWatchQueryVariables>;
+export const GetWatchesDocument = gql`
+    query getWatches($where: WatchWhereInput!) {
+  watches(where: $where) {
+    id
+    serialNum
+    metadataURI
+    ownerId
+    lastSynced
+    user {
+      id
+      username
+      email
+      walletAddress
+    }
+    ownershipLog {
+      id
+      ownerId
+      timestamp
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetWatchesQuery__
+ *
+ * To run a query within a React component, call `useGetWatchesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWatchesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWatchesQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetWatchesQuery(baseOptions: Apollo.QueryHookOptions<GetWatchesQuery, GetWatchesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetWatchesQuery, GetWatchesQueryVariables>(GetWatchesDocument, options);
+      }
+export function useGetWatchesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetWatchesQuery, GetWatchesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetWatchesQuery, GetWatchesQueryVariables>(GetWatchesDocument, options);
+        }
+export type GetWatchesQueryHookResult = ReturnType<typeof useGetWatchesQuery>;
+export type GetWatchesLazyQueryHookResult = ReturnType<typeof useGetWatchesLazyQuery>;
+export type GetWatchesQueryResult = Apollo.QueryResult<GetWatchesQuery, GetWatchesQueryVariables>;

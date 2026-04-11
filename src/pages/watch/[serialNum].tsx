@@ -28,7 +28,7 @@ export default function WatchDetail() {
     return (
       <Layout>
         <Flex direction="column" align="center" justify="center" minH="50vh" gap={4}>
-          <Text color="gray.500" fontSize="lg">{t('dashboard.watchNotFound')}</Text>
+          <Text color={{ base: 'gray.500', _dark: 'gray.500' }} fontSize="lg">{t('dashboard.watchNotFound')}</Text>
           <Button bg="#00a884" color="white" onClick={() => router.push('/')}>
             {t('dashboard.backToDashboard')}
           </Button>
@@ -41,7 +41,7 @@ export default function WatchDetail() {
     <Layout>
       <Flex direction="column" gap={6}>
         <Flex justify="space-between" align="center">
-          <Heading size="lg" color="white">
+          <Heading size="lg" color={{ base: 'gray.900', _dark: 'white' }}>
             {t('seeAWatch.ownershipOfAWatch')}
           </Heading>
           <Button
@@ -54,38 +54,38 @@ export default function WatchDetail() {
           </Button>
         </Flex>
 
-        <Box bg="gray.800" p={6} borderRadius="lg">
+        <Box bg={{ base: 'white', _dark: 'gray.800' }} p={6} borderRadius="lg" boxShadow={{ base: 'sm', _dark: 'none' }}>
           <Flex direction="column" gap={4}>
             <Flex justify="space-between" align="center">
-              <Text color="gray.400" fontSize="sm">{t('seeAWatch.serialNumber')}</Text>
-              <Text color="white" fontWeight="bold" fontSize="xl">#{watch.serialNum}</Text>
+              <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="sm">{t('seeAWatch.serialNumber')}</Text>
+              <Text color={{ base: 'gray.900', _dark: 'white' }} fontWeight="bold" fontSize="xl">#{watch.serialNum}</Text>
             </Flex>
 
-            <Separator borderColor="gray.700" />
+            <Separator borderColor={{ base: 'gray.200', _dark: 'gray.700' }} />
 
             <Flex justify="space-between" align="center">
-              <Text color="gray.400" fontSize="sm">{t('seeAWatch.currentOwner')}</Text>
+              <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="sm">{t('seeAWatch.currentOwner')}</Text>
               <Flex align="center" gap={2}>
-                <Text color="white">{user.username}</Text>
+                <Text color={{ base: 'gray.900', _dark: 'white' }}>{user.username}</Text>
                 <Badge colorPalette="green">You</Badge>
               </Flex>
             </Flex>
 
-            <Separator borderColor="gray.700" />
+            <Separator borderColor={{ base: 'gray.200', _dark: 'gray.700' }} />
 
             <Flex justify="space-between" align="center">
-              <Text color="gray.400" fontSize="sm">{t('ownershipHistory.walletAddress')}</Text>
-              <Text color="gray.300" fontSize="sm" fontFamily="mono">
+              <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="sm">{t('ownershipHistory.walletAddress')}</Text>
+              <Text color={{ base: 'gray.600', _dark: 'gray.300' }} fontSize="sm" fontFamily="mono">
                 {user.data.walletAddress}
               </Text>
             </Flex>
 
             {watch.metadataURI && (
               <>
-                <Separator borderColor="gray.700" />
+                <Separator borderColor={{ base: 'gray.200', _dark: 'gray.700' }} />
                 <Flex justify="space-between" align="center">
-                  <Text color="gray.400" fontSize="sm">{t('dashboard.metadataURI')}</Text>
-                  <Text color="gray.300" fontSize="sm" fontFamily="mono" truncate maxW="300px">
+                  <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="sm">{t('dashboard.metadataURI')}</Text>
+                  <Text color={{ base: 'gray.600', _dark: 'gray.300' }} fontSize="sm" fontFamily="mono" truncate maxW="300px">
                     {watch.metadataURI}
                   </Text>
                 </Flex>
@@ -94,12 +94,12 @@ export default function WatchDetail() {
           </Flex>
         </Box>
 
-        <Box bg="gray.800" p={6} borderRadius="lg">
-          <Heading size="md" color="white" mb={4}>
+        <Box bg={{ base: 'white', _dark: 'gray.800' }} p={6} borderRadius="lg" boxShadow={{ base: 'sm', _dark: 'none' }}>
+          <Heading size="md" color={{ base: 'gray.900', _dark: 'white' }} mb={4}>
             {t('ownershipHistory.title')}
           </Heading>
 
-          <Text color="gray.500" fontSize="sm">
+          <Text color={{ base: 'gray.500', _dark: 'gray.500' }} fontSize="sm">
             {t('dashboard.ownershipHistoryPlaceholder')}
           </Text>
         </Box>

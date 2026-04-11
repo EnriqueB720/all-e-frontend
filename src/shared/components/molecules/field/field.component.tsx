@@ -6,10 +6,12 @@ import { FieldProps } from '@types';
 import { Field as CKField } from '@chakra-ui/react';
 import { Input, PasswordInput } from '@components';
 
+const defaultFieldColor = { base: 'gray.900', _dark: 'white' };
+
 const Field: React.FC<FieldProps> = ({
   label,
   name,
-  fieldColor = 'black',
+  fieldColor,
   inputPlaceholder,
   inputValue,
   isRequired,
@@ -20,6 +22,7 @@ const Field: React.FC<FieldProps> = ({
   onChange,
   onBlur
 }) => {
+  const resolvedColor = fieldColor || defaultFieldColor;
 
   return (
     <CKField.Root
@@ -30,7 +33,7 @@ const Field: React.FC<FieldProps> = ({
       disabled={isSubmitting}
       onBlur={onBlur}
     >
-      <CKField.Label color={fieldColor}>{label}</CKField.Label>
+      <CKField.Label color={resolvedColor as any}>{label}</CKField.Label>
       {!isPassword ?
         <Input
           onChange={onChange}
@@ -38,7 +41,7 @@ const Field: React.FC<FieldProps> = ({
           name={name}
           placeholder={inputPlaceholder}
           value={inputValue}
-          color={fieldColor}
+          color={resolvedColor as any}
         />
         :
         <PasswordInput
@@ -46,7 +49,7 @@ const Field: React.FC<FieldProps> = ({
           name={name}
           placeholder={inputPlaceholder}
           value={inputValue}
-          color={fieldColor}
+          color={resolvedColor as any}
         />
       }
       {isErrors && <CKField.ErrorText>{errorMessage}</CKField.ErrorText>}

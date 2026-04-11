@@ -47,14 +47,12 @@ export default function Signup() {
       name: 'email',
       inputPlaceholder: 'email@example.com',
       isRequired: true,
-      fieldColor: 'white',
     },
     {
       label: t('register.form.username'),
       name: 'username',
       inputPlaceholder: 'johndoe',
       isRequired: true,
-      fieldColor: 'white',
     },
     {
       label: t('register.form.password'),
@@ -62,7 +60,6 @@ export default function Signup() {
       inputPlaceholder: '********',
       isRequired: true,
       isPassword: true,
-      fieldColor: 'white',
     },
     {
       label: t('register.form.repeatPassword'),
@@ -70,14 +67,12 @@ export default function Signup() {
       inputPlaceholder: '********',
       isRequired: true,
       isPassword: true,
-      fieldColor: 'white',
     },
     {
       label: t('register.form.walletAddress'),
       name: 'walletAddress',
       inputPlaceholder: '0x...',
       isRequired: true,
-      fieldColor: 'white',
     },
   ];
 
@@ -95,10 +90,10 @@ export default function Signup() {
       minH="100vh"
       align="center"
       justify="center"
-      bg="gray.900"
+      bg={{ base: 'gray.50', _dark: 'gray.900' }}
     >
       <Box
-        bg="gray.800"
+        bg={{ base: 'white', _dark: 'gray.800' }}
         p={8}
         borderRadius="xl"
         w="100%"
@@ -111,7 +106,7 @@ export default function Signup() {
           </Text>
         </NextLink>
 
-        <Heading as="h1" size="xl" color="white" mb={6} textAlign="center">
+        <Heading as="h1" size="xl" color={{ base: 'gray.900', _dark: 'white' }} mb={6} textAlign="center">
           {t('register.title')}
         </Heading>
 
@@ -126,7 +121,7 @@ export default function Signup() {
           groupings={[1, 1, 2, 1]}
         />
 
-        <Text mt={4} textAlign="center" color="gray.400" fontSize="sm">
+        <Text mt={4} textAlign="center" color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="sm">
           <CKLink asChild color="#00a884" _hover={{ textDecoration: 'underline' }}>
             <NextLink href="/login">{t('register.alreadyAnAccount')}</NextLink>
           </CKLink>

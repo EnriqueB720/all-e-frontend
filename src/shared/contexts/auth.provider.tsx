@@ -21,11 +21,11 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User>();
 
   const [loginQuery] = useLoginLazyQuery({
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: 'network-only'
   });
 
   const [refreshUser] = useRefreshUserLazyQuery({
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: 'network-only'
   })
 
   const [signupQuery] = useSignupMutation();
@@ -134,6 +134,11 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
       let token = await StorageService.getJwtToken();
 
+      if (!token) {
+        setIsAuthenticated(false);
+        setUser(undefined);
+        return;
+      }
 
       let { data } = await refreshUser({
         variables: {

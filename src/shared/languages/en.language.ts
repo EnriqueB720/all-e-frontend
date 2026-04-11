@@ -139,13 +139,22 @@ export const EnglishDictionary: Dictionary = {
   },
   checkAWatchOwnership: {
     title: 'Check Watch Ownership',
-    description: 'Enter the serial number to check ownership details',
+    description: 'Search by serial number, username, or wallet address',
     serialNumber: 'Serial Number',
-    check: 'Check Ownership',
+    check: 'Check',
+    searchBy: {
+      serialNum: 'Serial Number',
+      username: 'Username',
+      walletAddress: 'Wallet',
+      usernamePlaceholder: 'Enter username',
+      walletPlaceholder: 'Enter wallet address',
+    },
     result: {
       walletOwner: 'Wallet Owner',
       username: 'Username',
       ownerSince: 'Owner Since',
+      watchFound: 'watch found',
+      watchesFound: 'watches found',
     },
   },
   email: {

@@ -157,10 +157,19 @@ export interface Dictionary {
     description: string;
     serialNumber: string;
     check: string;
+    searchBy: {
+      serialNum: string;
+      username: string;
+      walletAddress: string;
+      usernamePlaceholder: string;
+      walletPlaceholder: string;
+    };
     result:{
       walletOwner: string;
       username: string;
       ownerSince: string;
+      watchFound: string;
+      watchesFound: string;
     }
   };
   email:{
