@@ -1,15 +1,104 @@
-import { AuthContext } from "@contexts";
-import { Layout } from "@components";
-import { useContext, useEffect } from "react";
+import { useContext } from 'react';
+import { useRouter } from 'next/router';
+import NextLink from 'next/link';
+import { Heading, Text, SimpleGrid, Badge } from '@chakra-ui/react';
 
+import { AuthContext } from '@contexts';
+import { Layout, Box, Flex, Button } from '@components';
+import { useTranslation } from '@hooks';
 
-export default function Home(prop: any) {
+export default function Home() {
+  const { isAuthenticated, user } = useContext(AuthContext);
+  const { t } = useTranslation();
+  const router = useRouter();
 
- const { isAuthenticated } = useContext(AuthContext);
+  if (!isAuthenticated) {
+    return (
+      <Layout>
+        <Flex direction="column" align="center" justify="center" minH="70vh" gap={6}>
+          <Heading size="2xl" color="white" textAlign="center">
+            {t('frontPage.title')}
+          </Heading>
+          <Text color="gray.400" fontSize="lg" textAlign="center" maxW="600px">
+            {t('frontPage.description')}
+          </Text>
+          <Flex gap={4}>
+            <NextLink href="/login">
+              <Button size="lg" bg="#00a884" color="white">
+                {t('login.title')}
+              </Button>
+            </NextLink>
+            <NextLink href="/check-ownership">
+              <Button size="lg" variant="outline" color="#00a884" borderColor="#00a884">
+                {t('checkAWatchOwnership.title')}
+              </Button>
+            </NextLink>
+          </Flex>
+        </Flex>
+      </Layout>
+    );
+  }
+
+  const watches = user?.watches || [];
 
   return (
-    <>
-     <Layout />
-    </>
-  )
+    <Layout>
+      <Flex justify="space-between" align="center" mb={6}>
+        <Heading size="lg" color="white">
+          {t('frontPage.title')}
+        </Heading>
+        <NextLink href="/register-watch">
+          <Button bg="#00a884" color="white">
+            {t('registerAWatchButton')}
+          </Button>
+        </NextLink>
+      </Flex>
+
+      {watches.length === 0 ? (
+        <Flex
+          direction="column"
+          align="center"
+          justify="center"
+          minH="40vh"
+          gap={4}
+        >
+          <Text color="gray.500" fontSize="lg">
+            {t('dashboard.noWatches')}
+          </Text>
+          <NextLink href="/register-watch">
+            <Button bg="#00a884" color="white">
+              {t('registerAWatchButton')}
+            </Button>
+          </NextLink>
+        </Flex>
+      ) : (
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6}>
+          {watches.map((watch) => (
+            <Box
+              key={watch.id}
+              bg="gray.800"
+              p={5}
+              borderRadius="lg"
+              cursor="pointer"
+              _hover={{ bg: 'gray.700', transform: 'translateY(-2px)' }}
+              transition="all 0.2s"
+              onClick={() => router.push(`/watch/${watch.data.serialNum}`)}
+            >
+              <Flex justify="space-between" align="center" mb={3}>
+                <Text color="white" fontWeight="bold" fontSize="lg">
+                  #{watch.serialNum}
+                </Text>
+                <Badge colorPalette="green">{t('dashboard.owned')}</Badge>
+              </Flex>
+              {watch.metadataURI && (
+                <Text color="gray.500" fontSize="xs" truncate>
+                  IPFS: {watch.metadataURI}
+                </Text>
+              )}
+            </Box>
+          ))}
+        </SimpleGrid>
+      )}
+    </Layout>
+  );
 }
