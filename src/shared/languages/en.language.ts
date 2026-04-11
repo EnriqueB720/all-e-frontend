@@ -115,6 +115,12 @@ export const EnglishDictionary: Dictionary = {
       accept: 'Yes, transfer',
       cancel: 'Cancel',
     },
+    errors: {
+      selectWatch: 'Please select a watch',
+      enterNewOwner: 'Please enter the new owner email',
+      userNotFound: 'User not found with that email',
+      transferFailed: 'Transfer failed, please try again',
+    },
   },
   ownershipHistory: {
     title: 'Ownership History',
@@ -144,6 +150,15 @@ export const EnglishDictionary: Dictionary = {
   },
   email: {
     //TODO define multiple email subjects and bodies to send to the user
+  },
+  dashboard: {
+    noWatches: "You don't have any watches registered yet.",
+    backToDashboard: 'Back to Dashboard',
+    owned: 'Owned',
+    watchNotFound: 'Watch not found',
+    metadataURI: 'Metadata URI',
+    ownershipHistoryPlaceholder: 'Ownership history will be available once blockchain integration is complete.',
+    lookupError: 'Watch not found or an error occurred.',
   },
   registerAWatchButton: 'Register a Watch',
   transferAWatchButton: 'Transfer a Watch',

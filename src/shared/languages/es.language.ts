@@ -115,6 +115,12 @@ export const SpanishDictionary: Dictionary = {
       accept: 'Sí, transferir',
       cancel: 'Cancelar',
     },
+    errors: {
+      selectWatch: 'Por favor selecciona un reloj',
+      enterNewOwner: 'Por favor ingresa el correo del nuevo propietario',
+      userNotFound: 'No se encontró un usuario con ese correo',
+      transferFailed: 'La transferencia falló, por favor intenta de nuevo',
+    },
   },
   ownershipHistory: {
     title: 'Historial de propiedad',
@@ -145,6 +151,15 @@ export const SpanishDictionary: Dictionary = {
   },
   email: {
     //TODO definir múltiples asuntos y cuerpos de correos para enviar al usuario
+  },
+  dashboard: {
+    noWatches: 'Aún no tienes relojes registrados.',
+    backToDashboard: 'Volver al panel',
+    owned: 'Propiedad',
+    watchNotFound: 'Reloj no encontrado',
+    metadataURI: 'URI de metadatos',
+    ownershipHistoryPlaceholder: 'El historial de propiedad estará disponible una vez que la integración con blockchain esté completa.',
+    lookupError: 'Reloj no encontrado o ha ocurrido un error.',
   },
   registerAWatchButton: 'Registrar un reloj',
   transferAWatchButton: 'Transferir un reloj',

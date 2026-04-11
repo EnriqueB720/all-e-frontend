@@ -131,6 +131,12 @@ export interface Dictionary {
       accept: string;
       cancel: string;
     }
+    errors: {
+      selectWatch: string;
+      enterNewOwner: string;
+      userNotFound: string;
+      transferFailed: string;
+    }
   };
   ownershipHistory: {
     title: string;
@@ -159,6 +165,15 @@ export interface Dictionary {
   };
   email:{
     //TODO define multiple email subjects and bodies to send to the user
+  };
+  dashboard: {
+    noWatches: string;
+    backToDashboard: string;
+    owned: string;
+    watchNotFound: string;
+    metadataURI: string;
+    ownershipHistoryPlaceholder: string;
+    lookupError: string;
   };
   registerAWatchButton: string;
   transferAWatchButton: string;
