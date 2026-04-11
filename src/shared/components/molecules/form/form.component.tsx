@@ -5,7 +5,8 @@ import _ from 'lodash';
 import { FormProps } from '@types';
 import { useTranslation } from '@/shared/hooks';
 import { Field, Button, Box } from '@components';
-import { Formik, FormikValues } from 'formik';
+import { Text } from '@chakra-ui/react';
+import { Formik, FormikValues, Form as FormikForm } from 'formik';
 
 
 const Form = <T extends FormikValues,>({
@@ -14,6 +15,7 @@ const Form = <T extends FormikValues,>({
   submitButtonText,
   formValues,
   isLoading,
+  errorMessage,
   groupings = [fields.length],
   onSubmit }: React.PropsWithChildren<FormProps<T>>) => {
 
@@ -30,9 +32,9 @@ const Form = <T extends FormikValues,>({
 
   return (
 
-    <Formik initialTouched={formValues} initialValues={formValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+    <Formik initialValues={formValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
       {(formik) => (
-        <>
+        <FormikForm>
           {groupings.map((subGroup, i) => {
             const lastFieldIndex = groupings.slice(0, i).reduce((total, size) => total + size, 0);
             const subGroupFields = fields.slice(lastFieldIndex, lastFieldIndex + subGroup);
@@ -64,20 +66,28 @@ const Form = <T extends FormikValues,>({
                 }
               </Box>
             )
-            
+
           })}
+
+          {errorMessage && (
+            <Text color="red.400" fontSize="sm" mt={2} textAlign="center">
+              {errorMessage}
+            </Text>
+          )}
 
           <Button
             marginTop={'10px'}
             loading={isLoading}
             disabled={isLoading}
             key='submit'
-            onClick={() => {formik.handleSubmit}}
+            type='submit'
+            width='100%'
             bg={'#00a884'}
+            color={'white'}
             >
             {submitButtonText || t('login.form.submit')}
           </Button>
-        </>)}
+        </FormikForm>)}
 
     </Formik>
   )

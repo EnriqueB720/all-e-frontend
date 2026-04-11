@@ -8,6 +8,7 @@ export interface FormProps<T> {
   validationSchema: yup.AnySchema;
   formValues: T;
   isLoading: boolean;
+  errorMessage?: string;
   onSubmit: (values: T) => void;
   groupings?: number[]
 }

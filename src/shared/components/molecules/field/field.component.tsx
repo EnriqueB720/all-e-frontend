@@ -3,11 +3,7 @@ import * as React from 'react';
 import _ from 'lodash';
 
 import { FieldProps } from '@types';
-import {
-  FormControl,
-  FormLabel,
-  FormErrorMessage
-} from "@chakra-ui/form-control"
+import { Field as CKField } from '@chakra-ui/react';
 import { Input, PasswordInput } from '@components';
 
 const Field: React.FC<FieldProps> = ({
@@ -26,15 +22,15 @@ const Field: React.FC<FieldProps> = ({
 }) => {
 
   return (
-    <FormControl
+    <CKField.Root
       mb={2}
       mr={2}
-      isInvalid={isErrors}
-      isRequired={isRequired}
-      isDisabled={isSubmitting}
+      invalid={isErrors}
+      required={isRequired}
+      disabled={isSubmitting}
       onBlur={onBlur}
-      color={fieldColor}>
-      <FormLabel color={fieldColor}>{label}</FormLabel>
+    >
+      <CKField.Label color={fieldColor}>{label}</CKField.Label>
       {!isPassword ?
         <Input
           onChange={onChange}
@@ -42,12 +38,19 @@ const Field: React.FC<FieldProps> = ({
           name={name}
           placeholder={inputPlaceholder}
           value={inputValue}
+          color={fieldColor}
         />
         :
-        <PasswordInput />
+        <PasswordInput
+          onChange={onChange}
+          name={name}
+          placeholder={inputPlaceholder}
+          value={inputValue}
+          color={fieldColor}
+        />
       }
-      {isErrors && <FormErrorMessage>{errorMessage}</FormErrorMessage>}
-    </FormControl>
+      {isErrors && <CKField.ErrorText>{errorMessage}</CKField.ErrorText>}
+    </CKField.Root>
   )
 
 }
