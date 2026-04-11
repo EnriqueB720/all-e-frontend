@@ -13,6 +13,10 @@ import {
 
 
 import {
+  Navbar
+} from '@organisms'
+
+import {
   Layout
 } from '@templates'
 
@@ -26,5 +30,6 @@ export {
   IconButton,
   Icon,
   PasswordInput,
+  Navbar,
   Layout
 }

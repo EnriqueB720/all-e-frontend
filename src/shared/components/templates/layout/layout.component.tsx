@@ -1,18 +1,24 @@
 import * as React from 'react';
 
 import _ from 'lodash';
-import { useTranslation } from '@hooks';
 
-const Layout: React.FC = () => {
+import { Navbar } from '@components';
+import { Box } from '@chakra-ui/react';
 
-  const { t } = useTranslation();
-
-  return (
-    <>
-      <p> {t('AppCreatorProfile.link')}</p>
-    </>
-  );
+interface LayoutProps {
+  children?: React.ReactNode;
 }
+
+const Layout: React.FC<LayoutProps> = ({ children }) => {
+  return (
+    <Box minH="100vh" bg="gray.900">
+      <Navbar />
+      <Box maxW="1200px" mx="auto" p={6}>
+        {children}
+      </Box>
+    </Box>
+  );
+};
 
 export default React.memo(Layout, (prevProps, nextProps) => {
   return _.isEqual(prevProps, nextProps);
