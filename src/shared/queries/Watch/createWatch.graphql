@@ -3,6 +3,7 @@ mutation createWatch($data: WatchCreateInput!) {
     id
     serialNum
     metadataURI
+    certificateUrl
     ownerId
     lastSynced
   }

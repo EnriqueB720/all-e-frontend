@@ -1,10 +1,10 @@
 import { useContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Heading, Text, Link as CKLink } from '@chakra-ui/react';
+import { Heading, Link as CKLink } from '@chakra-ui/react';
 import NextLink from 'next/link';
 
 import { AuthContext } from '@contexts';
-import { Box, Flex, Form } from '@components';
+import { Box, Flex, Form, Text } from '@components';
 import { useTranslation } from '@hooks';
 import { signUpSchema } from '@schemas';
 import { SignUpUser } from '@model';
@@ -71,8 +71,8 @@ export default function Signup() {
     {
       label: t('register.form.walletAddress'),
       name: 'walletAddress',
-      inputPlaceholder: '0x...',
-      isRequired: true,
+      inputPlaceholder: '0x... (' + t('register.form.optional') + ')',
+      isRequired: false,
     },
   ];
 

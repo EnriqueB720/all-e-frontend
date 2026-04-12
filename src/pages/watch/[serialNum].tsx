@@ -1,9 +1,9 @@
 import { useContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Heading, Text, Badge, Separator } from '@chakra-ui/react';
+import { Heading, Badge, Separator, Link } from '@chakra-ui/react';
 
 import { AuthContext } from '@contexts';
-import { Layout, Box, Flex, Button } from '@components';
+import { Layout, Box, Flex, Button, Text } from '@components';
 import { useTranslation } from '@hooks';
 
 export default function WatchDetail() {
@@ -71,23 +71,36 @@ export default function WatchDetail() {
               </Flex>
             </Flex>
 
-            <Separator borderColor={{ base: 'gray.200', _dark: 'gray.700' }} />
+           
 
-            <Flex justify="space-between" align="center">
-              <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="sm">{t('ownershipHistory.walletAddress')}</Text>
-              <Text color={{ base: 'gray.600', _dark: 'gray.300' }} fontSize="sm" fontFamily="mono">
-                {user.data.walletAddress}
-              </Text>
-            </Flex>
-
-            {watch.metadataURI && (
+            {user.data.walletAddress && (
               <>
                 <Separator borderColor={{ base: 'gray.200', _dark: 'gray.700' }} />
                 <Flex justify="space-between" align="center">
-                  <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="sm">{t('dashboard.metadataURI')}</Text>
-                  <Text color={{ base: 'gray.600', _dark: 'gray.300' }} fontSize="sm" fontFamily="mono" truncate maxW="300px">
-                    {watch.metadataURI}
+                  <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="sm">{t('ownershipHistory.walletAddress')}</Text>
+                  <Text color={{ base: 'gray.600', _dark: 'gray.300' }} fontSize="sm" fontFamily="mono">
+                    {user.data.walletAddress}
                   </Text>
+                </Flex>
+              </>
+            )}
+
+            {watch.certificateUrl && (
+              <>
+                <Separator borderColor={{ base: 'gray.200', _dark: 'gray.700' }} />
+                <Flex justify="space-between" align="center">
+                  <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="sm">{t('seeAWatch.ipfsCertificate')}</Text>
+                  <Link
+                    href={watch.certificateUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    color="#00a884"
+                    fontWeight="bold"
+                    fontSize="sm"
+                    _hover={{ textDecoration: 'underline' }}
+                  >
+                    {t('seeAWatch.viewOnIpfs')}
+                  </Link>
                 </Flex>
               </>
             )}

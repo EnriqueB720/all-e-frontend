@@ -1,10 +1,10 @@
 import { useContext } from 'react';
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
-import { Heading, Text, SimpleGrid, Badge } from '@chakra-ui/react';
+import { Heading, SimpleGrid, Badge } from '@chakra-ui/react';
 
 import { AuthContext } from '@contexts';
-import { Layout, Box, Flex, Button } from '@components';
+import { Layout, Box, Flex, Button, Text } from '@components';
 import { useTranslation } from '@hooks';
 
 export default function Home() {
@@ -91,9 +91,9 @@ export default function Home() {
                 </Text>
                 <Badge colorPalette="green">{t('dashboard.owned')}</Badge>
               </Flex>
-              {watch.metadataURI && (
+              {watch.certificateUrl && (
                 <Text color={{ base: 'gray.500', _dark: 'gray.500' }} fontSize="xs" truncate>
-                  IPFS: {watch.metadataURI}
+                  {t('seeAWatch.ipfsCertificate')}
                 </Text>
               )}
             </Box>

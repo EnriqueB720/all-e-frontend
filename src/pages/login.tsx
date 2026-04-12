@@ -1,10 +1,10 @@
 import { useContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Heading, Text, Link as CKLink } from '@chakra-ui/react';
+import { Heading, Link as CKLink } from '@chakra-ui/react';
 import NextLink from 'next/link';
 
 import { AuthContext } from '@contexts';
-import { Box, Flex, Form } from '@components';
+import { Box, Flex, Form, Text } from '@components';
 import { useTranslation } from '@hooks';
 import { loginSchema } from '@schemas';
 import { AuthCredentials, ICredentials } from '@model';
@@ -89,8 +89,15 @@ export default function Login() {
           onSubmit={handleLogin}
           groupings={[1, 1]}
         />
-
-        <Text mt={4} textAlign="center" color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="sm">
+      <Box>
+        
+      </Box>
+        <Text mt={3} textAlign="center" color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="sm">
+          <CKLink asChild color="#00a884" _hover={{ textDecoration: 'underline' }}>
+            <NextLink href="/forgot-password">{t('login.forgotPassword')}</NextLink>
+          </CKLink>
+        </Text>
+        <Text mt={2} ml={1} textAlign="center" color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="sm">
           <CKLink asChild color="#00a884" _hover={{ textDecoration: 'underline' }}>
             <NextLink href="/signup">{t('login.noAccount')}</NextLink>
           </CKLink>

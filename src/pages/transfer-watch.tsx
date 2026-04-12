@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Heading, Text, NativeSelect } from '@chakra-ui/react';
+import { Heading, NativeSelect } from '@chakra-ui/react';
 
 import { AuthContext } from '@contexts';
-import { Layout, Box, Flex, Button, Input } from '@components';
+import { Layout, Box, Flex, Button, Input, Text } from '@components';
 import { useTranslation } from '@hooks';
 import { useChangeWatchOwnershipMutation, useGetUserLazyQuery } from '@generated';
 

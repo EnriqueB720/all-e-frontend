@@ -12,6 +12,8 @@ export interface FieldProps {
   errorMessage?: string;
   isSubmitting?: boolean;
   isPassword?: boolean;
+  isTextarea?: boolean;
+  rows?: number;
   onChange?: (e: string | ChangeEvent<any>) => void;
   onBlur?: (e: any) => void;
 }

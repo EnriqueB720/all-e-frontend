@@ -3,7 +3,7 @@ import * as React from 'react';
 import _ from 'lodash';
 
 import { FieldProps } from '@types';
-import { Field as CKField } from '@chakra-ui/react';
+import { Field as CKField, Textarea } from '@chakra-ui/react';
 import { Input, PasswordInput } from '@components';
 
 const defaultFieldColor = { base: 'gray.900', _dark: 'white' };
@@ -19,6 +19,8 @@ const Field: React.FC<FieldProps> = ({
   errorMessage,
   isSubmitting,
   isPassword,
+  isTextarea,
+  rows,
   onChange,
   onBlur
 }) => {
@@ -34,7 +36,17 @@ const Field: React.FC<FieldProps> = ({
       onBlur={onBlur}
     >
       <CKField.Label color={resolvedColor as any}>{label}</CKField.Label>
-      {!isPassword ?
+      {isTextarea ? (
+        <Textarea
+          onChange={onChange as any}
+          name={name}
+          placeholder={inputPlaceholder}
+          value={inputValue}
+          rows={rows ?? 6}
+          color={resolvedColor as any}
+          w="100%"
+        />
+      ) : !isPassword ? (
         <Input
           onChange={onChange}
           type="text"
@@ -43,7 +55,7 @@ const Field: React.FC<FieldProps> = ({
           value={inputValue}
           color={resolvedColor as any}
         />
-        :
+      ) : (
         <PasswordInput
           onChange={onChange}
           name={name}
@@ -51,7 +63,7 @@ const Field: React.FC<FieldProps> = ({
           value={inputValue}
           color={resolvedColor as any}
         />
-      }
+      )}
       {isErrors && <CKField.ErrorText>{errorMessage}</CKField.ErrorText>}
     </CKField.Root>
   )

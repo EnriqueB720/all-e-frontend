@@ -3,6 +3,7 @@ query getWatch($where: WatchWhereInput!) {
     id
     serialNum
     metadataURI
+    certificateUrl
     ownerId
     lastSynced
     user {

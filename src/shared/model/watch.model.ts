@@ -20,6 +20,10 @@ export class Watch {
         return this.data?.metadataURI!;
     }
 
+    get certificateUrl(){
+        return this.data?.certificateUrl!;
+    }
+
     get user(){
         return new User(this.data?.user!);
     }

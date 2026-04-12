@@ -13,6 +13,7 @@ query login($data: LoginUserInput!){
         id,
         serialNum
         metadataURI
+        certificateUrl
         ownerId
         lastSynced
       },

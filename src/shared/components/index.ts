@@ -4,7 +4,10 @@ import {
   Flex,
   Input,
   IconButton,
-  Icon } from "@atoms";
+  Icon,
+  Text,
+  CopyableText
+ } from "@atoms";
 
 import { 
   Field,
@@ -31,5 +34,7 @@ export {
   Icon,
   PasswordInput,
   Navbar,
-  Layout
+  Layout,
+  Text,
+  CopyableText
 }

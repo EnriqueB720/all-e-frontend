@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
   Heading,
-  Text,
   Separator,
   PopoverRoot,
   PopoverTrigger,
@@ -16,15 +15,19 @@ import { useColorMode } from '@/shared/contexts/color-mode.context';
 import NextLink from 'next/link';
 
 import { AuthContext } from '@contexts';
-import { Box, Flex, Button } from '@components';
+import { Box, Flex, Button, Input, CopyableText, Text } from '@components';
 import { useTranslation } from '@hooks';
-import { Language } from '@generated';
+import { Language, useUpdateUserMutation } from '@generated';
 
 const Navbar: React.FC = () => {
-  const { isAuthenticated, user, logout } = useContext(AuthContext);
+  const { isAuthenticated, user, logout, refreshUserToken } = useContext(AuthContext);
   const { t, language, switchLanguage } = useTranslation();
   const { colorMode, toggleColorMode } = useColorMode();
   const router = useRouter();
+  const [isEditingWallet, setIsEditingWallet] = useState(false);
+  const [walletInput, setWalletInput] = useState('');
+  const [walletError, setWalletError] = useState('');
+  const [updateUser] = useUpdateUserMutation();
 
   const handleLogout = async () => {
     await logout();
@@ -34,6 +37,26 @@ const Navbar: React.FC = () => {
   const handleLanguageToggle = () => {
     const newLang = language === Language.English ? Language.Spanish : Language.English;
     switchLanguage(newLang);
+  };
+
+  const handleSaveWallet = async () => {
+    if (!walletInput.trim() || !user) return;
+    try {
+      setWalletError('');
+      await updateUser({
+        variables: { data: { id: user.id, walletAddress: walletInput.trim() } },
+      });
+      setIsEditingWallet(false);
+      setWalletInput('');
+      await refreshUserToken();
+    } catch (err: any) {
+      const message = err?.message || '';
+      if (message.includes('wallet address is already in use')) {
+        setWalletError(t('profile.walletTaken'));
+      } else {
+        setWalletError(t('profile.walletError'));
+      }
+    }
   };
 
   return (
@@ -63,9 +86,14 @@ const Navbar: React.FC = () => {
                   {t('transferAWatchButton')}
                 </Text>
               </NextLink>
-               <NextLink href="/check-ownership">
+              <NextLink href="/check-ownership">
                 <Text color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
                   Check Ownership
+                </Text>
+              </NextLink>
+              <NextLink href="/contact">
+                <Text color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
+                  Contact Us
                 </Text>
               </NextLink>
 
@@ -101,7 +129,7 @@ const Navbar: React.FC = () => {
 
                       <Flex direction="column" gap={1}>
                         <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="xs" fontWeight="medium">
-                          Email
+                          {t('profile.email')}
                         </Text>
                         <Text color={{ base: 'gray.700', _dark: 'gray.200' }} fontSize="sm">
                           {user?.email}
@@ -110,11 +138,49 @@ const Navbar: React.FC = () => {
 
                       <Flex direction="column" gap={1}>
                         <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="xs" fontWeight="medium">
-                          Wallet
+                          {t('profile.wallet')}
                         </Text>
-                        <Text color={{ base: 'gray.700', _dark: 'gray.200' }} fontSize="sm" fontFamily="mono" wordBreak="break-all">
-                          {user?.data.walletAddress}
-                        </Text>
+                        {user?.data.walletAddress ? (
+                          <Text color={{ base: 'gray.700', _dark: 'gray.200' }} fontSize="sm" fontFamily="mono" wordBreak="break-all">
+                           <CopyableText value={user?.data.walletAddress} />
+                          </Text>
+                        ) : isEditingWallet ? (
+                          <Flex direction="column" gap={2}>
+                            <Flex align="center" gap={1} bg={{ base: 'orange.50', _dark: 'orange.900' }} p={2} borderRadius="md">
+                              <Text fontSize="xs" color={{ base: 'orange.600', _dark: 'orange.300' }}>
+                                {'\u24D8'} {t('profile.walletWarning')}
+                              </Text>
+                            </Flex>
+                            <Input
+                              size="sm"
+                              placeholder={t('profile.walletPlaceholder')}
+                              value={walletInput}
+                              onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setWalletInput(e.target.value); setWalletError(''); }}
+                              bg={{ base: 'white', _dark: 'gray.600' }}
+                              color={{ base: 'gray.900', _dark: 'white' }}
+                            />
+                            {walletError && (
+                              <Text color="red.400" fontSize="xs">{walletError}</Text>
+                            )}
+                            <Flex gap={2}>
+                              <Button size="xs" bg="#00a884" color="white" onClick={handleSaveWallet}>
+                                {t('profile.saveWallet')}
+                              </Button>
+                              <Button size="xs" variant="outline" color={{ base: 'gray.600', _dark: 'gray.300' }} onClick={() => { setIsEditingWallet(false); setWalletError(''); }}>
+                                {t('profile.cancel')}
+                              </Button>
+                            </Flex>
+                          </Flex>
+                        ) : (
+                          <Flex align="center" gap={2}>
+                            <Text color={{ base: 'gray.400', _dark: 'gray.500' }} fontSize="sm">
+                              {t('profile.noWallet')}
+                            </Text>
+                            <Button size="xs" variant="outline" color="#00a884" borderColor="#00a884" onClick={() => setIsEditingWallet(true)}>
+                              {t('profile.addWallet')}
+                            </Button>
+                          </Flex>
+                        )}
                       </Flex>
                     </Flex>
                   </PopoverContent>

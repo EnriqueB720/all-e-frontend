@@ -4,8 +4,7 @@ import _ from 'lodash';
 
 import { FormProps } from '@types';
 import { useTranslation } from '@/shared/hooks';
-import { Field, Button, Box } from '@components';
-import { Text } from '@chakra-ui/react';
+import { Field, Button, Box, Text } from '@components';
 import { Formik, FormikValues, Form as FormikForm } from 'formik';
 
 

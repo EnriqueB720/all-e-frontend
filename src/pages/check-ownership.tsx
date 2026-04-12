@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Heading, Text, Separator } from '@chakra-ui/react';
+import { Heading, Separator, Link } from '@chakra-ui/react';
 
-import { Layout, Box, Flex, Button, Input } from '@components';
+import { Layout, Box, Flex, Button, Input, CopyableText, Text } from '@components';
 import { useTranslation } from '@hooks';
 import { useGetWatchLazyQuery, useGetWatchesLazyQuery } from '@generated';
 
@@ -71,11 +71,26 @@ export default function CheckOwnership() {
 
         <Flex justify="space-between">
           <Text color={{ base: 'gray.600', _dark: 'gray.400' }} fontSize="sm">
+            {t('checkAWatchOwnership.result.email')}
+          </Text>
+          {watch.user?.email ? (
+            <CopyableText value={watch.user.email} />
+          ) : (
+            <Text color={{ base: 'gray.900', _dark: 'white' }}>—</Text>
+          )}
+        </Flex>
+
+        <Separator borderColor={{ base: 'gray.300', _dark: 'gray.700' }} />
+
+        <Flex justify="space-between">
+          <Text color={{ base: 'gray.600', _dark: 'gray.400' }} fontSize="sm">
             {t('checkAWatchOwnership.result.walletOwner')}
           </Text>
-          <Text color={{ base: 'gray.700', _dark: 'gray.300' }} fontSize="sm" fontFamily="mono">
-            {watch.user?.walletAddress ?? '—'}
-          </Text>
+          {watch.user?.walletAddress ? (
+            <CopyableText value={watch.user.walletAddress} mono />
+          ) : (
+            <Text color={{ base: 'gray.700', _dark: 'gray.300' }} fontSize="sm" fontFamily="mono">—</Text>
+          )}
         </Flex>
 
         {watch.ownershipLog && watch.ownershipLog.length > 0 && (
@@ -87,6 +102,28 @@ export default function CheckOwnership() {
             <Text color={{ base: 'gray.900', _dark: 'white' }} fontSize="sm">
               {new Date(watch.ownershipLog[watch.ownershipLog.length - 1].timestamp).toLocaleDateString()}
             </Text>
+          </>
+        )}
+
+        {watch.certificateUrl && (
+          <>
+            <Separator borderColor={{ base: 'gray.300', _dark: 'gray.700' }} />
+            <Flex justify="space-between" align="center">
+              <Text color={{ base: 'gray.600', _dark: 'gray.400' }} fontSize="sm">
+                {t('seeAWatch.ipfsCertificate')}
+              </Text>
+              <Link
+                href={watch.certificateUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                color="#00a884"
+                fontWeight="bold"
+                fontSize="sm"
+                _hover={{ textDecoration: 'underline' }}
+              >
+                {t('seeAWatch.viewOnIpfs')}
+              </Link>
+            </Flex>
           </>
         )}
       </Flex>

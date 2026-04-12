@@ -16,6 +16,16 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type ContactInput = {
+  email: Scalars['String'];
+  message: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type ForgotPasswordInput = {
+  email: Scalars['String'];
+};
+
 export enum Language {
   English = 'ENGLISH',
   Spanish = 'SPANISH'
@@ -38,7 +48,11 @@ export type Mutation = {
   changeWatchOwnership: Watch;
   createUser: User;
   createWatch: Watch;
+  forgotPassword: Scalars['Boolean'];
+  resetPassword: Scalars['Boolean'];
+  sendContactMessage: Scalars['Boolean'];
   signup: User;
+  updateUser: User;
 };
 
 
@@ -57,8 +71,28 @@ export type MutationCreateWatchArgs = {
 };
 
 
+export type MutationForgotPasswordArgs = {
+  data: ForgotPasswordInput;
+};
+
+
+export type MutationResetPasswordArgs = {
+  data: ResetPasswordInput;
+};
+
+
+export type MutationSendContactMessageArgs = {
+  data: ContactInput;
+};
+
+
 export type MutationSignupArgs = {
   data: SignUpInput;
+};
+
+
+export type MutationUpdateUserArgs = {
+  data: UserUpdateInput;
 };
 
 export type OwnershipLog = {
@@ -115,11 +149,16 @@ export type QueryWatchesArgs = {
   where: WatchWhereInput;
 };
 
+export type ResetPasswordInput = {
+  newPassword: Scalars['String'];
+  token: Scalars['String'];
+};
+
 export type SignUpInput = {
   email: Scalars['String'];
   password: Scalars['String'];
   username: Scalars['String'];
-  walletAddress: Scalars['String'];
+  walletAddress?: InputMaybe<Scalars['String']>;
 };
 
 export type User = {
@@ -129,7 +168,7 @@ export type User = {
   id: Scalars['Float'];
   language: Language;
   username: Scalars['String'];
-  walletAddress: Scalars['String'];
+  walletAddress?: Maybe<Scalars['String']>;
   watch?: Maybe<Array<Watch>>;
 };
 
@@ -137,7 +176,12 @@ export type UserCreateInput = {
   email: Scalars['String'];
   password: Scalars['String'];
   username: Scalars['String'];
-  walletAddress: Scalars['String'];
+  walletAddress?: InputMaybe<Scalars['String']>;
+};
+
+export type UserUpdateInput = {
+  id: Scalars['Int'];
+  walletAddress?: InputMaybe<Scalars['String']>;
 };
 
 export type UserWhereInput = {
@@ -148,6 +192,7 @@ export type UserWhereInput = {
 
 export type Watch = {
   __typename?: 'Watch';
+  certificateUrl?: Maybe<Scalars['String']>;
   id: Scalars['Float'];
   lastSynced: Scalars['DateTime'];
   metadataURI?: Maybe<Scalars['String']>;
@@ -180,19 +225,33 @@ export type WatchWhereInput = {
   walletAddress?: InputMaybe<Scalars['String']>;
 };
 
+export type ForgotPasswordMutationVariables = Exact<{
+  data: ForgotPasswordInput;
+}>;
+
+
+export type ForgotPasswordMutation = { __typename?: 'Mutation', forgotPassword: boolean };
+
 export type LoginQueryVariables = Exact<{
   data: LoginUserInput;
 }>;
 
 
-export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, walletAddress: string, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, ownerId: number, lastSynced: any }> | null } } };
+export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, walletAddress?: string | null, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any }> | null } } };
 
 export type RefreshUserQueryVariables = Exact<{
   data: Scalars['String'];
 }>;
 
 
-export type RefreshUserQuery = { __typename?: 'Query', refreshUser: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, walletAddress: string, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, ownerId: number, lastSynced: any }> | null } } };
+export type RefreshUserQuery = { __typename?: 'Query', refreshUser: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, walletAddress?: string | null, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any }> | null } } };
+
+export type ResetPasswordMutationVariables = Exact<{
+  data: ResetPasswordInput;
+}>;
+
+
+export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword: boolean };
 
 export type SignupMutationVariables = Exact<{
   data: SignUpInput;
@@ -200,6 +259,13 @@ export type SignupMutationVariables = Exact<{
 
 
 export type SignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'User', email: string, id: number } };
+
+export type SendContactMessageMutationVariables = Exact<{
+  data: ContactInput;
+}>;
+
+
+export type SendContactMessageMutation = { __typename?: 'Mutation', sendContactMessage: boolean };
 
 export type GetOwnershipLogsQueryVariables = Exact<{
   where: OwnershipLogWhereInput;
@@ -213,7 +279,14 @@ export type GetUserQueryVariables = Exact<{
 }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, email: string, username: string, walletAddress: string, createdAt: any, language: Language, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, ownerId: number, lastSynced: any }> | null } };
+export type GetUserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, email: string, username: string, walletAddress?: string | null, createdAt: any, language: Language, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, ownerId: number, lastSynced: any }> | null } };
+
+export type UpdateUserMutationVariables = Exact<{
+  data: UserUpdateInput;
+}>;
+
+
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: number, email: string, username: string, walletAddress?: string | null } };
 
 export type ChangeWatchOwnershipMutationVariables = Exact<{
   data: WatchUpdateInput;
@@ -227,23 +300,54 @@ export type CreateWatchMutationVariables = Exact<{
 }>;
 
 
-export type CreateWatchMutation = { __typename?: 'Mutation', createWatch: { __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, ownerId: number, lastSynced: any } };
+export type CreateWatchMutation = { __typename?: 'Mutation', createWatch: { __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any } };
 
 export type GetWatchQueryVariables = Exact<{
   where: WatchWhereInput;
 }>;
 
 
-export type GetWatchQuery = { __typename?: 'Query', watch: { __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, ownerId: number, lastSynced: any, user?: { __typename?: 'User', id: number, username: string, email: string, walletAddress: string } | null, ownershipLog?: Array<{ __typename?: 'OwnershipLog', id: number, ownerId: number, timestamp: any }> | null } };
+export type GetWatchQuery = { __typename?: 'Query', watch: { __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any, user?: { __typename?: 'User', id: number, username: string, email: string, walletAddress?: string | null } | null, ownershipLog?: Array<{ __typename?: 'OwnershipLog', id: number, ownerId: number, timestamp: any }> | null } };
 
 export type GetWatchesQueryVariables = Exact<{
   where: WatchWhereInput;
 }>;
 
 
-export type GetWatchesQuery = { __typename?: 'Query', watches: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, ownerId: number, lastSynced: any, user?: { __typename?: 'User', id: number, username: string, email: string, walletAddress: string } | null, ownershipLog?: Array<{ __typename?: 'OwnershipLog', id: number, ownerId: number, timestamp: any }> | null }> };
+export type GetWatchesQuery = { __typename?: 'Query', watches: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any, user?: { __typename?: 'User', id: number, username: string, email: string, walletAddress?: string | null } | null, ownershipLog?: Array<{ __typename?: 'OwnershipLog', id: number, ownerId: number, timestamp: any }> | null }> };
 
 
+export const ForgotPasswordDocument = gql`
+    mutation forgotPassword($data: ForgotPasswordInput!) {
+  forgotPassword(data: $data)
+}
+    `;
+export type ForgotPasswordMutationFn = Apollo.MutationFunction<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
+
+/**
+ * __useForgotPasswordMutation__
+ *
+ * To run a mutation, you first call `useForgotPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useForgotPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [forgotPasswordMutation, { data, loading, error }] = useForgotPasswordMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useForgotPasswordMutation(baseOptions?: Apollo.MutationHookOptions<ForgotPasswordMutation, ForgotPasswordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ForgotPasswordMutation, ForgotPasswordMutationVariables>(ForgotPasswordDocument, options);
+      }
+export type ForgotPasswordMutationHookResult = ReturnType<typeof useForgotPasswordMutation>;
+export type ForgotPasswordMutationResult = Apollo.MutationResult<ForgotPasswordMutation>;
+export type ForgotPasswordMutationOptions = Apollo.BaseMutationOptions<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
 export const LoginDocument = gql`
     query login($data: LoginUserInput!) {
   login(data: $data) {
@@ -260,6 +364,7 @@ export const LoginDocument = gql`
         id
         serialNum
         metadataURI
+        certificateUrl
         ownerId
         lastSynced
       }
@@ -311,6 +416,7 @@ export const RefreshUserDocument = gql`
         id
         serialNum
         metadataURI
+        certificateUrl
         ownerId
         lastSynced
       }
@@ -346,6 +452,37 @@ export function useRefreshUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type RefreshUserQueryHookResult = ReturnType<typeof useRefreshUserQuery>;
 export type RefreshUserLazyQueryHookResult = ReturnType<typeof useRefreshUserLazyQuery>;
 export type RefreshUserQueryResult = Apollo.QueryResult<RefreshUserQuery, RefreshUserQueryVariables>;
+export const ResetPasswordDocument = gql`
+    mutation resetPassword($data: ResetPasswordInput!) {
+  resetPassword(data: $data)
+}
+    `;
+export type ResetPasswordMutationFn = Apollo.MutationFunction<ResetPasswordMutation, ResetPasswordMutationVariables>;
+
+/**
+ * __useResetPasswordMutation__
+ *
+ * To run a mutation, you first call `useResetPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResetPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resetPasswordMutation, { data, loading, error }] = useResetPasswordMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useResetPasswordMutation(baseOptions?: Apollo.MutationHookOptions<ResetPasswordMutation, ResetPasswordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ResetPasswordMutation, ResetPasswordMutationVariables>(ResetPasswordDocument, options);
+      }
+export type ResetPasswordMutationHookResult = ReturnType<typeof useResetPasswordMutation>;
+export type ResetPasswordMutationResult = Apollo.MutationResult<ResetPasswordMutation>;
+export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>;
 export const SignupDocument = gql`
     mutation signup($data: SignUpInput!) {
   signup(data: $data) {
@@ -380,6 +517,37 @@ export function useSignupMutation(baseOptions?: Apollo.MutationHookOptions<Signu
 export type SignupMutationHookResult = ReturnType<typeof useSignupMutation>;
 export type SignupMutationResult = Apollo.MutationResult<SignupMutation>;
 export type SignupMutationOptions = Apollo.BaseMutationOptions<SignupMutation, SignupMutationVariables>;
+export const SendContactMessageDocument = gql`
+    mutation sendContactMessage($data: ContactInput!) {
+  sendContactMessage(data: $data)
+}
+    `;
+export type SendContactMessageMutationFn = Apollo.MutationFunction<SendContactMessageMutation, SendContactMessageMutationVariables>;
+
+/**
+ * __useSendContactMessageMutation__
+ *
+ * To run a mutation, you first call `useSendContactMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendContactMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendContactMessageMutation, { data, loading, error }] = useSendContactMessageMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useSendContactMessageMutation(baseOptions?: Apollo.MutationHookOptions<SendContactMessageMutation, SendContactMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SendContactMessageMutation, SendContactMessageMutationVariables>(SendContactMessageDocument, options);
+      }
+export type SendContactMessageMutationHookResult = ReturnType<typeof useSendContactMessageMutation>;
+export type SendContactMessageMutationResult = Apollo.MutationResult<SendContactMessageMutation>;
+export type SendContactMessageMutationOptions = Apollo.BaseMutationOptions<SendContactMessageMutation, SendContactMessageMutationVariables>;
 export const GetOwnershipLogsDocument = gql`
     query getOwnershipLogs($where: OwnershipLogWhereInput!) {
   OwnershipLogs(where: $where) {
@@ -465,6 +633,42 @@ export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
 export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
 export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;
+export const UpdateUserDocument = gql`
+    mutation updateUser($data: UserUpdateInput!) {
+  updateUser(data: $data) {
+    id
+    email
+    username
+    walletAddress
+  }
+}
+    `;
+export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
+
+/**
+ * __useUpdateUserMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options);
+      }
+export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
+export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
 export const ChangeWatchOwnershipDocument = gql`
     mutation changeWatchOwnership($data: WatchUpdateInput!) {
   changeWatchOwnership(data: $data) {
@@ -508,6 +712,7 @@ export const CreateWatchDocument = gql`
     id
     serialNum
     metadataURI
+    certificateUrl
     ownerId
     lastSynced
   }
@@ -545,6 +750,7 @@ export const GetWatchDocument = gql`
     id
     serialNum
     metadataURI
+    certificateUrl
     ownerId
     lastSynced
     user {
@@ -595,6 +801,7 @@ export const GetWatchesDocument = gql`
     id
     serialNum
     metadataURI
+    certificateUrl
     ownerId
     lastSynced
     user {

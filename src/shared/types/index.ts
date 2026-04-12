@@ -15,4 +15,5 @@ export * from './flex.type';
 export * from './input.type';
 export * from './icon-button.type';
 export * from './icon.type';
-export * from './password-input.type'
+export * from './password-input.type';
+export * from './text.type';

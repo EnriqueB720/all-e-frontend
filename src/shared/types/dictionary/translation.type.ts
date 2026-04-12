@@ -76,17 +76,36 @@ export interface Dictionary {
   };
   register: {
     title: string;
-    form: RegisterForm;
+    form: RegisterForm & { optional: string };
     alreadyAnAccount: string;
   };
   forgotPassword: {
     title: string;
+    sent: string;
     form: {
       email: string;
       submit: string;
       verificationCode: string;
       newPassword: string;
       repeatNewPassword: string;
+    };
+  };
+  resetPassword: {
+    title: string;
+    submit: string;
+    success: string;
+    invalidToken: string;
+  };
+  contact: {
+    title: string;
+    description: string;
+    sent: string;
+    error: string;
+    form: {
+      name: string;
+      email: string;
+      message: string;
+      submit: string;
     };
   };
   login: {
@@ -112,6 +131,7 @@ export interface Dictionary {
     title: string;
     serialNumber: string;
     username: string;
+    walletRequired: string;
     form:{
       register: string;
       cancel: string;
@@ -147,6 +167,9 @@ export interface Dictionary {
     currentOwner: string;
     checkInfoOnBlockchain: string;
     ownershipOfAWatch: string;
+    ipfsCertificate: string;
+    viewOnIpfs: string;
+    cid: string;
   };
   frontPage:{
     title: string;
@@ -167,6 +190,7 @@ export interface Dictionary {
     result:{
       walletOwner: string;
       username: string;
+      email: string;
       ownerSince: string;
       watchFound: string;
       watchesFound: string;
@@ -183,6 +207,18 @@ export interface Dictionary {
     metadataURI: string;
     ownershipHistoryPlaceholder: string;
     lookupError: string;
+  };
+  profile: {
+    addWallet: string;
+    saveWallet: string;
+    cancel: string;
+    walletPlaceholder: string;
+    noWallet: string;
+    email: string;
+    wallet: string;
+    walletTaken: string;
+    walletError: string;
+    walletWarning: string;
   };
   registerAWatchButton: string;
   transferAWatchButton: string;
