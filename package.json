@@ -18,13 +18,17 @@
     "formik": "^2.4.6",
     "graphql": "^16.13.2",
     "jotai": "^2.13.1",
-    "next": "15.5.0",
+    "next": "^15.5.15",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-icons": "^5.5.0",
     "viem": "^2.47.17",
     "wagmi": "^2.19.5",
     "yup": "^1.7.0"
+  },
+  "overrides": {
+    "axios": "^1.15.0",
+    "lodash": "^4.18.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
