@@ -1,4 +1,4 @@
-import {Watch as WatchRequestedData } from "@generated";
+import {Watch as WatchRequestedData, MintStatus } from "@generated";
 import { User } from "@model";
 
 export class Watch {
@@ -22,6 +22,22 @@ export class Watch {
 
     get certificateUrl(){
         return this.data?.certificateUrl!;
+    }
+
+    get tokenId(){
+        return this.data?.tokenId;
+    }
+
+    get txHash(){
+        return this.data?.txHash;
+    }
+
+    get mintStatus(){
+        return this.data?.mintStatus ?? MintStatus.Pending;
+    }
+
+    get basescanTxUrl(){
+        return this.data?.basescanTxUrl;
     }
 
     get user(){

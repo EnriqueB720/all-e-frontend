@@ -13,6 +13,7 @@ import { useTranslation } from '@hooks';
 
 const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInitializing, setIsInitializing] = useState<boolean>(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>(undefined);
 
@@ -35,7 +36,11 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
 
     const refreshUserTokenAsync = async () => {
-      await refreshUserToken();
+      try {
+        await refreshUserToken();
+      } finally {
+        setIsInitializing(false);
+      }
     }
 
     refreshUserTokenAsync();
@@ -171,6 +176,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       value={{
         user,
         isLoading,
+        isInitializing,
         isAuthenticated,
         error,
         login,

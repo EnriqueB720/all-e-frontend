@@ -8,9 +8,11 @@ import { Layout, Box, Flex, Button, Text } from '@components';
 import { useTranslation } from '@hooks';
 
 export default function Home() {
-  const { isAuthenticated, user } = useContext(AuthContext);
+  const { isAuthenticated, isInitializing, user } = useContext(AuthContext);
   const { t } = useTranslation();
   const router = useRouter();
+
+  if (isInitializing) return <Layout><Flex minH="70vh" /></Layout>;
 
   if (!isAuthenticated) {
     return (

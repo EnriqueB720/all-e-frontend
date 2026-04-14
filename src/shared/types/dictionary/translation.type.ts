@@ -100,12 +100,20 @@ export interface Dictionary {
     title: string;
     description: string;
     sent: string;
+    sentTitle: string;
     error: string;
     form: {
       name: string;
       email: string;
       message: string;
       submit: string;
+    };
+    creator: {
+      name: string;
+      role: string;
+      bio: string;
+      scanToConnect: string;
+      openLinkedIn: string;
     };
   };
   login: {
@@ -151,6 +159,7 @@ export interface Dictionary {
       accept: string;
       cancel: string;
     }
+    approvalRequired: string;
     errors: {
       selectWatch: string;
       enterNewOwner: string;
@@ -161,6 +170,7 @@ export interface Dictionary {
   ownershipHistory: {
     title: string;
     walletAddress: string;
+    empty: string;
   };
   seeAWatch:{
     serialNumber: string;
@@ -170,6 +180,27 @@ export interface Dictionary {
     ipfsCertificate: string;
     viewOnIpfs: string;
     cid: string;
+    you: string;
+    nftStatus: string;
+    tokenId: string;
+    transaction: string;
+    viewOnBasescan: string;
+  };
+  mintStatus:{
+    pending: string;
+    minted: string;
+    failed: string;
+  };
+  approval:{
+    title: string;
+    description: string;
+    connectToApprove: string;
+    wrongAccount: string;
+    checking: string;
+    enabled: string;
+    approve: string;
+    approving: string;
+    viewTx: string;
   };
   frontPage:{
     title: string;

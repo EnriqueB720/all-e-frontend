@@ -83,13 +83,21 @@ export const SpanishDictionary: Dictionary = {
   contact: {
     title: 'Contáctanos',
     description: 'Envía un mensaje al creador de la aplicación.',
-    sent: 'Mensaje enviado. ¡Gracias!',
+    sent: 'Gracias por escribir — te responderé pronto.',
+    sentTitle: '¡Mensaje enviado!',
     error: 'No se pudo enviar el mensaje, intenta de nuevo.',
     form: {
       name: 'Tu nombre',
       email: 'Tu correo electrónico',
       message: 'Mensaje',
       submit: 'Enviar mensaje',
+    },
+    creator: {
+      name: 'Enrique Barroso',
+      role: 'Creador y desarrollador de All-E',
+      bio: 'Ingeniero full-stack detrás de All-E. Los mensajes me llegan directamente — suelo responder en un par de días.',
+      scanToConnect: 'Escanea para conectar en LinkedIn',
+      openLinkedIn: 'Abrir perfil de LinkedIn',
     },
   },
   login: {
@@ -136,6 +144,7 @@ export const SpanishDictionary: Dictionary = {
       accept: 'Sí, transferir',
       cancel: 'Cancelar',
     },
+    approvalRequired: 'Las transferencias en cadena requieren una aprobación única. Actívala abajo para continuar.',
     errors: {
       selectWatch: 'Por favor selecciona un reloj',
       enterNewOwner: 'Por favor ingresa el correo del nuevo propietario',
@@ -146,6 +155,7 @@ export const SpanishDictionary: Dictionary = {
   ownershipHistory: {
     title: 'Historial de propiedad',
     walletAddress: 'Dirección de la billetera',
+    empty: 'Aún no se registraron cambios de propiedad.',
   },
   seeAWatch: {
     serialNumber: 'Número de serie',
@@ -155,6 +165,27 @@ export const SpanishDictionary: Dictionary = {
     ipfsCertificate: 'Certificado IPFS',
     viewOnIpfs: 'Ver en IPFS',
     cid: 'CID',
+    you: 'Tú',
+    nftStatus: 'Estado del NFT',
+    tokenId: 'Token ID',
+    transaction: 'Transacción',
+    viewOnBasescan: 'Ver en Basescan',
+  },
+  mintStatus: {
+    pending: 'Minteo pendiente',
+    minted: 'Minteado en cadena',
+    failed: 'Falló el minteo',
+  },
+  approval: {
+    title: 'Transferencias en cadena',
+    description: 'Autoriza a la app a mover tus NFTs en tu nombre. Firma única.',
+    connectToApprove: 'Conecta tu billetera para habilitar transferencias.',
+    wrongAccount: 'La billetera conectada no coincide con la de tu perfil.',
+    checking: 'Verificando estado de aprobación...',
+    enabled: 'Aprobaciones habilitadas',
+    approve: 'Aprobar transferencias',
+    approving: 'Aprobando...',
+    viewTx: 'Ver tx de aprobación',
   },
   frontPage: {
     title: 'Bienvenido al Registro de Relojes',

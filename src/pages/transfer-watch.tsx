@@ -1,14 +1,15 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Heading, NativeSelect } from '@chakra-ui/react';
 
 import { AuthContext } from '@contexts';
-import { Layout, Box, Flex, Button, Input, Text } from '@components';
-import { useTranslation } from '@hooks';
+import { Layout, Box, Flex, Button, Input, Text, TransferApprovalControl } from '@components';
+import { useTranslation, useRequireAuth, useWatchApproval } from '@hooks';
 import { useChangeWatchOwnershipMutation, useGetUserLazyQuery } from '@generated';
 
 export default function TransferWatch() {
-  const { isAuthenticated, user, refreshUserToken } = useContext(AuthContext);
+  const { isReady, user } = useRequireAuth();
+  const { refreshUserToken } = useContext(AuthContext);
   const { t } = useTranslation();
   const router = useRouter();
 
@@ -19,14 +20,9 @@ export default function TransferWatch() {
 
   const [changeOwnership, { loading: transferring }] = useChangeWatchOwnershipMutation();
   const [findUser, { loading: findingUser }] = useGetUserLazyQuery();
+  const { isApproved } = useWatchApproval();
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/login');
-    }
-  }, [isAuthenticated, router]);
-
-  if (!isAuthenticated || !user) return null;
+  if (!isReady || !user) return null;
 
   const watches = user.watches || [];
   const selectedWatch = watches.find((w) => w.id.toString() === selectedWatchId);
@@ -135,12 +131,21 @@ export default function TransferWatch() {
               <Text color="red.400" fontSize="sm">{error}</Text>
             )}
 
+            {!isApproved && (
+              <Box bg={{ base: 'orange.50', _dark: 'orange.900' }} p={3} borderRadius="md">
+                <Text fontSize="xs" color={{ base: 'orange.700', _dark: 'orange.200' }} mb={2}>
+                  {t('transferWatch.approvalRequired')}
+                </Text>
+                <TransferApprovalControl ownerWalletAddress={user.data.walletAddress} />
+              </Box>
+            )}
+
             {!showConfirm ? (
               <Button
                 bg="#00a884"
                 color="white"
                 loading={findingUser}
-                disabled={!selectedWatchId || !newOwnerEmail}
+                disabled={!selectedWatchId || !newOwnerEmail || !isApproved}
                 onClick={() => setShowConfirm(true)}
               >
                 {t('transferWatch.form.transfer')}

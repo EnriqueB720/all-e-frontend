@@ -5,6 +5,7 @@ import { AuthCredentials, User, SignUpUser } from '@model';
 export interface IAuthContext {
   user?: User;
   isLoading: boolean;
+  isInitializing: boolean;
   isAuthenticated: boolean;
   error?: string;
   login: (credentials: AuthCredentials) => Promise<boolean>;
@@ -17,6 +18,7 @@ export interface IAuthContext {
 export default createContext<IAuthContext>({
   user: undefined,
   isLoading: false,
+  isInitializing: true,
   isAuthenticated: false,
   error: undefined,
   login: () => Promise.resolve(false),

@@ -4,6 +4,10 @@ query getWatches($where: WatchWhereInput!) {
     serialNum
     metadataURI
     certificateUrl
+    tokenId
+    txHash
+    mintStatus
+    basescanTxUrl
     ownerId
     lastSynced
     user {
@@ -11,9 +15,12 @@ query getWatches($where: WatchWhereInput!) {
       username
       email
       walletAddress
+      createdAt
+      language
     }
     ownershipLog {
       id
+      watchId
       ownerId
       timestamp
     }

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Heading, Separator, Link } from '@chakra-ui/react';
 
-import { Layout, Box, Flex, Button, Input, CopyableText, Text } from '@components';
+import { Layout, Box, Flex, Button, Input, CopyableText, Text, DetailRow, ExternalLink } from '@components';
 import { useTranslation } from '@hooks';
 import { useGetWatchLazyQuery, useGetWatchesLazyQuery } from '@generated';
 
@@ -122,6 +122,28 @@ export default function CheckOwnership() {
                 _hover={{ textDecoration: 'underline' }}
               >
                 {t('seeAWatch.viewOnIpfs')}
+              </Link>
+            </Flex>
+          </>
+        )}
+
+        {watch.basescanTxUrl && (
+          <>
+            <Separator borderColor={{ base: 'gray.300', _dark: 'gray.700' }} />
+             <Flex justify="space-between" align="center">
+              <Text color={{ base: 'gray.600', _dark: 'gray.400' }} fontSize="sm">
+                {t('seeAWatch.transaction')}
+              </Text>
+              <Link
+                href={watch.basescanTxUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                color="#00a884"
+                fontWeight="bold"
+                fontSize="sm"
+                _hover={{ textDecoration: 'underline' }}
+              >
+                {t('seeAWatch.viewOnBasescan')}
               </Link>
             </Flex>
           </>

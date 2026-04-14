@@ -1,28 +1,40 @@
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Heading, Badge, Separator, Link } from '@chakra-ui/react';
+import { Heading } from '@chakra-ui/react';
 
-import { AuthContext } from '@contexts';
-import { Layout, Box, Flex, Button, Text } from '@components';
-import { useTranslation } from '@hooks';
+import { Layout, Flex, Button, Text, WatchDetailCard, OwnershipHistoryCard } from '@components';
+import { useTranslation, useRequireAuth } from '@hooks';
+import { useGetWatchQuery, MintStatus } from '@generated';
+import { Watch as WatchModel } from '@model';
 
 export default function WatchDetail() {
-  const { isAuthenticated, user } = useContext(AuthContext);
+  const { isReady, user } = useRequireAuth();
   const { t } = useTranslation();
   const router = useRouter();
   const { serialNum } = router.query;
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/login');
-    }
-  }, [isAuthenticated, router]);
-
-  if (!isAuthenticated || !user || !serialNum) return null;
-
-  const watch = user.watches?.find(
+  const cachedWatch = user?.watches?.find(
     (w) => w.serialNum === (serialNum as string)
   );
+
+  const { data, startPolling, stopPolling } = useGetWatchQuery({
+    variables: { where: { serialNum: serialNum as string } },
+    skip: !serialNum,
+    fetchPolicy: 'cache-and-network',
+  });
+
+  const watch = data?.watch ? new WatchModel(data.watch) : cachedWatch;
+
+  useEffect(() => {
+    if (watch?.mintStatus === MintStatus.Pending) {
+      startPolling(4000);
+    } else {
+      stopPolling();
+    }
+    return () => stopPolling();
+  }, [watch?.mintStatus, startPolling, stopPolling]);
+
+  if (!isReady || !user || !serialNum) return null;
 
   if (!watch) {
     return (
@@ -54,68 +66,14 @@ export default function WatchDetail() {
           </Button>
         </Flex>
 
-        <Box bg={{ base: 'white', _dark: 'gray.800' }} p={6} borderRadius="lg" boxShadow={{ base: 'sm', _dark: 'none' }}>
-          <Flex direction="column" gap={4}>
-            <Flex justify="space-between" align="center">
-              <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="sm">{t('seeAWatch.serialNumber')}</Text>
-              <Text color={{ base: 'gray.900', _dark: 'white' }} fontWeight="bold" fontSize="xl">#{watch.serialNum}</Text>
-            </Flex>
+        <WatchDetailCard
+          watch={watch}
+          ownerUsername={user.username}
+          ownerWalletAddress={user.data.walletAddress}
+          isCurrentUserOwner
+        />
 
-            <Separator borderColor={{ base: 'gray.200', _dark: 'gray.700' }} />
-
-            <Flex justify="space-between" align="center">
-              <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="sm">{t('seeAWatch.currentOwner')}</Text>
-              <Flex align="center" gap={2}>
-                <Text color={{ base: 'gray.900', _dark: 'white' }}>{user.username}</Text>
-                <Badge colorPalette="green">You</Badge>
-              </Flex>
-            </Flex>
-
-           
-
-            {user.data.walletAddress && (
-              <>
-                <Separator borderColor={{ base: 'gray.200', _dark: 'gray.700' }} />
-                <Flex justify="space-between" align="center">
-                  <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="sm">{t('ownershipHistory.walletAddress')}</Text>
-                  <Text color={{ base: 'gray.600', _dark: 'gray.300' }} fontSize="sm" fontFamily="mono">
-                    {user.data.walletAddress}
-                  </Text>
-                </Flex>
-              </>
-            )}
-
-            {watch.certificateUrl && (
-              <>
-                <Separator borderColor={{ base: 'gray.200', _dark: 'gray.700' }} />
-                <Flex justify="space-between" align="center">
-                  <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="sm">{t('seeAWatch.ipfsCertificate')}</Text>
-                  <Link
-                    href={watch.certificateUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    color="#00a884"
-                    fontWeight="bold"
-                    fontSize="sm"
-                    _hover={{ textDecoration: 'underline' }}
-                  >
-                    {t('seeAWatch.viewOnIpfs')}
-                  </Link>
-                </Flex>
-              </>
-            )}
-          </Flex>
-        </Box>
-
-        <Box bg={{ base: 'white', _dark: 'gray.800' }} p={6} borderRadius="lg" boxShadow={{ base: 'sm', _dark: 'none' }}>
-          <Heading size="md" color={{ base: 'gray.900', _dark: 'white' }} mb={4}>
-            {t('ownershipHistory.title')}
-          </Heading>
-
-          <Text color={{ base: 'gray.500', _dark: 'gray.500' }} fontSize="sm">
-            {t('dashboard.ownershipHistoryPlaceholder')}
-          </Text>
-        </Box>
+        <OwnershipHistoryCard entries={data?.watch?.ownershipLog ?? []} />
       </Flex>
     </Layout>
   );

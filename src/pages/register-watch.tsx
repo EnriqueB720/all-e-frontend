@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Heading } from '@chakra-ui/react';
 import * as yup from 'yup';
 
 import { AuthContext } from '@contexts';
 import { Layout, Box, Flex, Form, Button, Text } from '@components';
-import { useTranslation } from '@hooks';
+import { useTranslation, useRequireAuth } from '@hooks';
 import { useCreateWatchMutation } from '@generated';
 import { FieldProps } from '@types';
 
@@ -22,17 +22,12 @@ const initialValues: RegisterWatchFormValues = {
 };
 
 export default function RegisterWatch() {
-  const { isAuthenticated, user, refreshUserToken } = useContext(AuthContext);
+  const { isReady, user } = useRequireAuth();
+  const { refreshUserToken } = useContext(AuthContext);
   const { t } = useTranslation();
   const router = useRouter();
   const [createWatch, { loading }] = useCreateWatchMutation();
   const [error, setError] = useState<string | undefined>(undefined);
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/login');
-    }
-  }, [isAuthenticated, router]);
 
   const fields: FieldProps[] = [
     {
@@ -66,7 +61,7 @@ export default function RegisterWatch() {
     }
   };
 
-  if (!isAuthenticated) return null;
+  if (!isReady) return null;
 
   return (
     <Layout>

@@ -1,22 +1,29 @@
-import { 
+import {
   Button,
-  Box, 
+  Box,
   Flex,
   Input,
   IconButton,
   Icon,
   Text,
-  CopyableText
+  CopyableText,
+  MintStatusBadge,
+  ExternalLink,
+  ConnectWalletButton
  } from "@atoms";
 
-import { 
+import {
   Field,
   Form,
-  PasswordInput } from "@molecules";
+  PasswordInput,
+  DetailRow,
+  TransferApprovalControl } from "@molecules";
 
 
 import {
-  Navbar
+  Navbar,
+  WatchDetailCard,
+  OwnershipHistoryCard
 } from '@organisms'
 
 import {
@@ -33,8 +40,15 @@ export {
   IconButton,
   Icon,
   PasswordInput,
+  DetailRow,
+  TransferApprovalControl,
   Navbar,
+  WatchDetailCard,
+  OwnershipHistoryCard,
   Layout,
   Text,
-  CopyableText
+  CopyableText,
+  MintStatusBadge,
+  ExternalLink,
+  ConnectWalletButton
 }

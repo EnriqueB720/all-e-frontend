@@ -15,7 +15,7 @@ import { useColorMode } from '@/shared/contexts/color-mode.context';
 import NextLink from 'next/link';
 
 import { AuthContext } from '@contexts';
-import { Box, Flex, Button, Input, CopyableText, Text } from '@components';
+import { Box, Flex, Button, Input, CopyableText, Text, TransferApprovalControl } from '@components';
 import { useTranslation } from '@hooks';
 import { Language, useUpdateUserMutation } from '@generated';
 
@@ -182,6 +182,18 @@ const Navbar: React.FC = () => {
                           </Flex>
                         )}
                       </Flex>
+
+                      {user?.data.walletAddress && (
+                        <>
+                          <Separator borderColor={{ base: 'gray.200', _dark: 'gray.600' }} />
+                          <Flex direction="column" gap={2}>
+                            <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="xs" fontWeight="medium">
+                              {t('approval.title')}
+                            </Text>
+                            <TransferApprovalControl ownerWalletAddress={user.data.walletAddress} />
+                          </Flex>
+                        </>
+                      )}
                     </Flex>
                   </PopoverContent>
                 </PopoverPositioner>

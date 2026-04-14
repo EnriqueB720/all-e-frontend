@@ -43,6 +43,13 @@ export type LoginUserInput = {
   password: Scalars['String'];
 };
 
+/** On-chain mint lifecycle for a watch NFT */
+export enum MintStatus {
+  Failed = 'FAILED',
+  Minted = 'MINTED',
+  Pending = 'PENDING'
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
   changeWatchOwnership: Watch;
@@ -98,6 +105,7 @@ export type MutationUpdateUserArgs = {
 export type OwnershipLog = {
   __typename?: 'OwnershipLog';
   id: Scalars['Float'];
+  owner?: Maybe<User>;
   ownerId: Scalars['Float'];
   timestamp: Scalars['DateTime'];
   watch?: Maybe<Watch>;
@@ -192,13 +200,17 @@ export type UserWhereInput = {
 
 export type Watch = {
   __typename?: 'Watch';
+  basescanTxUrl?: Maybe<Scalars['String']>;
   certificateUrl?: Maybe<Scalars['String']>;
   id: Scalars['Float'];
   lastSynced: Scalars['DateTime'];
   metadataURI?: Maybe<Scalars['String']>;
+  mintStatus?: Maybe<MintStatus>;
   ownerId: Scalars['Float'];
   ownershipLog?: Maybe<Array<OwnershipLog>>;
   serialNum?: Maybe<Scalars['String']>;
+  tokenId?: Maybe<Scalars['String']>;
+  txHash?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
 };
 
@@ -237,14 +249,14 @@ export type LoginQueryVariables = Exact<{
 }>;
 
 
-export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, walletAddress?: string | null, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any }> | null } } };
+export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, walletAddress?: string | null, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, tokenId?: string | null, txHash?: string | null, mintStatus?: MintStatus | null, basescanTxUrl?: string | null, ownerId: number, lastSynced: any }> | null } } };
 
 export type RefreshUserQueryVariables = Exact<{
   data: Scalars['String'];
 }>;
 
 
-export type RefreshUserQuery = { __typename?: 'Query', refreshUser: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, walletAddress?: string | null, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any }> | null } } };
+export type RefreshUserQuery = { __typename?: 'Query', refreshUser: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, walletAddress?: string | null, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, tokenId?: string | null, txHash?: string | null, mintStatus?: MintStatus | null, basescanTxUrl?: string | null, ownerId: number, lastSynced: any }> | null } } };
 
 export type ResetPasswordMutationVariables = Exact<{
   data: ResetPasswordInput;
@@ -300,21 +312,21 @@ export type CreateWatchMutationVariables = Exact<{
 }>;
 
 
-export type CreateWatchMutation = { __typename?: 'Mutation', createWatch: { __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any } };
+export type CreateWatchMutation = { __typename?: 'Mutation', createWatch: { __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, tokenId?: string | null, txHash?: string | null, mintStatus?: MintStatus | null, basescanTxUrl?: string | null, ownerId: number, lastSynced: any } };
 
 export type GetWatchQueryVariables = Exact<{
   where: WatchWhereInput;
 }>;
 
 
-export type GetWatchQuery = { __typename?: 'Query', watch: { __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any, user?: { __typename?: 'User', id: number, username: string, email: string, walletAddress?: string | null } | null, ownershipLog?: Array<{ __typename?: 'OwnershipLog', id: number, ownerId: number, timestamp: any }> | null } };
+export type GetWatchQuery = { __typename?: 'Query', watch: { __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, tokenId?: string | null, txHash?: string | null, mintStatus?: MintStatus | null, basescanTxUrl?: string | null, ownerId: number, lastSynced: any, user?: { __typename?: 'User', id: number, username: string, email: string, walletAddress?: string | null, createdAt: any, language: Language } | null, ownershipLog?: Array<{ __typename?: 'OwnershipLog', id: number, watchId: number, ownerId: number, timestamp: any, owner?: { __typename?: 'User', id: number, username: string, walletAddress?: string | null } | null }> | null } };
 
 export type GetWatchesQueryVariables = Exact<{
   where: WatchWhereInput;
 }>;
 
 
-export type GetWatchesQuery = { __typename?: 'Query', watches: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any, user?: { __typename?: 'User', id: number, username: string, email: string, walletAddress?: string | null } | null, ownershipLog?: Array<{ __typename?: 'OwnershipLog', id: number, ownerId: number, timestamp: any }> | null }> };
+export type GetWatchesQuery = { __typename?: 'Query', watches: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, tokenId?: string | null, txHash?: string | null, mintStatus?: MintStatus | null, basescanTxUrl?: string | null, ownerId: number, lastSynced: any, user?: { __typename?: 'User', id: number, username: string, email: string, walletAddress?: string | null, createdAt: any, language: Language } | null, ownershipLog?: Array<{ __typename?: 'OwnershipLog', id: number, watchId: number, ownerId: number, timestamp: any }> | null }> };
 
 
 export const ForgotPasswordDocument = gql`
@@ -365,6 +377,10 @@ export const LoginDocument = gql`
         serialNum
         metadataURI
         certificateUrl
+        tokenId
+        txHash
+        mintStatus
+        basescanTxUrl
         ownerId
         lastSynced
       }
@@ -417,6 +433,10 @@ export const RefreshUserDocument = gql`
         serialNum
         metadataURI
         certificateUrl
+        tokenId
+        txHash
+        mintStatus
+        basescanTxUrl
         ownerId
         lastSynced
       }
@@ -713,6 +733,10 @@ export const CreateWatchDocument = gql`
     serialNum
     metadataURI
     certificateUrl
+    tokenId
+    txHash
+    mintStatus
+    basescanTxUrl
     ownerId
     lastSynced
   }
@@ -751,6 +775,10 @@ export const GetWatchDocument = gql`
     serialNum
     metadataURI
     certificateUrl
+    tokenId
+    txHash
+    mintStatus
+    basescanTxUrl
     ownerId
     lastSynced
     user {
@@ -758,11 +786,19 @@ export const GetWatchDocument = gql`
       username
       email
       walletAddress
+      createdAt
+      language
     }
     ownershipLog {
       id
+      watchId
       ownerId
       timestamp
+      owner {
+        id
+        username
+        walletAddress
+      }
     }
   }
 }
@@ -802,6 +838,10 @@ export const GetWatchesDocument = gql`
     serialNum
     metadataURI
     certificateUrl
+    tokenId
+    txHash
+    mintStatus
+    basescanTxUrl
     ownerId
     lastSynced
     user {
@@ -809,9 +849,12 @@ export const GetWatchesDocument = gql`
       username
       email
       walletAddress
+      createdAt
+      language
     }
     ownershipLog {
       id
+      watchId
       ownerId
       timestamp
     }

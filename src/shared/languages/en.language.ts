@@ -83,13 +83,21 @@ export const EnglishDictionary: Dictionary = {
   contact: {
     title: 'Contact us',
     description: 'Send a message to the app creator.',
-    sent: 'Message sent. Thank you!',
+    sent: "Thanks for reaching out — I'll reply soon.",
+    sentTitle: 'Message sent!',
     error: 'Failed to send message, please try again.',
     form: {
       name: 'Your name',
       email: 'Your email',
       message: 'Message',
       submit: 'Send message',
+    },
+    creator: {
+      name: 'Enrique Barroso',
+      role: 'Creator & developer of All-E',
+      bio: "Full-stack engineer behind All-E. Messages come straight to me — expect a reply within a couple of days.",
+      scanToConnect: 'Scan to connect on LinkedIn',
+      openLinkedIn: 'Open LinkedIn profile',
     },
   },
   login: {
@@ -136,6 +144,7 @@ export const EnglishDictionary: Dictionary = {
       accept: 'Yes, transfer',
       cancel: 'Cancel',
     },
+    approvalRequired: 'On-chain transfers require a one-time approval. Enable it below to continue.',
     errors: {
       selectWatch: 'Please select a watch',
       enterNewOwner: 'Please enter the new owner email',
@@ -146,6 +155,7 @@ export const EnglishDictionary: Dictionary = {
   ownershipHistory: {
     title: 'Ownership History',
     walletAddress: 'Wallet Address',
+    empty: 'No ownership changes recorded yet.',
   },
   seeAWatch: {
     serialNumber: 'Serial Number',
@@ -155,6 +165,27 @@ export const EnglishDictionary: Dictionary = {
     ipfsCertificate: 'IPFS Certificate',
     viewOnIpfs: 'View on IPFS',
     cid: 'CID',
+    you: 'You',
+    nftStatus: 'NFT status',
+    tokenId: 'Token ID',
+    transaction: 'Transaction',
+    viewOnBasescan: 'View on Basescan',
+  },
+  mintStatus: {
+    pending: 'Mint pending',
+    minted: 'Minted on-chain',
+    failed: 'Mint failed',
+  },
+  approval: {
+    title: 'On-chain transfers',
+    description: 'Approve the app to move your NFTs on your behalf. One-time signature.',
+    connectToApprove: 'Connect your wallet to enable transfers.',
+    wrongAccount: 'Connected wallet does not match your profile wallet address.',
+    checking: 'Checking approval status...',
+    enabled: 'Approvals enabled',
+    approve: 'Approve transfers',
+    approving: 'Approving...',
+    viewTx: 'View approval tx',
   },
   frontPage: {
     title: 'Welcome to the Watch Registry',
