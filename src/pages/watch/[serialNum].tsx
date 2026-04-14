@@ -1,10 +1,9 @@
-import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Heading } from '@chakra-ui/react';
 
 import { Layout, Flex, Button, Text, WatchDetailCard, OwnershipHistoryCard } from '@components';
 import { useTranslation, useRequireAuth } from '@hooks';
-import { useGetWatchQuery, useRetryMintMutation, MintStatus } from '@generated';
+import { useGetWatchQuery } from '@generated';
 import { Watch as WatchModel } from '@model';
 
 export default function WatchDetail() {
@@ -17,34 +16,13 @@ export default function WatchDetail() {
     (w) => w.serialNum === (serialNum as string)
   );
 
-  const { data, startPolling, stopPolling } = useGetWatchQuery({
+  const { data } = useGetWatchQuery({
     variables: { where: { serialNum: serialNum as string } },
     skip: !serialNum,
     fetchPolicy: 'cache-and-network',
   });
 
-  const watch = data?.watch ? new WatchModel(data.watch) : cachedWatch;
-
-  const [retryMint, { loading: retrying }] = useRetryMintMutation();
-
-  const handleRetry = async () => {
-    if (!watch?.id) return;
-    try {
-      await retryMint({ variables: { watchId: watch.id } });
-      startPolling(4000);
-    } catch (err) {
-      console.error('Retry failed', err);
-    }
-  };
-
-  useEffect(() => {
-    if (watch?.mintStatus === MintStatus.Pending) {
-      startPolling(4000);
-    } else {
-      stopPolling();
-    }
-    return () => stopPolling();
-  }, [watch?.mintStatus, startPolling, stopPolling]);
+  const watch = data?.watch ? new WatchModel(data.watch as any) : cachedWatch;
 
   if (!isReady || !user || !serialNum) return null;
 
@@ -68,26 +46,14 @@ export default function WatchDetail() {
           <Heading size="lg" color={{ base: 'gray.900', _dark: 'white' }}>
             {t('seeAWatch.ownershipOfAWatch')}
           </Heading>
-          <Flex gap={3}>
-            {watch.mintStatus === MintStatus.Failed && (
-              <Button
-                bg="#e53e3e"
-                color="white"
-                onClick={handleRetry}
-                disabled={retrying}
-              >
-                {retrying ? t('mintStatus.retrying') : t('mintStatus.retry')}
-              </Button>
-            )}
-            <Button
-              variant="outline"
-              color="#00a884"
-              borderColor="#00a884"
-              onClick={() => router.push('/transfer-watch')}
-            >
-              {t('transferAWatchButton')}
-            </Button>
-          </Flex>
+          <Button
+            variant="outline"
+            color="#00a884"
+            borderColor="#00a884"
+            onClick={() => router.push('/transfer-watch')}
+          >
+            {t('transferAWatchButton')}
+          </Button>
         </Flex>
 
         <WatchDetailCard

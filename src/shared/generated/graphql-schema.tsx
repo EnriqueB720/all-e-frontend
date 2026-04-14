@@ -57,7 +57,6 @@ export type Mutation = {
   createWatch: Watch;
   forgotPassword: Scalars['Boolean'];
   resetPassword: Scalars['Boolean'];
-  retryMint: Watch;
   sendContactMessage: Scalars['Boolean'];
   signup: User;
   updateUser: User;
@@ -86,11 +85,6 @@ export type MutationForgotPasswordArgs = {
 
 export type MutationResetPasswordArgs = {
   data: ResetPasswordInput;
-};
-
-
-export type MutationRetryMintArgs = {
-  watchId: Scalars['Int'];
 };
 
 
@@ -255,14 +249,14 @@ export type LoginQueryVariables = Exact<{
 }>;
 
 
-export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, walletAddress?: string | null, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, tokenId?: string | null, txHash?: string | null, mintStatus?: MintStatus | null, basescanTxUrl?: string | null, ownerId: number, lastSynced: any }> | null } } };
+export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, walletAddress?: string | null, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any }> | null } } };
 
 export type RefreshUserQueryVariables = Exact<{
   data: Scalars['String'];
 }>;
 
 
-export type RefreshUserQuery = { __typename?: 'Query', refreshUser: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, walletAddress?: string | null, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, tokenId?: string | null, txHash?: string | null, mintStatus?: MintStatus | null, basescanTxUrl?: string | null, ownerId: number, lastSynced: any }> | null } } };
+export type RefreshUserQuery = { __typename?: 'Query', refreshUser: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, walletAddress?: string | null, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any }> | null } } };
 
 export type ResetPasswordMutationVariables = Exact<{
   data: ResetPasswordInput;
@@ -318,28 +312,21 @@ export type CreateWatchMutationVariables = Exact<{
 }>;
 
 
-export type CreateWatchMutation = { __typename?: 'Mutation', createWatch: { __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, tokenId?: string | null, txHash?: string | null, mintStatus?: MintStatus | null, basescanTxUrl?: string | null, ownerId: number, lastSynced: any } };
+export type CreateWatchMutation = { __typename?: 'Mutation', createWatch: { __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any } };
 
 export type GetWatchQueryVariables = Exact<{
   where: WatchWhereInput;
 }>;
 
 
-export type GetWatchQuery = { __typename?: 'Query', watch: { __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, tokenId?: string | null, txHash?: string | null, mintStatus?: MintStatus | null, basescanTxUrl?: string | null, ownerId: number, lastSynced: any, user?: { __typename?: 'User', id: number, username: string, email: string, walletAddress?: string | null, createdAt: any, language: Language } | null, ownershipLog?: Array<{ __typename?: 'OwnershipLog', id: number, watchId: number, ownerId: number, timestamp: any, owner?: { __typename?: 'User', id: number, username: string, walletAddress?: string | null } | null }> | null } };
+export type GetWatchQuery = { __typename?: 'Query', watch: { __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any, user?: { __typename?: 'User', id: number, username: string, email: string, walletAddress?: string | null, createdAt: any, language: Language } | null, ownershipLog?: Array<{ __typename?: 'OwnershipLog', id: number, watchId: number, ownerId: number, timestamp: any, owner?: { __typename?: 'User', id: number, username: string, walletAddress?: string | null } | null }> | null } };
 
 export type GetWatchesQueryVariables = Exact<{
   where: WatchWhereInput;
 }>;
 
 
-export type GetWatchesQuery = { __typename?: 'Query', watches: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, tokenId?: string | null, txHash?: string | null, mintStatus?: MintStatus | null, basescanTxUrl?: string | null, ownerId: number, lastSynced: any, user?: { __typename?: 'User', id: number, username: string, email: string, walletAddress?: string | null, createdAt: any, language: Language } | null, ownershipLog?: Array<{ __typename?: 'OwnershipLog', id: number, watchId: number, ownerId: number, timestamp: any }> | null }> };
-
-export type RetryMintMutationVariables = Exact<{
-  watchId: Scalars['Int'];
-}>;
-
-
-export type RetryMintMutation = { __typename?: 'Mutation', retryMint: { __typename?: 'Watch', id: number, serialNum?: string | null, mintStatus?: MintStatus | null, tokenId?: string | null, txHash?: string | null, basescanTxUrl?: string | null } };
+export type GetWatchesQuery = { __typename?: 'Query', watches: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any, user?: { __typename?: 'User', id: number, username: string, email: string, walletAddress?: string | null, createdAt: any, language: Language } | null, ownershipLog?: Array<{ __typename?: 'OwnershipLog', id: number, watchId: number, ownerId: number, timestamp: any }> | null }> };
 
 
 export const ForgotPasswordDocument = gql`
@@ -390,10 +377,6 @@ export const LoginDocument = gql`
         serialNum
         metadataURI
         certificateUrl
-        tokenId
-        txHash
-        mintStatus
-        basescanTxUrl
         ownerId
         lastSynced
       }
@@ -446,10 +429,6 @@ export const RefreshUserDocument = gql`
         serialNum
         metadataURI
         certificateUrl
-        tokenId
-        txHash
-        mintStatus
-        basescanTxUrl
         ownerId
         lastSynced
       }
@@ -746,10 +725,6 @@ export const CreateWatchDocument = gql`
     serialNum
     metadataURI
     certificateUrl
-    tokenId
-    txHash
-    mintStatus
-    basescanTxUrl
     ownerId
     lastSynced
   }
@@ -788,10 +763,6 @@ export const GetWatchDocument = gql`
     serialNum
     metadataURI
     certificateUrl
-    tokenId
-    txHash
-    mintStatus
-    basescanTxUrl
     ownerId
     lastSynced
     user {
@@ -851,10 +822,6 @@ export const GetWatchesDocument = gql`
     serialNum
     metadataURI
     certificateUrl
-    tokenId
-    txHash
-    mintStatus
-    basescanTxUrl
     ownerId
     lastSynced
     user {
@@ -902,41 +869,3 @@ export function useGetWatchesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetWatchesQueryHookResult = ReturnType<typeof useGetWatchesQuery>;
 export type GetWatchesLazyQueryHookResult = ReturnType<typeof useGetWatchesLazyQuery>;
 export type GetWatchesQueryResult = Apollo.QueryResult<GetWatchesQuery, GetWatchesQueryVariables>;
-export const RetryMintDocument = gql`
-    mutation retryMint($watchId: Int!) {
-  retryMint(watchId: $watchId) {
-    id
-    serialNum
-    mintStatus
-    tokenId
-    txHash
-    basescanTxUrl
-  }
-}
-    `;
-export type RetryMintMutationFn = Apollo.MutationFunction<RetryMintMutation, RetryMintMutationVariables>;
-
-/**
- * __useRetryMintMutation__
- *
- * To run a mutation, you first call `useRetryMintMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRetryMintMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [retryMintMutation, { data, loading, error }] = useRetryMintMutation({
- *   variables: {
- *      watchId: // value for 'watchId'
- *   },
- * });
- */
-export function useRetryMintMutation(baseOptions?: Apollo.MutationHookOptions<RetryMintMutation, RetryMintMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RetryMintMutation, RetryMintMutationVariables>(RetryMintDocument, options);
-      }
-export type RetryMintMutationHookResult = ReturnType<typeof useRetryMintMutation>;
-export type RetryMintMutationResult = Apollo.MutationResult<RetryMintMutation>;
-export type RetryMintMutationOptions = Apollo.BaseMutationOptions<RetryMintMutation, RetryMintMutationVariables>;

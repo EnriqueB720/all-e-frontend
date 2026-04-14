@@ -4,7 +4,7 @@ import { Heading } from '@chakra-ui/react';
 import * as yup from 'yup';
 
 import { AuthContext } from '@contexts';
-import { Layout, Box, Flex, Form, Button, Text } from '@components';
+import { Layout, Box, Flex, Form } from '@components';
 import { useTranslation, useRequireAuth } from '@hooks';
 import { useCreateWatchMutation } from '@generated';
 import { FieldProps } from '@types';
@@ -78,27 +78,16 @@ export default function RegisterWatch() {
             {t('watchRegistry.title')}
           </Heading>
 
-          {!user?.data.walletAddress ? (
-            <Flex direction="column" gap={4} align="center">
-              <Text color={{ base: 'orange.600', _dark: 'orange.300' }} textAlign="center">
-                {t('watchRegistry.walletRequired')}
-              </Text>
-              <Button bg="#00a884" color="white" onClick={() => router.push('/')}>
-                {t('dashboard.backToDashboard')}
-              </Button>
-            </Flex>
-          ) : (
-            <Form<RegisterWatchFormValues>
-              fields={fields}
-              validationSchema={registerWatchSchema}
-              formValues={initialValues}
-              isLoading={loading}
-              errorMessage={error}
-              submitButtonText={t('watchRegistry.form.register')}
-              onSubmit={handleRegister}
-              groupings={[1]}
-            />
-          )}
+          <Form<RegisterWatchFormValues>
+            fields={fields}
+            validationSchema={registerWatchSchema}
+            formValues={initialValues}
+            isLoading={loading}
+            errorMessage={error}
+            submitButtonText={t('watchRegistry.form.register')}
+            onSubmit={handleRegister}
+            groupings={[1]}
+          />
         </Box>
       </Flex>
     </Layout>

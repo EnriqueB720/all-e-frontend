@@ -3,8 +3,8 @@ import { useRouter } from 'next/router';
 import { Heading, NativeSelect } from '@chakra-ui/react';
 
 import { AuthContext } from '@contexts';
-import { Layout, Box, Flex, Button, Input, Text, TransferApprovalControl } from '@components';
-import { useTranslation, useRequireAuth, useWatchApproval } from '@hooks';
+import { Layout, Box, Flex, Button, Input, Text } from '@components';
+import { useTranslation, useRequireAuth } from '@hooks';
 import { useChangeWatchOwnershipMutation, useGetUserLazyQuery } from '@generated';
 
 export default function TransferWatch() {
@@ -20,7 +20,6 @@ export default function TransferWatch() {
 
   const [changeOwnership, { loading: transferring }] = useChangeWatchOwnershipMutation();
   const [findUser, { loading: findingUser }] = useGetUserLazyQuery();
-  const { isApproved } = useWatchApproval();
 
   if (!isReady || !user) return null;
 
@@ -131,21 +130,12 @@ export default function TransferWatch() {
               <Text color="red.400" fontSize="sm">{error}</Text>
             )}
 
-            {!isApproved && (
-              <Box bg={{ base: 'orange.50', _dark: 'orange.900' }} p={3} borderRadius="md">
-                <Text fontSize="xs" color={{ base: 'orange.700', _dark: 'orange.200' }} mb={2}>
-                  {t('transferWatch.approvalRequired')}
-                </Text>
-                <TransferApprovalControl ownerWalletAddress={user.data.walletAddress} />
-              </Box>
-            )}
-
             {!showConfirm ? (
               <Button
                 bg="#00a884"
                 color="white"
                 loading={findingUser}
-                disabled={!selectedWatchId || !newOwnerEmail || !isApproved}
+                disabled={!selectedWatchId || !newOwnerEmail}
                 onClick={() => setShowConfirm(true)}
               >
                 {t('transferWatch.form.transfer')}

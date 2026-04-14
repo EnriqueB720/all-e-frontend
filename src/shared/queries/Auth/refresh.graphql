@@ -14,10 +14,6 @@ query refreshUser($data: String!){
         serialNum
         metadataURI
         certificateUrl
-        tokenId
-        txHash
-        mintStatus
-        basescanTxUrl
         ownerId
         lastSynced
       },

@@ -123,7 +123,6 @@ export const EnglishDictionary: Dictionary = {
     title: 'Register a Watch',
     serialNumber: 'Serial Number',
     username: 'Username',
-    walletRequired: 'You need to add a wallet address to your profile before registering a watch.',
     form: {
       register: 'Register Watch',
       cancel: 'Cancel',
@@ -144,7 +143,6 @@ export const EnglishDictionary: Dictionary = {
       accept: 'Yes, transfer',
       cancel: 'Cancel',
     },
-    approvalRequired: 'On-chain transfers require a one-time approval. Enable it below to continue.',
     errors: {
       selectWatch: 'Please select a watch',
       enterNewOwner: 'Please enter the new owner email',
@@ -160,34 +158,11 @@ export const EnglishDictionary: Dictionary = {
   seeAWatch: {
     serialNumber: 'Serial Number',
     currentOwner: 'Current Owner',
-    checkInfoOnBlockchain: 'Check Info on Blockchain',
     ownershipOfAWatch: 'Ownership of a Watch',
     ipfsCertificate: 'IPFS Certificate',
     viewOnIpfs: 'View on IPFS',
     cid: 'CID',
     you: 'You',
-    nftStatus: 'NFT status',
-    tokenId: 'Token ID',
-    transaction: 'Transaction',
-    viewOnBasescan: 'View on Basescan',
-  },
-  mintStatus: {
-    pending: 'Mint pending',
-    minted: 'Minted on-chain',
-    failed: 'Mint failed',
-    retry: 'Retry mint',
-    retrying: 'Retrying...',
-  },
-  approval: {
-    title: 'On-chain transfers',
-    description: 'Approve the app to move your NFTs on your behalf. One-time signature.',
-    connectToApprove: 'Connect your wallet to enable transfers.',
-    wrongAccount: 'Connected wallet does not match your profile wallet address.',
-    checking: 'Checking approval status...',
-    enabled: 'Approvals enabled',
-    approve: 'Approve transfers',
-    approving: 'Approving...',
-    viewTx: 'View approval tx',
   },
   frontPage: {
     title: 'Welcome to the Watch Registry',
@@ -246,7 +221,6 @@ export const EnglishDictionary: Dictionary = {
     referAs: 'Creator of the app',
   },
   logoutMessage: 'Log out',
-  connectWallet: 'Connect Wallet',
 };
 
 export default EnglishDictionary

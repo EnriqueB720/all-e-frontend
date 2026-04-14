@@ -139,7 +139,6 @@ export interface Dictionary {
     title: string;
     serialNumber: string;
     username: string;
-    walletRequired: string;
     form:{
       register: string;
       cancel: string;
@@ -159,7 +158,6 @@ export interface Dictionary {
       accept: string;
       cancel: string;
     }
-    approvalRequired: string;
     errors: {
       selectWatch: string;
       enterNewOwner: string;
@@ -175,34 +173,11 @@ export interface Dictionary {
   seeAWatch:{
     serialNumber: string;
     currentOwner: string;
-    checkInfoOnBlockchain: string;
     ownershipOfAWatch: string;
     ipfsCertificate: string;
     viewOnIpfs: string;
     cid: string;
     you: string;
-    nftStatus: string;
-    tokenId: string;
-    transaction: string;
-    viewOnBasescan: string;
-  };
-  mintStatus:{
-    pending: string;
-    minted: string;
-    failed: string;
-    retry: string;
-    retrying: string;
-  };
-  approval:{
-    title: string;
-    description: string;
-    connectToApprove: string;
-    wrongAccount: string;
-    checking: string;
-    enabled: string;
-    approve: string;
-    approving: string;
-    viewTx: string;
   };
   frontPage:{
     title: string;
@@ -257,7 +232,6 @@ export interface Dictionary {
   transferAWatchButton: string;
   AppCreatorProfile: AppCreatorProfile;
   logoutMessage: string;
-  connectWallet: string;
 };
 
 

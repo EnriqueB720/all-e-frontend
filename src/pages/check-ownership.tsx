@@ -127,27 +127,6 @@ export default function CheckOwnership() {
           </>
         )}
 
-        {watch.basescanTxUrl && (
-          <>
-            <Separator borderColor={{ base: 'gray.300', _dark: 'gray.700' }} />
-             <Flex justify="space-between" align="center">
-              <Text color={{ base: 'gray.600', _dark: 'gray.400' }} fontSize="sm">
-                {t('seeAWatch.transaction')}
-              </Text>
-              <Link
-                href={watch.basescanTxUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                color="#00a884"
-                fontWeight="bold"
-                fontSize="sm"
-                _hover={{ textDecoration: 'underline' }}
-              >
-                {t('seeAWatch.viewOnBasescan')}
-              </Link>
-            </Flex>
-          </>
-        )}
       </Flex>
     </Box>
   );

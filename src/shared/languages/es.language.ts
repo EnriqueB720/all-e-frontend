@@ -123,7 +123,6 @@ export const SpanishDictionary: Dictionary = {
     title: 'Registrar un reloj',
     serialNumber: 'Número de serie',
     username: 'Nombre de usuario',
-    walletRequired: 'Debes agregar una dirección de billetera a tu perfil antes de registrar un reloj.',
     form: {
       register: 'Registrar reloj',
       cancel: 'Cancelar',
@@ -144,7 +143,6 @@ export const SpanishDictionary: Dictionary = {
       accept: 'Sí, transferir',
       cancel: 'Cancelar',
     },
-    approvalRequired: 'Las transferencias en cadena requieren una aprobación única. Actívala abajo para continuar.',
     errors: {
       selectWatch: 'Por favor selecciona un reloj',
       enterNewOwner: 'Por favor ingresa el correo del nuevo propietario',
@@ -160,34 +158,11 @@ export const SpanishDictionary: Dictionary = {
   seeAWatch: {
     serialNumber: 'Número de serie',
     currentOwner: 'Propietario actual',
-    checkInfoOnBlockchain: 'Ver información en blockchain',
     ownershipOfAWatch: 'Propiedad de un reloj',
     ipfsCertificate: 'Certificado IPFS',
     viewOnIpfs: 'Ver en IPFS',
     cid: 'CID',
     you: 'Tú',
-    nftStatus: 'Estado del NFT',
-    tokenId: 'Token ID',
-    transaction: 'Transacción',
-    viewOnBasescan: 'Ver en Basescan',
-  },
-  mintStatus: {
-    pending: 'Minteo pendiente',
-    minted: 'Minteado en cadena',
-    failed: 'Falló el minteo',
-    retry: 'Reintentar minteo',
-    retrying: 'Reintentando...',
-  },
-  approval: {
-    title: 'Transferencias en cadena',
-    description: 'Autoriza a la app a mover tus NFTs en tu nombre. Firma única.',
-    connectToApprove: 'Conecta tu billetera para habilitar transferencias.',
-    wrongAccount: 'La billetera conectada no coincide con la de tu perfil.',
-    checking: 'Verificando estado de aprobación...',
-    enabled: 'Aprobaciones habilitadas',
-    approve: 'Aprobar transferencias',
-    approving: 'Aprobando...',
-    viewTx: 'Ver tx de aprobación',
   },
   frontPage: {
     title: 'Bienvenido al Registro de Relojes',
@@ -247,7 +222,6 @@ export const SpanishDictionary: Dictionary = {
     referAs: 'Creador de la aplicación',
   },
   logoutMessage: 'Cerrar sesión',
-  connectWallet: 'Conectar billetera',
 };
 
 export default SpanishDictionary

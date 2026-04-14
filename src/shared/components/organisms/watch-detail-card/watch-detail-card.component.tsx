@@ -2,7 +2,7 @@ import * as React from 'react';
 import _ from 'lodash';
 import { Badge } from '@chakra-ui/react';
 
-import { Box, ExternalLink, Flex, MintStatusBadge, Text } from '@atoms';
+import { Box, ExternalLink, Flex, Text } from '@atoms';
 import { DetailRow } from '@molecules';
 import { useTranslation } from '@hooks';
 import { WatchDetailCardProps } from '@types';
@@ -52,30 +52,6 @@ const WatchDetailCard: React.FC<WatchDetailCardProps> = ({
           <DetailRow label={t('seeAWatch.ipfsCertificate')}>
             <ExternalLink href={watch.certificateUrl}>
               {t('seeAWatch.viewOnIpfs')}
-            </ExternalLink>
-          </DetailRow>
-        )}
-
-        <DetailRow label={t('seeAWatch.nftStatus')}>
-          <MintStatusBadge status={watch.mintStatus} />
-        </DetailRow>
-
-        {watch.tokenId && (
-          <DetailRow label={t('seeAWatch.tokenId')}>
-            <Text
-              color={{ base: 'gray.900', _dark: 'white' }}
-              fontFamily="mono"
-              fontSize="sm"
-            >
-              #{watch.tokenId}
-            </Text>
-          </DetailRow>
-        )}
-
-        {watch.basescanTxUrl && (
-          <DetailRow label={t('seeAWatch.transaction')}>
-            <ExternalLink href={watch.basescanTxUrl}>
-              {t('seeAWatch.viewOnBasescan')}
             </ExternalLink>
           </DetailRow>
         )}

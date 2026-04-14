@@ -7,9 +7,7 @@ import {
   Icon,
   Text,
   CopyableText,
-  MintStatusBadge,
   ExternalLink,
-  ConnectWalletButton
  } from "@atoms";
 
 import {
@@ -17,7 +15,7 @@ import {
   Form,
   PasswordInput,
   DetailRow,
-  TransferApprovalControl } from "@molecules";
+} from "@molecules";
 
 
 import {
@@ -41,14 +39,11 @@ export {
   Icon,
   PasswordInput,
   DetailRow,
-  TransferApprovalControl,
   Navbar,
   WatchDetailCard,
   OwnershipHistoryCard,
   Layout,
   Text,
   CopyableText,
-  MintStatusBadge,
   ExternalLink,
-  ConnectWalletButton
 }
