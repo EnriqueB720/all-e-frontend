@@ -8,7 +8,6 @@ query login($data: LoginUserInput!){
       username
       language
       createdAt
-      walletAddress
       watch{
         id,
         serialNum

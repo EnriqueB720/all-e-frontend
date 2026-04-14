@@ -10,7 +10,6 @@ import { WatchDetailCardProps } from '@types';
 const WatchDetailCard: React.FC<WatchDetailCardProps> = ({
   watch,
   ownerUsername,
-  ownerWalletAddress,
   isCurrentUserOwner = false,
 }) => {
   const { t } = useTranslation();

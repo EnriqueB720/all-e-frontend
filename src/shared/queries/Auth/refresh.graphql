@@ -8,7 +8,6 @@ query refreshUser($data: String!){
       username
       language
       createdAt
-      walletAddress
       watch{
         id,
         serialNum

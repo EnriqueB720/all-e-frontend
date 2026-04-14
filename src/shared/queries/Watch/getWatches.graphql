@@ -10,7 +10,6 @@ query getWatches($where: WatchWhereInput!) {
       id
       username
       email
-      walletAddress
       createdAt
       language
     }
