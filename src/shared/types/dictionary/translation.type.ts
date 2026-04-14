@@ -190,6 +190,8 @@ export interface Dictionary {
     pending: string;
     minted: string;
     failed: string;
+    retry: string;
+    retrying: string;
   };
   approval:{
     title: string;

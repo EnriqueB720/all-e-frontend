@@ -175,6 +175,8 @@ export const SpanishDictionary: Dictionary = {
     pending: 'Minteo pendiente',
     minted: 'Minteado en cadena',
     failed: 'Falló el minteo',
+    retry: 'Reintentar minteo',
+    retrying: 'Reintentando...',
   },
   approval: {
     title: 'Transferencias en cadena',

@@ -4,7 +4,7 @@ import { Heading } from '@chakra-ui/react';
 
 import { Layout, Flex, Button, Text, WatchDetailCard, OwnershipHistoryCard } from '@components';
 import { useTranslation, useRequireAuth } from '@hooks';
-import { useGetWatchQuery, MintStatus } from '@generated';
+import { useGetWatchQuery, useRetryMintMutation, MintStatus } from '@generated';
 import { Watch as WatchModel } from '@model';
 
 export default function WatchDetail() {
@@ -24,6 +24,18 @@ export default function WatchDetail() {
   });
 
   const watch = data?.watch ? new WatchModel(data.watch) : cachedWatch;
+
+  const [retryMint, { loading: retrying }] = useRetryMintMutation();
+
+  const handleRetry = async () => {
+    if (!watch?.id) return;
+    try {
+      await retryMint({ variables: { watchId: watch.id } });
+      startPolling(4000);
+    } catch (err) {
+      console.error('Retry failed', err);
+    }
+  };
 
   useEffect(() => {
     if (watch?.mintStatus === MintStatus.Pending) {
@@ -56,14 +68,26 @@ export default function WatchDetail() {
           <Heading size="lg" color={{ base: 'gray.900', _dark: 'white' }}>
             {t('seeAWatch.ownershipOfAWatch')}
           </Heading>
-          <Button
-            variant="outline"
-            color="#00a884"
-            borderColor="#00a884"
-            onClick={() => router.push('/transfer-watch')}
-          >
-            {t('transferAWatchButton')}
-          </Button>
+          <Flex gap={3}>
+            {watch.mintStatus === MintStatus.Failed && (
+              <Button
+                bg="#e53e3e"
+                color="white"
+                onClick={handleRetry}
+                disabled={retrying}
+              >
+                {retrying ? t('mintStatus.retrying') : t('mintStatus.retry')}
+              </Button>
+            )}
+            <Button
+              variant="outline"
+              color="#00a884"
+              borderColor="#00a884"
+              onClick={() => router.push('/transfer-watch')}
+            >
+              {t('transferAWatchButton')}
+            </Button>
+          </Flex>
         </Flex>
 
         <WatchDetailCard

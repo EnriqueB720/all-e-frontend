@@ -57,6 +57,7 @@ export type Mutation = {
   createWatch: Watch;
   forgotPassword: Scalars['Boolean'];
   resetPassword: Scalars['Boolean'];
+  retryMint: Watch;
   sendContactMessage: Scalars['Boolean'];
   signup: User;
   updateUser: User;
@@ -85,6 +86,11 @@ export type MutationForgotPasswordArgs = {
 
 export type MutationResetPasswordArgs = {
   data: ResetPasswordInput;
+};
+
+
+export type MutationRetryMintArgs = {
+  watchId: Scalars['Int'];
 };
 
 
@@ -327,6 +333,13 @@ export type GetWatchesQueryVariables = Exact<{
 
 
 export type GetWatchesQuery = { __typename?: 'Query', watches: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, tokenId?: string | null, txHash?: string | null, mintStatus?: MintStatus | null, basescanTxUrl?: string | null, ownerId: number, lastSynced: any, user?: { __typename?: 'User', id: number, username: string, email: string, walletAddress?: string | null, createdAt: any, language: Language } | null, ownershipLog?: Array<{ __typename?: 'OwnershipLog', id: number, watchId: number, ownerId: number, timestamp: any }> | null }> };
+
+export type RetryMintMutationVariables = Exact<{
+  watchId: Scalars['Int'];
+}>;
+
+
+export type RetryMintMutation = { __typename?: 'Mutation', retryMint: { __typename?: 'Watch', id: number, serialNum?: string | null, mintStatus?: MintStatus | null, tokenId?: string | null, txHash?: string | null, basescanTxUrl?: string | null } };
 
 
 export const ForgotPasswordDocument = gql`
@@ -889,3 +902,41 @@ export function useGetWatchesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetWatchesQueryHookResult = ReturnType<typeof useGetWatchesQuery>;
 export type GetWatchesLazyQueryHookResult = ReturnType<typeof useGetWatchesLazyQuery>;
 export type GetWatchesQueryResult = Apollo.QueryResult<GetWatchesQuery, GetWatchesQueryVariables>;
+export const RetryMintDocument = gql`
+    mutation retryMint($watchId: Int!) {
+  retryMint(watchId: $watchId) {
+    id
+    serialNum
+    mintStatus
+    tokenId
+    txHash
+    basescanTxUrl
+  }
+}
+    `;
+export type RetryMintMutationFn = Apollo.MutationFunction<RetryMintMutation, RetryMintMutationVariables>;
+
+/**
+ * __useRetryMintMutation__
+ *
+ * To run a mutation, you first call `useRetryMintMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRetryMintMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [retryMintMutation, { data, loading, error }] = useRetryMintMutation({
+ *   variables: {
+ *      watchId: // value for 'watchId'
+ *   },
+ * });
+ */
+export function useRetryMintMutation(baseOptions?: Apollo.MutationHookOptions<RetryMintMutation, RetryMintMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RetryMintMutation, RetryMintMutationVariables>(RetryMintDocument, options);
+      }
+export type RetryMintMutationHookResult = ReturnType<typeof useRetryMintMutation>;
+export type RetryMintMutationResult = Apollo.MutationResult<RetryMintMutation>;
+export type RetryMintMutationOptions = Apollo.BaseMutationOptions<RetryMintMutation, RetryMintMutationVariables>;

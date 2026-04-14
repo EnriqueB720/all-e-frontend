@@ -175,6 +175,8 @@ export const EnglishDictionary: Dictionary = {
     pending: 'Mint pending',
     minted: 'Minted on-chain',
     failed: 'Mint failed',
+    retry: 'Retry mint',
+    retrying: 'Retrying...',
   },
   approval: {
     title: 'On-chain transfers',
