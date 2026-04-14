@@ -167,7 +167,7 @@ export const SpanishDictionary: Dictionary = {
   frontPage: {
     title: 'Bienvenido al Registro de Relojes',
     description:
-      'Registra, transfiere y verifica la propiedad de relojes en la blockchain.',
+      'Registra, transfiere y verifica la propiedad de relojes.',
   },
   checkAWatchOwnership: {
     title: 'Verificar propiedad de un reloj',
@@ -200,7 +200,7 @@ export const SpanishDictionary: Dictionary = {
     owned: 'Propiedad',
     watchNotFound: 'Reloj no encontrado',
     metadataURI: 'URI de metadatos',
-    ownershipHistoryPlaceholder: 'El historial de propiedad estará disponible una vez que la integración con blockchain esté completa.',
+    ownershipHistoryPlaceholder: 'Aún no hay historial de propiedad.',
     lookupError: 'Reloj no encontrado o ha ocurrido un error.',
   },
   profile: {

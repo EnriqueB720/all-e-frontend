@@ -43,13 +43,6 @@ export type LoginUserInput = {
   password: Scalars['String'];
 };
 
-/** On-chain mint lifecycle for a watch NFT */
-export enum MintStatus {
-  Failed = 'FAILED',
-  Minted = 'MINTED',
-  Pending = 'PENDING'
-}
-
 export type Mutation = {
   __typename?: 'Mutation';
   changeWatchOwnership: Watch;
@@ -200,17 +193,13 @@ export type UserWhereInput = {
 
 export type Watch = {
   __typename?: 'Watch';
-  basescanTxUrl?: Maybe<Scalars['String']>;
   certificateUrl?: Maybe<Scalars['String']>;
   id: Scalars['Float'];
   lastSynced: Scalars['DateTime'];
   metadataURI?: Maybe<Scalars['String']>;
-  mintStatus?: Maybe<MintStatus>;
   ownerId: Scalars['Float'];
   ownershipLog?: Maybe<Array<OwnershipLog>>;
   serialNum?: Maybe<Scalars['String']>;
-  tokenId?: Maybe<Scalars['String']>;
-  txHash?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
 };
 

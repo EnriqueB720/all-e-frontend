@@ -167,7 +167,7 @@ export const EnglishDictionary: Dictionary = {
   frontPage: {
     title: 'Welcome to the Watch Registry',
     description:
-      'Register, transfer, and verify the ownership of watches on the blockchain.',
+      'Register, transfer, and verify the ownership of watches.',
   },
   checkAWatchOwnership: {
     title: 'Check Watch Ownership',
@@ -199,7 +199,7 @@ export const EnglishDictionary: Dictionary = {
     owned: 'Owned',
     watchNotFound: 'Watch not found',
     metadataURI: 'Metadata URI',
-    ownershipHistoryPlaceholder: 'Ownership history will be available once blockchain integration is complete.',
+    ownershipHistoryPlaceholder: 'No ownership history yet.',
     lookupError: 'Watch not found or an error occurred.',
   },
   profile: {
