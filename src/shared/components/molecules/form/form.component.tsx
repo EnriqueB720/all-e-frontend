@@ -33,7 +33,15 @@ const Form = <T extends FormikValues,>({
 
     <Formik initialValues={formValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
       {(formik) => (
-        <FormikForm>
+        <FormikForm
+          onKeyDown={(e: React.KeyboardEvent<HTMLFormElement>) => {
+            const target = e.target as HTMLElement;
+            if (e.key === 'Enter' && target.tagName !== 'TEXTAREA') {
+              e.preventDefault();
+              if (!isLoading) formik.submitForm();
+            }
+          }}
+        >
           {groupings.map((subGroup, i) => {
             const lastFieldIndex = groupings.slice(0, i).reduce((total, size) => total + size, 0);
             const subGroupFields = fields.slice(lastFieldIndex, lastFieldIndex + subGroup);

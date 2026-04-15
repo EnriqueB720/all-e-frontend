@@ -44,8 +44,8 @@ export default function Contact() {
   return (
     <Layout>
       <Flex direction="column" align="center" mt={10} mb={16} gap={8} px={4}>
-        <Flex direction="column" align="center" gap={2}>
-          <Heading size="xl" color={{ base: 'gray.900', _dark: 'white' }}>
+        <Flex direction="column" align="center" gap={2} className="fade-in-up">
+          <Heading size="3xl" className="gradient-text" letterSpacing="tight">
             {t('contact.title')}
           </Heading>
           <Text color={mutedText}>
@@ -61,6 +61,7 @@ export default function Contact() {
           align="stretch"
         >
           <Box
+            className="soft-card fade-in-up stagger-1"
             flex="1"
             bg={cardBg}
             borderWidth="1px"
@@ -94,6 +95,7 @@ export default function Contact() {
           </Box>
 
           <Box
+            className="soft-card fade-in-up stagger-2"
             w={{ base: '100%', md: '320px' }}
             bg={cardBg}
             borderWidth="1px"

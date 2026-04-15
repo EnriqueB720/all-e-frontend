@@ -59,9 +59,9 @@ export default function Login() {
       minH="100vh"
       align="center"
       justify="center"
-      bg={{ base: 'gray.50', _dark: 'gray.900' }}
     >
       <Box
+        className="soft-card fade-in-up"
         bg={{ base: 'white', _dark: 'gray.800' }}
         p={8}
         borderRadius="xl"
@@ -75,7 +75,7 @@ export default function Login() {
           </Text>
         </NextLink>
 
-        <Heading as="h1" size="xl" color={{ base: 'gray.900', _dark: 'white' }} mb={6} textAlign="center">
+        <Heading as="h1" size="2xl" mb={6} textAlign="center" className="gradient-text" letterSpacing="tight">
           {t('login.title')}
         </Heading>
 

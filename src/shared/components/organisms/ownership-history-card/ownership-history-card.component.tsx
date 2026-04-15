@@ -1,6 +1,6 @@
 import * as React from 'react';
 import _ from 'lodash';
-import { Heading } from '@chakra-ui/react';
+import { Heading, Link } from '@chakra-ui/react';
 
 import { Box, Flex, Text } from '@atoms';
 import { DetailRow } from '@molecules';
@@ -21,6 +21,7 @@ const OwnershipHistoryCard: React.FC<OwnershipHistoryCardProps> = ({ entries }) 
 
   return (
     <Box
+      className="soft-card"
       bg={{ base: 'white', _dark: 'gray.800' }}
       p={6}
       borderRadius="lg"
@@ -42,14 +43,21 @@ const OwnershipHistoryCard: React.FC<OwnershipHistoryCardProps> = ({ entries }) 
               label={formatTimestamp(entry.timestamp)}
               showSeparator={idx !== 0}
             >
-              <Flex direction="column" align="flex-end">
+              <Flex direction="column" align="flex-end" gap={1}>
                 <Text color={{ base: 'gray.900', _dark: 'white' }} fontSize="sm" fontWeight="medium">
                   {entry.owner?.username ?? `#${entry.ownerId}`}
                 </Text>
-                {entry.owner?.walletAddress && (
-                  <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="xs" fontFamily="mono">
-                    {entry.owner.walletAddress}
-                  </Text>
+                {entry.certificateUrl && (
+                  <Link
+                    href={entry.certificateUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    color="#00a884"
+                    fontSize="xs"
+                    _hover={{ textDecoration: 'underline' }}
+                  >
+                    {t('seeAWatch.viewOnIpfs')}
+                  </Link>
                 )}
               </Flex>
             </DetailRow>

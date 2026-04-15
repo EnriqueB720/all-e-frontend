@@ -16,6 +16,7 @@ const WatchDetailCard: React.FC<WatchDetailCardProps> = ({
 
   return (
     <Box
+      className="soft-card"
       bg={{ base: 'white', _dark: 'gray.800' }}
       p={6}
       borderRadius="lg"
@@ -34,18 +35,6 @@ const WatchDetailCard: React.FC<WatchDetailCardProps> = ({
             {isCurrentUserOwner && <Badge colorPalette="green">{t('seeAWatch.you')}</Badge>}
           </Flex>
         </DetailRow>
-
-        {ownerWalletAddress && (
-          <DetailRow label={t('ownershipHistory.walletAddress')}>
-            <Text
-              color={{ base: 'gray.600', _dark: 'gray.300' }}
-              fontSize="sm"
-              fontFamily="mono"
-            >
-              {ownerWalletAddress}
-            </Text>
-          </DetailRow>
-        )}
 
         {watch.certificateUrl && (
           <DetailRow label={t('seeAWatch.ipfsCertificate')}>

@@ -18,6 +18,8 @@ query getWatch($where: WatchWhereInput!) {
       watchId
       ownerId
       timestamp
+      metadataURI
+      certificateUrl
       owner {
         id
         username

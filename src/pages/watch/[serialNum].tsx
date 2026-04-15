@@ -31,7 +31,7 @@ export default function WatchDetail() {
       <Layout>
         <Flex direction="column" align="center" justify="center" minH="50vh" gap={4}>
           <Text color={{ base: 'gray.500', _dark: 'gray.500' }} fontSize="lg">{t('dashboard.watchNotFound')}</Text>
-          <Button bg="#00a884" color="white" onClick={() => router.push('/')}>
+          <Button color="white" className="brand-gradient-bg" onClick={() => router.push('/')}>
             {t('dashboard.backToDashboard')}
           </Button>
         </Flex>
@@ -41,9 +41,9 @@ export default function WatchDetail() {
 
   return (
     <Layout>
-      <Flex direction="column" gap={6}>
+      <Flex direction="column" gap={6} className="fade-in-up">
         <Flex justify="space-between" align="center">
-          <Heading size="lg" color={{ base: 'gray.900', _dark: 'white' }}>
+          <Heading size="2xl" className="gradient-text" letterSpacing="tight">
             {t('seeAWatch.ownershipOfAWatch')}
           </Heading>
           <Button
@@ -59,7 +59,6 @@ export default function WatchDetail() {
         <WatchDetailCard
           watch={watch}
           ownerUsername={user.username}
-          ownerWalletAddress={user.data.walletAddress}
           isCurrentUserOwner
         />
 

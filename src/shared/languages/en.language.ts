@@ -57,7 +57,6 @@ export const EnglishDictionary: Dictionary = {
       email: 'Email',
       username: 'Username',
       password: 'Password',
-      walletAddress: 'Wallet address',
       repeatPassword: 'Repeat password',
       optional: 'optional',
     },
@@ -152,7 +151,6 @@ export const EnglishDictionary: Dictionary = {
   },
   ownershipHistory: {
     title: 'Ownership History',
-    walletAddress: 'Wallet Address',
     empty: 'No ownership changes recorded yet.',
   },
   seeAWatch: {
@@ -171,18 +169,15 @@ export const EnglishDictionary: Dictionary = {
   },
   checkAWatchOwnership: {
     title: 'Check Watch Ownership',
-    description: 'Search by serial number, username, or wallet address',
+    description: 'Search by serial number or username',
     serialNumber: 'Serial Number',
     check: 'Check',
     searchBy: {
       serialNum: 'Serial Number',
       username: 'Username',
-      walletAddress: 'Wallet',
       usernamePlaceholder: 'Enter username',
-      walletPlaceholder: 'Enter wallet address',
     },
     result: {
-      walletOwner: 'Wallet Owner',
       username: 'Username',
       email: 'Email',
       ownerSince: 'Owner Since',
@@ -203,16 +198,8 @@ export const EnglishDictionary: Dictionary = {
     lookupError: 'Watch not found or an error occurred.',
   },
   profile: {
-    addWallet: 'Add Wallet',
-    saveWallet: 'Save',
     cancel: 'Cancel',
-    walletPlaceholder: '0x...',
-    noWallet: 'No wallet address',
     email: 'Email',
-    wallet: 'Wallet',
-    walletTaken: 'This wallet address is already in use by another account',
-    walletError: 'Failed to save wallet address, please try again',
-    walletWarning: 'The wallet address cannot be changed after saving',
   },
   registerAWatchButton: 'Register a Watch',
   transferAWatchButton: 'Transfer a Watch',

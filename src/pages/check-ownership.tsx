@@ -5,7 +5,7 @@ import { Layout, Box, Flex, Button, Input, CopyableText, Text, DetailRow, Extern
 import { useTranslation } from '@hooks';
 import { useGetWatchLazyQuery, useGetWatchesLazyQuery } from '@generated';
 
-type SearchType = 'serialNum' | 'username' | 'walletAddress';
+type SearchType = 'serialNum' | 'username';
 
 export default function CheckOwnership() {
   const { t } = useTranslation();
@@ -45,11 +45,10 @@ export default function CheckOwnership() {
   const placeholderMap: Record<SearchType, string> = {
     serialNum: t('checkAWatchOwnership.serialNumber'),
     username: t('checkAWatchOwnership.searchBy.usernamePlaceholder'),
-    walletAddress: t('checkAWatchOwnership.searchBy.walletPlaceholder'),
   };
 
   const renderWatchCard = (watch: any) => (
-    <Box key={watch.id} bg={{ base: 'gray.100', _dark: 'gray.800' }} p={6} borderRadius="lg" w="100%" maxW="500px">
+    <Box key={watch.id} className="soft-card fade-in-up" bg={{ base: 'white', _dark: 'gray.800' }} p={6} borderRadius="lg" w="100%" maxW="500px" boxShadow={{ base: 'sm', _dark: 'none' }}>
       <Flex direction="column" gap={4}>
         <Flex justify="space-between">
           <Text color={{ base: 'gray.600', _dark: 'gray.400' }} fontSize="sm">
@@ -77,19 +76,6 @@ export default function CheckOwnership() {
             <CopyableText value={watch.user.email} />
           ) : (
             <Text color={{ base: 'gray.900', _dark: 'white' }}>—</Text>
-          )}
-        </Flex>
-
-        <Separator borderColor={{ base: 'gray.300', _dark: 'gray.700' }} />
-
-        <Flex justify="space-between">
-          <Text color={{ base: 'gray.600', _dark: 'gray.400' }} fontSize="sm">
-            {t('checkAWatchOwnership.result.walletOwner')}
-          </Text>
-          {watch.user?.walletAddress ? (
-            <CopyableText value={watch.user.walletAddress} mono />
-          ) : (
-            <Text color={{ base: 'gray.700', _dark: 'gray.300' }} fontSize="sm" fontFamily="mono">—</Text>
           )}
         </Flex>
 
@@ -133,8 +119,8 @@ export default function CheckOwnership() {
 
   return (
     <Layout>
-      <Flex direction="column" align="center" mt={10} gap={6}>
-        <Heading size="xl" color={{ base: 'gray.900', _dark: 'white' }}>
+      <Flex direction="column" align="center" mt={10} gap={6} className="fade-in-up">
+        <Heading size="3xl" className="gradient-text" letterSpacing="tight" textAlign="center">
           {t('checkAWatchOwnership.title')}
         </Heading>
         <Text color={{ base: 'gray.600', _dark: 'gray.400' }}>
@@ -142,7 +128,7 @@ export default function CheckOwnership() {
         </Text>
 
         <Flex gap={2} w="100%" maxW="500px" justify="center">
-          {(['serialNum', 'username', 'walletAddress'] as SearchType[]).map((type) => (
+          {(['serialNum', 'username'] as SearchType[]).map((type) => (
             <Button
               key={type}
               size="sm"
@@ -168,13 +154,19 @@ export default function CheckOwnership() {
             placeholder={placeholderMap[searchType]}
             value={searchValue}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value)}
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              if (e.key === 'Enter' && searchValue && !loading) {
+                handleCheck();
+              }
+            }}
             flex={1}
           />
           <Button
-            bg="#00a884"
             color="white"
+            className="brand-gradient-bg"
             loading={loading}
             onClick={handleCheck}
+            px={6}
           >
             {t('checkAWatchOwnership.check')}
           </Button>

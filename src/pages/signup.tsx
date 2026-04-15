@@ -15,7 +15,6 @@ interface SignUpFormValues {
   username: string;
   password: string;
   repeatPassword: string;
-  walletAddress: string;
 }
 
 const signUpInitialValues: SignUpFormValues = {
@@ -23,7 +22,6 @@ const signUpInitialValues: SignUpFormValues = {
   username: '',
   password: '',
   repeatPassword: '',
-  walletAddress: '',
 };
 
 export default function Signup() {
@@ -68,12 +66,6 @@ export default function Signup() {
       isRequired: true,
       isPassword: true,
     },
-    {
-      label: t('register.form.walletAddress'),
-      name: 'walletAddress',
-      inputPlaceholder: '0x... (' + t('register.form.optional') + ')',
-      isRequired: false,
-    },
   ];
 
   const handleSignUp = async (values: SignUpFormValues) => {
@@ -90,9 +82,9 @@ export default function Signup() {
       minH="100vh"
       align="center"
       justify="center"
-      bg={{ base: 'gray.50', _dark: 'gray.900' }}
     >
       <Box
+        className="soft-card fade-in-up"
         bg={{ base: 'white', _dark: 'gray.800' }}
         p={8}
         borderRadius="xl"
@@ -106,7 +98,7 @@ export default function Signup() {
           </Text>
         </NextLink>
 
-        <Heading as="h1" size="xl" color={{ base: 'gray.900', _dark: 'white' }} mb={6} textAlign="center">
+        <Heading as="h1" size="2xl" mb={6} textAlign="center" className="gradient-text" letterSpacing="tight">
           {t('register.title')}
         </Heading>
 
@@ -118,7 +110,7 @@ export default function Signup() {
           errorMessage={error}
           submitButtonText={t('register.form.submit')}
           onSubmit={handleSignUp}
-          groupings={[1, 1, 2, 1]}
+          groupings={[1, 1, 2]}
         />
 
         <Text mt={4} textAlign="center" color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="sm">

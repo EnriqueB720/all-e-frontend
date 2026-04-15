@@ -14,7 +14,6 @@ interface ProfileForm extends Form {
   email: string;
   username: string;
   password: string;
-  walletAddress: string;
 }
 
 interface RegisterForm extends ProfileForm {
@@ -167,7 +166,6 @@ export interface Dictionary {
   };
   ownershipHistory: {
     title: string;
-    walletAddress: string;
     empty: string;
   };
   seeAWatch:{
@@ -191,12 +189,9 @@ export interface Dictionary {
     searchBy: {
       serialNum: string;
       username: string;
-      walletAddress: string;
       usernamePlaceholder: string;
-      walletPlaceholder: string;
     };
     result:{
-      walletOwner: string;
       username: string;
       email: string;
       ownerSince: string;
@@ -217,16 +212,8 @@ export interface Dictionary {
     lookupError: string;
   };
   profile: {
-    addWallet: string;
-    saveWallet: string;
     cancel: string;
-    walletPlaceholder: string;
-    noWallet: string;
     email: string;
-    wallet: string;
-    walletTaken: string;
-    walletError: string;
-    walletWarning: string;
   };
   registerAWatchButton: string;
   transferAWatchButton: string;

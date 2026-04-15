@@ -21,15 +21,15 @@ export default function ForgotPassword() {
   };
 
   return (
-    <Flex minH="100vh" align="center" justify="center" bg={{ base: 'gray.50', _dark: 'gray.900' }}>
-      <Box bg={{ base: 'white', _dark: 'gray.800' }} p={8} borderRadius="xl" w="100%" maxW="400px" boxShadow="xl">
+    <Flex minH="100vh" align="center" justify="center">
+      <Box className="soft-card fade-in-up" bg={{ base: 'white', _dark: 'gray.800' }} p={8} borderRadius="xl" w="100%" maxW="400px" boxShadow="xl">
         <NextLink href="/login">
           <Text color="#00a884" fontSize="sm" mb={4} cursor="pointer" _hover={{ textDecoration: 'underline' }}>
             &larr; {t('login.title')}
           </Text>
         </NextLink>
 
-        <Heading as="h1" size="xl" color={{ base: 'gray.900', _dark: 'white' }} mb={6} textAlign="center">
+        <Heading as="h1" size="2xl" mb={6} textAlign="center" className="gradient-text" letterSpacing="tight">
           {t('forgotPassword.title')}
         </Heading>
 
@@ -47,7 +47,7 @@ export default function ForgotPassword() {
               value={email}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
             />
-            <Button bg="#00a884" color="white" loading={loading} onClick={handleSubmit}>
+            <Button color="white" className="brand-gradient-bg" loading={loading} onClick={handleSubmit}>
               {t('forgotPassword.form.submit')}
             </Button>
             {error && (

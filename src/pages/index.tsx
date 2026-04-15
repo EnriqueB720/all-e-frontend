@@ -18,20 +18,32 @@ export default function Home() {
     return (
       <Layout>
         <Flex direction="column" align="center" justify="center" minH="70vh" gap={6}>
-          <Heading size="2xl" color={{ base: 'gray.900', _dark: 'white' }} textAlign="center">
+          <Heading
+            size="4xl"
+            textAlign="center"
+            className="gradient-text fade-in-up"
+            letterSpacing="tight"
+            lineHeight="1.05"
+          >
             {t('frontPage.title')}
           </Heading>
-          <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="lg" textAlign="center" maxW="600px">
+          <Text
+            className="fade-in-up stagger-2"
+            color={{ base: 'gray.600', _dark: 'gray.300' }}
+            fontSize="xl"
+            textAlign="center"
+            maxW="640px"
+          >
             {t('frontPage.description')}
           </Text>
-          <Flex gap={4}>
+          <Flex gap={4} className="fade-in-up stagger-3">
             <NextLink href="/login">
-              <Button size="lg" bg="#00a884" color="white">
+              <Button size="lg" color="white" className="brand-gradient-bg" px={8}>
                 {t('login.title')}
               </Button>
             </NextLink>
             <NextLink href="/check-ownership">
-              <Button size="lg" variant="outline" color="#00a884" borderColor="#00a884">
+              <Button size="lg" variant="outline" color="#00a884" borderColor="#00a884" px={8} _hover={{ bg: 'rgba(0,168,132,0.08)', transform: 'translateY(-1px)' }} transition="all 0.2s">
                 {t('checkAWatchOwnership.title')}
               </Button>
             </NextLink>
@@ -45,12 +57,12 @@ export default function Home() {
 
   return (
     <Layout>
-      <Flex justify="space-between" align="center" mb={6}>
-        <Heading size="lg" color={{ base: 'gray.900', _dark: 'white' }}>
+      <Flex justify="space-between" align="center" mb={6} className="fade-in-up">
+        <Heading size="2xl" className="gradient-text" letterSpacing="tight">
           {t('frontPage.title')}
         </Heading>
         <NextLink href="/register-watch">
-          <Button bg="#00a884" color="white">
+          <Button color="white" className="brand-gradient-bg" px={6}>
             {t('registerAWatchButton')}
           </Button>
         </NextLink>
@@ -68,22 +80,21 @@ export default function Home() {
             {t('dashboard.noWatches')}
           </Text>
           <NextLink href="/register-watch">
-            <Button bg="#00a884" color="white">
+            <Button color="white" className="brand-gradient-bg" px={6}>
               {t('registerAWatchButton')}
             </Button>
           </NextLink>
         </Flex>
       ) : (
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6}>
-          {watches.map((watch) => (
+          {watches.map((watch, i) => (
             <Box
               key={watch.id}
+              className={`glow-card fade-in-up stagger-${Math.min(i + 1, 4)}`}
               bg={{ base: 'white', _dark: 'gray.800' }}
               p={5}
               borderRadius="lg"
               cursor="pointer"
-              _hover={{ bg: { base: 'gray.100', _dark: 'gray.700' }, transform: 'translateY(-2px)' }}
-              transition="all 0.2s"
               boxShadow={{ base: 'sm', _dark: 'none' }}
               onClick={() => router.push(`/watch/${watch.data.serialNum}`)}
             >

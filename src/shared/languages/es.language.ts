@@ -57,7 +57,6 @@ export const SpanishDictionary: Dictionary = {
       email: 'Correo electrónico',
       username: 'Nombre de usuario',
       password: 'Contraseña',
-      walletAddress: 'Dirección de la billetera',
       repeatPassword: 'Repetir contraseña',
       optional: 'opcional',
     },
@@ -152,7 +151,6 @@ export const SpanishDictionary: Dictionary = {
   },
   ownershipHistory: {
     title: 'Historial de propiedad',
-    walletAddress: 'Dirección de la billetera',
     empty: 'Aún no se registraron cambios de propiedad.',
   },
   seeAWatch: {
@@ -172,18 +170,15 @@ export const SpanishDictionary: Dictionary = {
   checkAWatchOwnership: {
     title: 'Verificar propiedad de un reloj',
     description:
-      'Busca por número de serie, nombre de usuario o dirección de billetera',
+      'Busca por número de serie o nombre de usuario',
     serialNumber: 'Número de serie',
     check: 'Verificar',
     searchBy: {
       serialNum: 'Número de serie',
       username: 'Usuario',
-      walletAddress: 'Billetera',
       usernamePlaceholder: 'Ingresa nombre de usuario',
-      walletPlaceholder: 'Ingresa dirección de billetera',
     },
     result: {
-      walletOwner: 'Propietario de la billetera',
       username: 'Nombre de usuario',
       email: 'Correo electrónico',
       ownerSince: 'Propietario desde',
@@ -204,16 +199,8 @@ export const SpanishDictionary: Dictionary = {
     lookupError: 'Reloj no encontrado o ha ocurrido un error.',
   },
   profile: {
-    addWallet: 'Agregar billetera',
-    saveWallet: 'Guardar',
     cancel: 'Cancelar',
-    walletPlaceholder: '0x...',
-    noWallet: 'Sin dirección de billetera',
     email: 'Correo electrónico',
-    wallet: 'Billetera',
-    walletTaken: 'Esta dirección de billetera ya está en uso por otra cuenta',
-    walletError: 'No se pudo guardar la dirección de billetera, intenta de nuevo',
-    walletWarning: 'La dirección de billetera no se puede cambiar después de guardarla',
   },
   registerAWatchButton: 'Registrar un reloj',
   transferAWatchButton: 'Transferir un reloj',

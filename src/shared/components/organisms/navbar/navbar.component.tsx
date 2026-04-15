@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { useRouter } from 'next/router';
 import {
   Heading,
@@ -15,19 +15,15 @@ import { useColorMode } from '@/shared/contexts/color-mode.context';
 import NextLink from 'next/link';
 
 import { AuthContext } from '@contexts';
-import { Box, Flex, Button, Input, CopyableText, Text } from '@components';
+import { Box, Flex, Button, Text } from '@components';
 import { useTranslation } from '@hooks';
-import { Language, useUpdateUserMutation } from '@generated';
+import { Language } from '@generated';
 
 const Navbar: React.FC = () => {
-  const { isAuthenticated, user, logout, refreshUserToken } = useContext(AuthContext);
+  const { isAuthenticated, user, logout } = useContext(AuthContext);
   const { t, language, switchLanguage } = useTranslation();
   const { colorMode, toggleColorMode } = useColorMode();
   const router = useRouter();
-  const [isEditingWallet, setIsEditingWallet] = useState(false);
-  const [walletInput, setWalletInput] = useState('');
-  const [walletError, setWalletError] = useState('');
-  const [updateUser] = useUpdateUserMutation();
 
   const handleLogout = async () => {
     await logout();
@@ -39,31 +35,21 @@ const Navbar: React.FC = () => {
     switchLanguage(newLang);
   };
 
-  const handleSaveWallet = async () => {
-    if (!walletInput.trim() || !user) return;
-    try {
-      setWalletError('');
-      await updateUser({
-        variables: { data: { id: user.id, walletAddress: walletInput.trim() } },
-      });
-      setIsEditingWallet(false);
-      setWalletInput('');
-      await refreshUserToken();
-    } catch (err: any) {
-      const message = err?.message || '';
-      if (message.includes('wallet address is already in use')) {
-        setWalletError(t('profile.walletTaken'));
-      } else {
-        setWalletError(t('profile.walletError'));
-      }
-    }
-  };
-
   return (
-    <Box bg={{ base: 'white', _dark: 'gray.800' }} px={6} py={3} boxShadow="md">
+    <Box
+      bg={{ base: 'whiteAlpha.800', _dark: 'blackAlpha.400' }}
+      backdropFilter="blur(12px)"
+      borderBottom="1px solid"
+      borderColor={{ base: 'gray.200', _dark: 'whiteAlpha.100' }}
+      px={6}
+      py={3}
+      position="sticky"
+      top={0}
+      zIndex={10}
+    >
       <Flex justify="space-between" align="center" maxW="1200px" mx="auto">
         <NextLink href="/">
-          <Heading size="md" color="#00a884" cursor="pointer">
+          <Heading size="md" cursor="pointer" className="gradient-text" letterSpacing="tight">
             All-E
           </Heading>
         </NextLink>
@@ -72,27 +58,27 @@ const Navbar: React.FC = () => {
           {isAuthenticated ? (
             <>
               <NextLink href="/">
-                <Text color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
+                <Text className="link-underline" color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
                   Dashboard
                 </Text>
               </NextLink>
               <NextLink href="/register-watch">
-                <Text color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
+                <Text className="link-underline" color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
                   {t('registerAWatchButton')}
                 </Text>
               </NextLink>
               <NextLink href="/transfer-watch">
-                <Text color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
+                <Text className="link-underline" color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
                   {t('transferAWatchButton')}
                 </Text>
               </NextLink>
               <NextLink href="/check-ownership">
-                <Text color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
+                <Text className="link-underline" color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
                   Check Ownership
                 </Text>
               </NextLink>
               <NextLink href="/contact">
-                <Text color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
+                <Text className="link-underline" color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
                   Contact Us
                 </Text>
               </NextLink>
@@ -136,53 +122,6 @@ const Navbar: React.FC = () => {
                         </Text>
                       </Flex>
 
-                      <Flex direction="column" gap={1}>
-                        <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="xs" fontWeight="medium">
-                          {t('profile.wallet')}
-                        </Text>
-                        {user?.data.walletAddress ? (
-                          <Text color={{ base: 'gray.700', _dark: 'gray.200' }} fontSize="sm" fontFamily="mono" wordBreak="break-all">
-                           <CopyableText value={user?.data.walletAddress} />
-                          </Text>
-                        ) : isEditingWallet ? (
-                          <Flex direction="column" gap={2}>
-                            <Flex align="center" gap={1} bg={{ base: 'orange.50', _dark: 'orange.900' }} p={2} borderRadius="md">
-                              <Text fontSize="xs" color={{ base: 'orange.600', _dark: 'orange.300' }}>
-                                {'\u24D8'} {t('profile.walletWarning')}
-                              </Text>
-                            </Flex>
-                            <Input
-                              size="sm"
-                              placeholder={t('profile.walletPlaceholder')}
-                              value={walletInput}
-                              onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setWalletInput(e.target.value); setWalletError(''); }}
-                              bg={{ base: 'white', _dark: 'gray.600' }}
-                              color={{ base: 'gray.900', _dark: 'white' }}
-                            />
-                            {walletError && (
-                              <Text color="red.400" fontSize="xs">{walletError}</Text>
-                            )}
-                            <Flex gap={2}>
-                              <Button size="xs" bg="#00a884" color="white" onClick={handleSaveWallet}>
-                                {t('profile.saveWallet')}
-                              </Button>
-                              <Button size="xs" variant="outline" color={{ base: 'gray.600', _dark: 'gray.300' }} onClick={() => { setIsEditingWallet(false); setWalletError(''); }}>
-                                {t('profile.cancel')}
-                              </Button>
-                            </Flex>
-                          </Flex>
-                        ) : (
-                          <Flex align="center" gap={2}>
-                            <Text color={{ base: 'gray.400', _dark: 'gray.500' }} fontSize="sm">
-                              {t('profile.noWallet')}
-                            </Text>
-                            <Button size="xs" variant="outline" color="#00a884" borderColor="#00a884" onClick={() => setIsEditingWallet(true)}>
-                              {t('profile.addWallet')}
-                            </Button>
-                          </Flex>
-                        )}
-                      </Flex>
-
                     </Flex>
                   </PopoverContent>
                 </PopoverPositioner>
@@ -206,7 +145,7 @@ const Navbar: React.FC = () => {
                 </Button>
               </NextLink>
               <NextLink href="/signup">
-                <Button size="sm" bg="#00a884" color="white">
+                <Button size="sm" color="white" className="brand-gradient-bg">
                   {t('login.noAccount')}
                 </Button>
               </NextLink>

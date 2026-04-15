@@ -18,6 +18,7 @@ query getWatches($where: WatchWhereInput!) {
       watchId
       ownerId
       timestamp
+      metadataURI
     }
   }
 }

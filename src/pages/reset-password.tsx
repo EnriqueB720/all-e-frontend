@@ -32,9 +32,9 @@ export default function ResetPassword() {
   };
 
   return (
-    <Flex minH="100vh" align="center" justify="center" bg={{ base: 'gray.50', _dark: 'gray.900' }}>
-      <Box bg={{ base: 'white', _dark: 'gray.800' }} p={8} borderRadius="xl" w="100%" maxW="400px" boxShadow="xl">
-        <Heading as="h1" size="xl" color={{ base: 'gray.900', _dark: 'white' }} mb={6} textAlign="center">
+    <Flex minH="100vh" align="center" justify="center">
+      <Box className="soft-card fade-in-up" bg={{ base: 'white', _dark: 'gray.800' }} p={8} borderRadius="xl" w="100%" maxW="400px" boxShadow="xl">
+        <Heading as="h1" size="2xl" mb={6} textAlign="center" className="gradient-text" letterSpacing="tight">
           {t('resetPassword.title')}
         </Heading>
 
@@ -64,7 +64,7 @@ export default function ResetPassword() {
               value={confirm}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirm(e.target.value)}
             />
-            <Button bg="#00a884" color="white" loading={loading} onClick={handleSubmit}>
+            <Button color="white" className="brand-gradient-bg" loading={loading} onClick={handleSubmit}>
               {t('resetPassword.submit')}
             </Button>
             {mismatch && (

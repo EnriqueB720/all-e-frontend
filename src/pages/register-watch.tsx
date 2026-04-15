@@ -67,6 +67,7 @@ export default function RegisterWatch() {
     <Layout>
       <Flex justify="center" mt={10}>
         <Box
+          className="soft-card fade-in-up"
           bg={{ base: 'white', _dark: 'gray.800' }}
           p={8}
           borderRadius="xl"
@@ -74,7 +75,7 @@ export default function RegisterWatch() {
           maxW="450px"
           boxShadow="xl"
         >
-          <Heading as="h1" size="xl" color={{ base: 'gray.900', _dark: 'white' }} mb={6} textAlign="center">
+          <Heading as="h1" size="2xl" mb={6} textAlign="center" className="gradient-text" letterSpacing="tight">
             {t('watchRegistry.title')}
           </Heading>
 

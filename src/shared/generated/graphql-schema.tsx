@@ -52,7 +52,6 @@ export type Mutation = {
   resetPassword: Scalars['Boolean'];
   sendContactMessage: Scalars['Boolean'];
   signup: User;
-  updateUser: User;
 };
 
 
@@ -90,14 +89,11 @@ export type MutationSignupArgs = {
   data: SignUpInput;
 };
 
-
-export type MutationUpdateUserArgs = {
-  data: UserUpdateInput;
-};
-
 export type OwnershipLog = {
   __typename?: 'OwnershipLog';
+  certificateUrl?: Maybe<Scalars['String']>;
   id: Scalars['Float'];
+  metadataURI?: Maybe<Scalars['String']>;
   owner?: Maybe<User>;
   ownerId: Scalars['Float'];
   timestamp: Scalars['DateTime'];
@@ -159,7 +155,6 @@ export type SignUpInput = {
   email: Scalars['String'];
   password: Scalars['String'];
   username: Scalars['String'];
-  walletAddress?: InputMaybe<Scalars['String']>;
 };
 
 export type User = {
@@ -169,7 +164,6 @@ export type User = {
   id: Scalars['Float'];
   language: Language;
   username: Scalars['String'];
-  walletAddress?: Maybe<Scalars['String']>;
   watch?: Maybe<Array<Watch>>;
 };
 
@@ -177,12 +171,6 @@ export type UserCreateInput = {
   email: Scalars['String'];
   password: Scalars['String'];
   username: Scalars['String'];
-  walletAddress?: InputMaybe<Scalars['String']>;
-};
-
-export type UserUpdateInput = {
-  id: Scalars['Int'];
-  walletAddress?: InputMaybe<Scalars['String']>;
 };
 
 export type UserWhereInput = {
@@ -223,7 +211,6 @@ export type WatchWhereInput = {
   ownerId?: InputMaybe<Scalars['Int']>;
   serialNum?: InputMaybe<Scalars['String']>;
   username?: InputMaybe<Scalars['String']>;
-  walletAddress?: InputMaybe<Scalars['String']>;
 };
 
 export type ForgotPasswordMutationVariables = Exact<{
@@ -238,14 +225,14 @@ export type LoginQueryVariables = Exact<{
 }>;
 
 
-export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, walletAddress?: string | null, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any }> | null } } };
+export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any }> | null } } };
 
 export type RefreshUserQueryVariables = Exact<{
   data: Scalars['String'];
 }>;
 
 
-export type RefreshUserQuery = { __typename?: 'Query', refreshUser: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, walletAddress?: string | null, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any }> | null } } };
+export type RefreshUserQuery = { __typename?: 'Query', refreshUser: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any }> | null } } };
 
 export type ResetPasswordMutationVariables = Exact<{
   data: ResetPasswordInput;
@@ -280,14 +267,7 @@ export type GetUserQueryVariables = Exact<{
 }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, email: string, username: string, walletAddress?: string | null, createdAt: any, language: Language, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, ownerId: number, lastSynced: any }> | null } };
-
-export type UpdateUserMutationVariables = Exact<{
-  data: UserUpdateInput;
-}>;
-
-
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: number, email: string, username: string, walletAddress?: string | null } };
+export type GetUserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, email: string, username: string, createdAt: any, language: Language, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, ownerId: number, lastSynced: any }> | null } };
 
 export type ChangeWatchOwnershipMutationVariables = Exact<{
   data: WatchUpdateInput;
@@ -308,14 +288,14 @@ export type GetWatchQueryVariables = Exact<{
 }>;
 
 
-export type GetWatchQuery = { __typename?: 'Query', watch: { __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any, user?: { __typename?: 'User', id: number, username: string, email: string, walletAddress?: string | null, createdAt: any, language: Language } | null, ownershipLog?: Array<{ __typename?: 'OwnershipLog', id: number, watchId: number, ownerId: number, timestamp: any, owner?: { __typename?: 'User', id: number, username: string, walletAddress?: string | null } | null }> | null } };
+export type GetWatchQuery = { __typename?: 'Query', watch: { __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any, user?: { __typename?: 'User', id: number, username: string, email: string, createdAt: any, language: Language } | null, ownershipLog?: Array<{ __typename?: 'OwnershipLog', id: number, watchId: number, ownerId: number, timestamp: any, metadataURI?: string | null, certificateUrl?: string | null, owner?: { __typename?: 'User', id: number, username: string } | null }> | null } };
 
 export type GetWatchesQueryVariables = Exact<{
   where: WatchWhereInput;
 }>;
 
 
-export type GetWatchesQuery = { __typename?: 'Query', watches: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any, user?: { __typename?: 'User', id: number, username: string, email: string, walletAddress?: string | null, createdAt: any, language: Language } | null, ownershipLog?: Array<{ __typename?: 'OwnershipLog', id: number, watchId: number, ownerId: number, timestamp: any }> | null }> };
+export type GetWatchesQuery = { __typename?: 'Query', watches: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any, user?: { __typename?: 'User', id: number, username: string, email: string, createdAt: any, language: Language } | null, ownershipLog?: Array<{ __typename?: 'OwnershipLog', id: number, watchId: number, ownerId: number, timestamp: any, metadataURI?: string | null }> | null }> };
 
 
 export const ForgotPasswordDocument = gql`
@@ -360,7 +340,6 @@ export const LoginDocument = gql`
       username
       language
       createdAt
-      walletAddress
       watch {
         id
         serialNum
@@ -412,7 +391,6 @@ export const RefreshUserDocument = gql`
       username
       language
       createdAt
-      walletAddress
       watch {
         id
         serialNum
@@ -593,7 +571,6 @@ export const GetUserDocument = gql`
     id
     email
     username
-    walletAddress
     createdAt
     language
     watch {
@@ -634,42 +611,6 @@ export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
 export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
 export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;
-export const UpdateUserDocument = gql`
-    mutation updateUser($data: UserUpdateInput!) {
-  updateUser(data: $data) {
-    id
-    email
-    username
-    walletAddress
-  }
-}
-    `;
-export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
-
-/**
- * __useUpdateUserMutation__
- *
- * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
-export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options);
-      }
-export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
-export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
-export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
 export const ChangeWatchOwnershipDocument = gql`
     mutation changeWatchOwnership($data: WatchUpdateInput!) {
   changeWatchOwnership(data: $data) {
@@ -758,7 +699,6 @@ export const GetWatchDocument = gql`
       id
       username
       email
-      walletAddress
       createdAt
       language
     }
@@ -767,10 +707,11 @@ export const GetWatchDocument = gql`
       watchId
       ownerId
       timestamp
+      metadataURI
+      certificateUrl
       owner {
         id
         username
-        walletAddress
       }
     }
   }
@@ -817,7 +758,6 @@ export const GetWatchesDocument = gql`
       id
       username
       email
-      walletAddress
       createdAt
       language
     }
@@ -826,6 +766,7 @@ export const GetWatchesDocument = gql`
       watchId
       ownerId
       timestamp
+      metadataURI
     }
   }
 }
