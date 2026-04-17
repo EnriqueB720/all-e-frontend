@@ -156,6 +156,7 @@ export const EnglishDictionary: Dictionary = {
       accept: 'Yes, transfer',
       cancel: 'Cancel',
     },
+    confirmReject: 'Are you sure you want to reject this transfer request?',
     errors: {
       selectWatch: 'Please select a watch',
       enterNewOwner: 'Please enter the new owner email',

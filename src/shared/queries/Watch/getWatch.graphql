@@ -2,6 +2,11 @@ query getWatch($where: WatchWhereInput!) {
   watch(where: $where) {
     id
     serialNum
+    brand
+    model
+    referenceNumber
+    yearOfProduction
+    imageUrl
     metadataURI
     certificateUrl
     ownerId

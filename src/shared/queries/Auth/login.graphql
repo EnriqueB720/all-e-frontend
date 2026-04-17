@@ -11,6 +11,11 @@ query login($data: LoginUserInput!){
       watch{
         id,
         serialNum
+        brand
+        model
+        referenceNumber
+        yearOfProduction
+        imageUrl
         metadataURI
         certificateUrl
         ownerId

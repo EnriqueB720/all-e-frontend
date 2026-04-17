@@ -1,5 +1,18 @@
-import { useContext, useEffect, useState } from 'react';
-import { Heading, NativeSelect, Badge, Separator } from '@chakra-ui/react';
+import { useContext, useState } from 'react';
+import {
+  Heading,
+  NativeSelect,
+  Badge,
+  DialogRoot,
+  DialogContent,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+  DialogTitle,
+  DialogCloseTrigger,
+  DialogBackdrop,
+  DialogPositioner,
+} from '@chakra-ui/react';
 
 import { AuthContext } from '@contexts';
 import { Layout, Box, Flex, Button, Input, Text } from '@components';
@@ -22,6 +35,7 @@ export default function TransferWatch() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [respondingId, setRespondingId] = useState<number | null>(null);
+  const [confirmAction, setConfirmAction] = useState<{ id: number; accept: boolean } | null>(null);
 
   const [createTransfer, { loading: creating }] = useCreateTransferRequestMutation();
   const [respondTransfer] = useRespondToTransferRequestMutation();
@@ -77,6 +91,7 @@ export default function TransferWatch() {
   };
 
   const handleRespond = async (transferRequestId: number, accept: boolean) => {
+    setConfirmAction(null);
     setRespondingId(transferRequestId);
     try {
       await respondTransfer({
@@ -204,7 +219,7 @@ export default function TransferWatch() {
                       className="brand-gradient-bg"
                       loading={respondingId === req.id}
                       disabled={respondingId !== null && respondingId !== req.id}
-                      onClick={() => handleRespond(req.id, true)}
+                      onClick={() => setConfirmAction({ id: req.id, accept: true })}
                       flex={1}
                     >
                       {t('transferWatch.accept')}
@@ -216,7 +231,7 @@ export default function TransferWatch() {
                       borderColor="red.400"
                       loading={respondingId === req.id}
                       disabled={respondingId !== null && respondingId !== req.id}
-                      onClick={() => handleRespond(req.id, false)}
+                      onClick={() => setConfirmAction({ id: req.id, accept: false })}
                       flex={1}
                     >
                       {t('transferWatch.reject')}
@@ -259,6 +274,59 @@ export default function TransferWatch() {
           </Box>
         )}
       </Flex>
+
+      <DialogRoot
+        open={confirmAction !== null}
+        onOpenChange={(e) => { if (!e.open) setConfirmAction(null); }}
+      >
+        <DialogBackdrop />
+        <DialogPositioner>
+          <DialogContent bg={{ base: 'white', _dark: 'gray.800' }} borderRadius="xl" p={2}>
+            <DialogHeader>
+              <DialogTitle color={{ base: 'gray.900', _dark: 'white' }}>
+                {confirmAction?.accept
+                  ? t('transferWatch.confirmTransferAction.accept')
+                  : t('transferWatch.confirmTransferAction.cancel')}
+              </DialogTitle>
+            </DialogHeader>
+            <DialogBody>
+              <Text color={{ base: 'gray.600', _dark: 'gray.300' }} fontSize="sm">
+                {confirmAction?.accept
+                  ? t('transferWatch.confirmTransferAction.description')
+                  : t('transferWatch.confirmReject')}
+              </Text>
+            </DialogBody>
+            <DialogFooter>
+              <Flex gap={3} w="100%">
+                <Button
+                  flex={1}
+                  variant="outline"
+                  color={{ base: 'gray.600', _dark: 'gray.300' }}
+                  borderColor={{ base: 'gray.300', _dark: 'gray.600' }}
+                  onClick={() => setConfirmAction(null)}
+                >
+                  {t('transferWatch.confirmTransferAction.cancel')}
+                </Button>
+                <Button
+                  flex={1}
+                  color="white"
+                  className={confirmAction?.accept ? 'brand-gradient-bg' : ''}
+                  bg={confirmAction?.accept ? undefined : 'red.500'}
+                  _hover={confirmAction?.accept ? undefined : { bg: 'red.600' }}
+                  onClick={() => {
+                    if (confirmAction) handleRespond(confirmAction.id, confirmAction.accept);
+                  }}
+                >
+                  {confirmAction?.accept
+                    ? t('transferWatch.confirmTransferAction.accept')
+                    : t('transferWatch.reject')}
+                </Button>
+              </Flex>
+            </DialogFooter>
+            <DialogCloseTrigger />
+          </DialogContent>
+        </DialogPositioner>
+      </DialogRoot>
     </Layout>
   );
 }

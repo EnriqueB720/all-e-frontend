@@ -170,7 +170,8 @@ export interface Dictionary {
       description: string;
       accept: string;
       cancel: string;
-    }
+    };
+    confirmReject: string;
     errors: {
       selectWatch: string;
       enterNewOwner: string;

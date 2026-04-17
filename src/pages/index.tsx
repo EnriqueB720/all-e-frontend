@@ -143,33 +143,44 @@ export default function Home() {
               key={watch.id}
               className={`glow-card fade-in-up stagger-${Math.min(i + 1, 4)}`}
               bg={{ base: 'white', _dark: 'gray.800' }}
-              p={5}
               borderRadius="lg"
               cursor="pointer"
               boxShadow={{ base: 'sm', _dark: 'none' }}
+              overflow="hidden"
               onClick={() => router.push(`/watch/${watch.data.serialNum}`)}
             >
-              <Flex justify="space-between" align="center" mb={2}>
-                <Text color={{ base: 'gray.900', _dark: 'white' }} fontWeight="bold" fontSize="lg">
-                  #{watch.serialNum}
-                </Text>
-                <Badge colorPalette="green">{t('dashboard.owned')}</Badge>
-              </Flex>
-              {(watch.data.brand || watch.data.model) && (
-                <Text color={{ base: 'gray.600', _dark: 'gray.400' }} fontSize="sm" mb={1}>
-                  {[watch.data.brand, watch.data.model].filter(Boolean).join(' ')}
-                </Text>
+              {watch.data.imageUrl && (
+                <Box h="140px" overflow="hidden" bg={{ base: 'gray.100', _dark: 'gray.700' }}>
+                  <img
+                    src={watch.data.imageUrl}
+                    alt={`${watch.data.brand ?? ''} ${watch.data.model ?? ''}`}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                </Box>
               )}
-              {watch.data.referenceNumber && (
-                <Text color={{ base: 'gray.500', _dark: 'gray.500' }} fontSize="xs" mb={1}>
-                  Ref. {watch.data.referenceNumber}
-                </Text>
-              )}
-              {watch.certificateUrl && (
-                <Text color={{ base: 'gray.500', _dark: 'gray.500' }} fontSize="xs" truncate>
-                  {t('seeAWatch.ipfsCertificate')}
-                </Text>
-              )}
+              <Box p={5}>
+                <Flex justify="space-between" align="center" mb={2}>
+                  <Text color={{ base: 'gray.900', _dark: 'white' }} fontWeight="bold" fontSize="lg">
+                    #{watch.serialNum}
+                  </Text>
+                  <Badge colorPalette="green">{t('dashboard.owned')}</Badge>
+                </Flex>
+                {(watch.data.brand || watch.data.model) && (
+                  <Text color={{ base: 'gray.600', _dark: 'gray.400' }} fontSize="sm" mb={1}>
+                    {[watch.data.brand, watch.data.model].filter(Boolean).join(' ')}
+                  </Text>
+                )}
+                {watch.data.referenceNumber && (
+                  <Text color={{ base: 'gray.500', _dark: 'gray.500' }} fontSize="xs" mb={1}>
+                    Ref. {watch.data.referenceNumber}
+                  </Text>
+                )}
+                {watch.certificateUrl && (
+                  <Text color={{ base: 'gray.500', _dark: 'gray.500' }} fontSize="xs" truncate>
+                    {t('seeAWatch.ipfsCertificate')}
+                  </Text>
+                )}
+              </Box>
             </Box>
           ))}
         </SimpleGrid>

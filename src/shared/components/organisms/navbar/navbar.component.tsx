@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import {
-  Heading,
   Separator,
   PopoverRoot,
   PopoverTrigger,
@@ -12,7 +11,17 @@ import {
   PopoverArrow,
   PopoverArrowTip,
   Badge,
+  DrawerRoot,
+  DrawerBackdrop,
+  DrawerPositioner,
+  DrawerContent,
+  DrawerCloseTrigger,
+  DrawerHeader,
+  DrawerBody,
+  DrawerTitle,
+  IconButton,
 } from '@chakra-ui/react';
+import { LuMenu } from 'react-icons/lu';
 import { useColorMode } from '@/shared/contexts/color-mode.context';
 import NextLink from 'next/link';
 
@@ -26,6 +35,7 @@ const Navbar: React.FC = () => {
   const { t, language, switchLanguage } = useTranslation();
   const { colorMode, toggleColorMode } = useColorMode();
   const router = useRouter();
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const { data: pendingData } = usePendingTransferRequestsQuery({
     variables: { userId: user?.id ?? 0 },
@@ -45,6 +55,73 @@ const Navbar: React.FC = () => {
     const newLang = language === Language.English ? Language.Spanish : Language.English;
     switchLanguage(newLang);
   };
+
+  const navLinks = isAuthenticated ? (
+    <>
+      <NextLink href="/" onClick={() => setDrawerOpen(false)}>
+        <Text className="link-underline" color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
+          Dashboard
+        </Text>
+      </NextLink>
+      <NextLink href="/register-watch" onClick={() => setDrawerOpen(false)}>
+        <Text className="link-underline" color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
+          {t('registerAWatchButton')}
+        </Text>
+      </NextLink>
+      <NextLink href="/transfer-watch" onClick={() => setDrawerOpen(false)}>
+        <Flex align="center" gap={1}>
+          <Text className="link-underline" color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
+            {t('transferAWatchButton')}
+          </Text>
+          {pendingCount > 0 && (
+            <Badge colorPalette="red" variant="solid" fontSize="2xs" borderRadius="full" px={1.5} minW="18px" textAlign="center">
+              {pendingCount}
+            </Badge>
+          )}
+        </Flex>
+      </NextLink>
+      <NextLink href="/check-ownership" onClick={() => setDrawerOpen(false)}>
+        <Text className="link-underline" color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
+          Check Ownership
+        </Text>
+      </NextLink>
+      <NextLink href="/contact" onClick={() => setDrawerOpen(false)}>
+        <Text className="link-underline" color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
+          Contact Us
+        </Text>
+      </NextLink>
+    </>
+  ) : null;
+
+  const utilButtons = (
+    <>
+      <Button
+        size="sm"
+        variant="ghost"
+        color={{ base: 'gray.600', _dark: 'gray.300' }}
+        _hover={{ color: { base: 'gray.900', _dark: 'white' }, bg: { base: 'gray.100', _dark: 'gray.700' } }}
+        onClick={toggleColorMode}
+        fontWeight="bold"
+        minW="auto"
+        px={2}
+      >
+        {colorMode === 'light' ? 'Dark' : 'Light'}
+      </Button>
+
+      <Button
+        size="sm"
+        variant="ghost"
+        color={{ base: 'gray.600', _dark: 'gray.300' }}
+        _hover={{ color: { base: 'gray.900', _dark: 'white' }, bg: { base: 'gray.100', _dark: 'gray.700' } }}
+        onClick={handleLanguageToggle}
+        fontWeight="bold"
+        minW="auto"
+        px={2}
+      >
+        {language === Language.English ? 'ES' : 'EN'}
+      </Button>
+    </>
+  );
 
   return (
     <Box
@@ -73,41 +150,11 @@ const Navbar: React.FC = () => {
           />
         </NextLink>
 
-        <Flex align="center" gap={4}>
+        {/* Desktop nav */}
+        <Flex align="center" gap={4} display={{ base: 'none', lg: 'flex' }}>
           {isAuthenticated ? (
             <>
-              <NextLink href="/">
-                <Text className="link-underline" color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
-                  Dashboard
-                </Text>
-              </NextLink>
-              <NextLink href="/register-watch">
-                <Text className="link-underline" color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
-                  {t('registerAWatchButton')}
-                </Text>
-              </NextLink>
-              <NextLink href="/transfer-watch">
-                <Flex align="center" gap={1}>
-                  <Text className="link-underline" color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
-                    {t('transferAWatchButton')}
-                  </Text>
-                  {pendingCount > 0 && (
-                    <Badge colorPalette="red" variant="solid" fontSize="2xs" borderRadius="full" px={1.5} minW="18px" textAlign="center">
-                      {pendingCount}
-                    </Badge>
-                  )}
-                </Flex>
-              </NextLink>
-              <NextLink href="/check-ownership">
-                <Text className="link-underline" color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
-                  Check Ownership
-                </Text>
-              </NextLink>
-              <NextLink href="/contact">
-                <Text className="link-underline" color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
-                  Contact Us
-                </Text>
-              </NextLink>
+              {navLinks}
 
               <PopoverRoot>
                 <PopoverTrigger asChild>
@@ -192,33 +239,91 @@ const Navbar: React.FC = () => {
             </>
           )}
 
-          <Button
-            size="sm"
-            variant="ghost"
-            color={{ base: 'gray.600', _dark: 'gray.300' }}
-            _hover={{ color: { base: 'gray.900', _dark: 'white' }, bg: { base: 'gray.100', _dark: 'gray.700' } }}
-            onClick={toggleColorMode}
-            fontWeight="bold"
-            minW="auto"
-            px={2}
-          >
-            {colorMode === 'light' ? 'Dark' : 'Light'}
-          </Button>
+          {utilButtons}
+        </Flex>
 
-          <Button
-            size="sm"
+        {/* Mobile hamburger */}
+        <Flex align="center" gap={2} display={{ base: 'flex', lg: 'none' }}>
+          {utilButtons}
+          <IconButton
+            aria-label="Open menu"
             variant="ghost"
             color={{ base: 'gray.600', _dark: 'gray.300' }}
-            _hover={{ color: { base: 'gray.900', _dark: 'white' }, bg: { base: 'gray.100', _dark: 'gray.700' } }}
-            onClick={handleLanguageToggle}
-            fontWeight="bold"
-            minW="auto"
-            px={2}
+            size="sm"
+            onClick={() => setDrawerOpen(true)}
           >
-            {language === Language.English ? 'ES' : 'EN'}
-          </Button>
+            <LuMenu />
+          </IconButton>
         </Flex>
       </Flex>
+
+      {/* Mobile drawer */}
+      <DrawerRoot
+        open={drawerOpen}
+        onOpenChange={(e) => setDrawerOpen(e.open)}
+        placement="end"
+      >
+        <DrawerBackdrop />
+        <DrawerPositioner>
+          <DrawerContent bg={{ base: 'white', _dark: 'gray.800' }} maxW="280px">
+            <DrawerHeader>
+              <DrawerTitle color={{ base: 'gray.900', _dark: 'white' }}>Menu</DrawerTitle>
+            </DrawerHeader>
+            <DrawerBody>
+              <Flex direction="column" gap={4}>
+                {isAuthenticated ? (
+                  <>
+                    <Flex direction="column" gap={1} mb={2}>
+                      <Text color={{ base: 'gray.900', _dark: 'white' }} fontWeight="bold" fontSize="md">
+                        {user?.username}
+                      </Text>
+                      <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="xs">
+                        {user?.email}
+                      </Text>
+                    </Flex>
+
+                    <Separator borderColor={{ base: 'gray.200', _dark: 'gray.600' }} />
+
+                    {navLinks}
+
+                    <NextLink href="/profile" onClick={() => setDrawerOpen(false)}>
+                      <Text className="link-underline" color={{ base: 'gray.600', _dark: 'gray.300' }} _hover={{ color: { base: 'gray.900', _dark: 'white' } }} cursor="pointer" fontSize="sm">
+                        {t('profile.title')}
+                      </Text>
+                    </NextLink>
+
+                    <Separator borderColor={{ base: 'gray.200', _dark: 'gray.600' }} />
+
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      color="#00a884"
+                      borderColor="#00a884"
+                      onClick={() => { setDrawerOpen(false); handleLogout(); }}
+                    >
+                      {t('logoutMessage')}
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <NextLink href="/login" onClick={() => setDrawerOpen(false)}>
+                      <Button size="sm" variant="outline" color="#00a884" borderColor="#00a884" w="100%">
+                        {t('login.title')}
+                      </Button>
+                    </NextLink>
+                    <NextLink href="/signup" onClick={() => setDrawerOpen(false)}>
+                      <Button size="sm" color="white" className="brand-gradient-bg" w="100%">
+                        {t('login.noAccount')}
+                      </Button>
+                    </NextLink>
+                  </>
+                )}
+              </Flex>
+            </DrawerBody>
+            <DrawerCloseTrigger />
+          </DrawerContent>
+        </DrawerPositioner>
+      </DrawerRoot>
     </Box>
   );
 };

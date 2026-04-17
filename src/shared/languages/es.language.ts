@@ -156,6 +156,7 @@ export const SpanishDictionary: Dictionary = {
       accept: 'Sí, transferir',
       cancel: 'Cancelar',
     },
+    confirmReject: '¿Estás seguro de que deseas rechazar esta solicitud de transferencia?',
     errors: {
       selectWatch: 'Por favor selecciona un reloj',
       enterNewOwner: 'Por favor ingresa el correo del nuevo propietario',

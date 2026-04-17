@@ -11,6 +11,11 @@ query refreshUser($data: String!){
       watch{
         id,
         serialNum
+        brand
+        model
+        referenceNumber
+        yearOfProduction
+        imageUrl
         metadataURI
         certificateUrl
         ownerId
