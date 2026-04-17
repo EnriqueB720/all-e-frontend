@@ -11,14 +11,29 @@ import { FieldProps } from '@types';
 
 interface RegisterWatchFormValues {
   serialNum: string;
+  brand: string;
+  model: string;
+  referenceNumber: string;
+  yearOfProduction: string;
+  imageUrl: string;
 }
 
 const registerWatchSchema = yup.object().shape({
   serialNum: yup.string().required('Serial number is required'),
+  brand: yup.string(),
+  model: yup.string(),
+  referenceNumber: yup.string(),
+  yearOfProduction: yup.string().matches(/^\d{4}$/, 'Must be a valid year').nullable(),
+  imageUrl: yup.string().url('Must be a valid URL'),
 });
 
 const initialValues: RegisterWatchFormValues = {
   serialNum: '',
+  brand: '',
+  model: '',
+  referenceNumber: '',
+  yearOfProduction: '',
+  imageUrl: '',
 };
 
 export default function RegisterWatch() {
@@ -36,6 +51,31 @@ export default function RegisterWatch() {
       inputPlaceholder: '123456',
       isRequired: true,
     },
+    {
+      label: t('watchRegistry.brand'),
+      name: 'brand',
+      inputPlaceholder: 'Rolex, Omega, Seiko...',
+    },
+    {
+      label: t('watchRegistry.model'),
+      name: 'model',
+      inputPlaceholder: 'Submariner, Speedmaster...',
+    },
+    {
+      label: t('watchRegistry.referenceNumber'),
+      name: 'referenceNumber',
+      inputPlaceholder: '126610LN',
+    },
+    {
+      label: t('watchRegistry.yearOfProduction'),
+      name: 'yearOfProduction',
+      inputPlaceholder: '2024',
+    },
+    {
+      label: t('watchRegistry.imageUrl'),
+      name: 'imageUrl',
+      inputPlaceholder: 'https://...',
+    },
   ];
 
   const handleRegister = async (values: RegisterWatchFormValues) => {
@@ -48,6 +88,11 @@ export default function RegisterWatch() {
           data: {
             ownerId: user.id,
             serialNum: values.serialNum,
+            brand: values.brand || undefined,
+            model: values.model || undefined,
+            referenceNumber: values.referenceNumber || undefined,
+            yearOfProduction: values.yearOfProduction ? parseInt(values.yearOfProduction, 10) : undefined,
+            imageUrl: values.imageUrl || undefined,
             lastSynced: new Date().toISOString(),
           },
         },
@@ -87,7 +132,7 @@ export default function RegisterWatch() {
             errorMessage={error}
             submitButtonText={t('watchRegistry.form.register')}
             onSubmit={handleRegister}
-            groupings={[1]}
+            groupings={[1, 2, 2, 1]}
           />
         </Box>
       </Flex>

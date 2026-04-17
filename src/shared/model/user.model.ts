@@ -22,6 +22,10 @@ export class User {
         return this.data?.email!;
     }
 
+    get createdAt(){
+        return this.data?.createdAt!;
+    }
+
     get watches(){
         return this.userWatches?.map(watch => new Watch(watch));
     }

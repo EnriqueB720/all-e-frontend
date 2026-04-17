@@ -15,7 +15,7 @@ export default function ForgotPassword() {
   const handleSubmit = async () => {
     if (!email) return;
     try {
-      await forgotPassword({ variables: { data: { email } } });
+      await forgotPassword({ variables: { data: { email: email.toLowerCase() } } });
       setSent(true);
     } catch {}
   };

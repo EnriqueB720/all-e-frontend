@@ -1,16 +1,44 @@
-import { useContext } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
-import { Heading, SimpleGrid, Badge } from '@chakra-ui/react';
+import { Heading, SimpleGrid, Badge, NativeSelect } from '@chakra-ui/react';
 
 import { AuthContext } from '@contexts';
-import { Layout, Box, Flex, Button, Text } from '@components';
+import { Layout, Box, Flex, Button, Input, Text } from '@components';
 import { useTranslation } from '@hooks';
 
 export default function Home() {
   const { isAuthenticated, isInitializing, user } = useContext(AuthContext);
   const { t } = useTranslation();
   const router = useRouter();
+
+  const watches = user?.watches || [];
+  const [search, setSearch] = useState('');
+  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'serial'>('newest');
+
+  const filteredWatches = useMemo(() => {
+    let result = [...watches];
+
+    if (search) {
+      const q = search.toLowerCase();
+      result = result.filter((w) => {
+        const serial = (w.serialNum ?? '').toLowerCase();
+        const brand = (w.data.brand ?? '').toLowerCase();
+        const model = (w.data.model ?? '').toLowerCase();
+        const ref = (w.data.referenceNumber ?? '').toLowerCase();
+        return serial.includes(q) || brand.includes(q) || model.includes(q) || ref.includes(q);
+      });
+    }
+
+    result.sort((a, b) => {
+      if (sortBy === 'serial') return (a.serialNum ?? '').localeCompare(b.serialNum ?? '');
+      const dateA = new Date(a.data.lastSynced).getTime();
+      const dateB = new Date(b.data.lastSynced).getTime();
+      return sortBy === 'newest' ? dateB - dateA : dateA - dateB;
+    });
+
+    return result;
+  }, [watches, search, sortBy]);
 
   if (isInitializing) return <Layout><Flex minH="70vh" /></Layout>;
 
@@ -53,8 +81,6 @@ export default function Home() {
     );
   }
 
-  const watches = user?.watches || [];
-
   return (
     <Layout>
       <Flex justify="space-between" align="center" mb={6} className="fade-in-up">
@@ -86,8 +112,33 @@ export default function Home() {
           </NextLink>
         </Flex>
       ) : (
+        <>
+        <Flex gap={3} mb={4} align="center" className="fade-in-up stagger-2">
+          <Input
+            bg={{ base: 'white', _dark: 'gray.700' }}
+            color={{ base: 'gray.900', _dark: 'white' }}
+            borderColor={{ base: 'gray.300', _dark: 'gray.600' }}
+            placeholder={t('dashboard.searchPlaceholder')}
+            value={search}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
+            flex={1}
+          />
+          <NativeSelect.Root w="auto">
+            <NativeSelect.Field
+              bg={{ base: 'white', _dark: 'gray.700' }}
+              color={{ base: 'gray.900', _dark: 'white' }}
+              borderColor={{ base: 'gray.300', _dark: 'gray.600' }}
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as any)}
+            >
+              <option value="newest">{t('dashboard.sortNewest')}</option>
+              <option value="oldest">{t('dashboard.sortOldest')}</option>
+              <option value="serial">{t('dashboard.sortSerial')}</option>
+            </NativeSelect.Field>
+          </NativeSelect.Root>
+        </Flex>
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6}>
-          {watches.map((watch, i) => (
+          {filteredWatches.map((watch, i) => (
             <Box
               key={watch.id}
               className={`glow-card fade-in-up stagger-${Math.min(i + 1, 4)}`}
@@ -98,12 +149,22 @@ export default function Home() {
               boxShadow={{ base: 'sm', _dark: 'none' }}
               onClick={() => router.push(`/watch/${watch.data.serialNum}`)}
             >
-              <Flex justify="space-between" align="center" mb={3}>
+              <Flex justify="space-between" align="center" mb={2}>
                 <Text color={{ base: 'gray.900', _dark: 'white' }} fontWeight="bold" fontSize="lg">
                   #{watch.serialNum}
                 </Text>
                 <Badge colorPalette="green">{t('dashboard.owned')}</Badge>
               </Flex>
+              {(watch.data.brand || watch.data.model) && (
+                <Text color={{ base: 'gray.600', _dark: 'gray.400' }} fontSize="sm" mb={1}>
+                  {[watch.data.brand, watch.data.model].filter(Boolean).join(' ')}
+                </Text>
+              )}
+              {watch.data.referenceNumber && (
+                <Text color={{ base: 'gray.500', _dark: 'gray.500' }} fontSize="xs" mb={1}>
+                  Ref. {watch.data.referenceNumber}
+                </Text>
+              )}
               {watch.certificateUrl && (
                 <Text color={{ base: 'gray.500', _dark: 'gray.500' }} fontSize="xs" truncate>
                   {t('seeAWatch.ipfsCertificate')}
@@ -112,6 +173,12 @@ export default function Home() {
             </Box>
           ))}
         </SimpleGrid>
+        {filteredWatches.length === 0 && search && (
+          <Text color={{ base: 'gray.500', _dark: 'gray.500' }} fontSize="sm" textAlign="center" mt={4}>
+            {t('dashboard.noResults')}
+          </Text>
+        )}
+        </>
       )}
     </Layout>
   );

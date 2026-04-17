@@ -1,91 +1,125 @@
-import { useContext, useState } from 'react';
-import { useRouter } from 'next/router';
-import { Heading, NativeSelect } from '@chakra-ui/react';
+import { useContext, useEffect, useState } from 'react';
+import { Heading, NativeSelect, Badge, Separator } from '@chakra-ui/react';
 
 import { AuthContext } from '@contexts';
 import { Layout, Box, Flex, Button, Input, Text } from '@components';
 import { useTranslation, useRequireAuth } from '@hooks';
-import { useChangeWatchOwnershipMutation, useGetUserLazyQuery } from '@generated';
+import {
+  useCreateTransferRequestMutation,
+  useRespondToTransferRequestMutation,
+  usePendingTransferRequestsQuery,
+  useSentTransferRequestsQuery,
+} from '@generated';
+import { toaster } from '@/components/ui/toaster';
 
 export default function TransferWatch() {
   const { isReady, user } = useRequireAuth();
   const { refreshUserToken } = useContext(AuthContext);
   const { t } = useTranslation();
-  const router = useRouter();
 
   const [selectedWatchId, setSelectedWatchId] = useState<string>('');
   const [newOwnerEmail, setNewOwnerEmail] = useState('');
   const [error, setError] = useState('');
-  const [showConfirm, setShowConfirm] = useState(false);
+  const [success, setSuccess] = useState('');
+  const [respondingId, setRespondingId] = useState<number | null>(null);
 
-  const [changeOwnership, { loading: transferring }] = useChangeWatchOwnershipMutation();
-  const [findUser, { loading: findingUser }] = useGetUserLazyQuery();
+  const [createTransfer, { loading: creating }] = useCreateTransferRequestMutation();
+  const [respondTransfer] = useRespondToTransferRequestMutation();
+
+  const { data: pendingData, refetch: refetchPending } = usePendingTransferRequestsQuery({
+    variables: { userId: user?.id ?? 0 },
+    skip: !user,
+    fetchPolicy: 'network-only',
+  });
+
+  const { data: sentData, refetch: refetchSent } = useSentTransferRequestsQuery({
+    variables: { userId: user?.id ?? 0 },
+    skip: !user,
+    fetchPolicy: 'network-only',
+  });
 
   if (!isReady || !user) return null;
 
   const watches = user.watches || [];
-  const selectedWatch = watches.find((w) => w.id.toString() === selectedWatchId);
+  const pendingRequests = pendingData?.pendingTransferRequests ?? [];
+  const sentRequests = sentData?.sentTransferRequests ?? [];
 
-  const handleTransfer = async () => {
+  const handleSendRequest = async () => {
     setError('');
+    setSuccess('');
 
-    if (!selectedWatch) {
+    if (!selectedWatchId || !newOwnerEmail) {
       setError(t('transferWatch.errors.selectWatch'));
       return;
     }
 
-    if (!newOwnerEmail) {
-      setError(t('transferWatch.errors.enterNewOwner'));
-      return;
-    }
-
     try {
-      const { data: userData } = await findUser({
-        variables: { where: { email: newOwnerEmail } },
-      });
-
-      if (!userData?.user) {
-        setError(t('transferWatch.errors.userNotFound'));
-        return;
-      }
-
-      const newOwner = userData.user;
-
-      await changeOwnership({
+      await createTransfer({
         variables: {
           data: {
-            id: selectedWatch.id,
-            ownerId: newOwner.id,
-            serialNum: selectedWatch.serialNum,
-            metadataURI: selectedWatch.metadataURI || '',
-            lastSynced: new Date().toISOString(),
+            watchId: parseInt(selectedWatchId, 10),
+            fromUserId: user.id,
+            toUserEmail: newOwnerEmail.toLowerCase(),
           },
         },
       });
-
-      await refreshUserToken();
-      setShowConfirm(false);
-      router.push('/');
+      setSuccess(t('transferWatch.requestSent'));
+      setSelectedWatchId('');
+      setNewOwnerEmail('');
+      toaster.create({
+        title: t('transferWatch.requestSent'),
+        type: 'success',
+      });
+      refetchSent();
     } catch (err: any) {
       setError(err.message || t('transferWatch.errors.transferFailed'));
-      setShowConfirm(false);
     }
+  };
+
+  const handleRespond = async (transferRequestId: number, accept: boolean) => {
+    setRespondingId(transferRequestId);
+    try {
+      await respondTransfer({
+        variables: {
+          data: {
+            transferRequestId,
+            userId: user.id,
+            accept,
+          },
+        },
+      });
+      if (accept) await refreshUserToken();
+      toaster.create({
+        title: accept ? t('notifications.transferAccepted') : t('notifications.transferRejected'),
+        type: accept ? 'success' : 'info',
+      });
+      refetchPending();
+      refetchSent();
+    } catch (err: any) {
+      setError(err.message || t('transferWatch.errors.transferFailed'));
+    } finally {
+      setRespondingId(null);
+    }
+  };
+
+  const statusColor: Record<string, string> = {
+    PENDING: 'yellow',
+    ACCEPTED: 'green',
+    REJECTED: 'red',
   };
 
   return (
     <Layout>
-      <Flex justify="center" mt={10}>
+      <Flex direction="column" gap={6} maxW="600px" mx="auto" mt={10}>
         <Box
           className="soft-card fade-in-up"
           bg={{ base: 'white', _dark: 'gray.800' }}
           p={8}
           borderRadius="xl"
-          w="100%"
-          maxW="500px"
           boxShadow="xl"
         >
           <Heading as="h1" size="2xl" mb={6} textAlign="center" className="gradient-text" letterSpacing="tight">
-            {t('transferAWatchButton')}
+            {t('transferWatch.sendRequest')}
           </Heading>
 
           <Flex direction="column" gap={4}>
@@ -101,12 +135,10 @@ export default function TransferWatch() {
                   value={selectedWatchId}
                   onChange={(e) => setSelectedWatchId(e.target.value)}
                 >
-                  <option value="">
-                    -- {t('transferWatch.selectAWatch')} --
-                  </option>
+                  <option value="">-- {t('transferWatch.selectAWatch')} --</option>
                   {watches.map((watch) => (
                     <option key={watch.id} value={watch.id.toString()}>
-                      #{watch.serialNum}
+                      #{watch.serialNum} {watch.data.brand ? `- ${watch.data.brand}` : ''}
                     </option>
                   ))}
                 </NativeSelect.Field>
@@ -127,52 +159,105 @@ export default function TransferWatch() {
               />
             </Box>
 
-            {error && (
-              <Text color="red.400" fontSize="sm">{error}</Text>
-            )}
+            {error && <Text color="red.400" fontSize="sm">{error}</Text>}
+            {success && <Text color="green.400" fontSize="sm">{success}</Text>}
 
-            {!showConfirm ? (
-              <Button
-                color="white"
-                className="brand-gradient-bg"
-                loading={findingUser}
-                disabled={!selectedWatchId || !newOwnerEmail}
-                onClick={() => setShowConfirm(true)}
-              >
-                {t('transferWatch.form.transfer')}
-              </Button>
-            ) : (
-              <Box bg={{ base: 'gray.100', _dark: 'gray.700' }} p={4} borderRadius="md">
-                <Text color={{ base: 'gray.900', _dark: 'white' }} fontWeight="bold" mb={2}>
-                  {t('transferWatch.confirmTransferAction.title')}
-                </Text>
-                <Text color={{ base: 'gray.600', _dark: 'gray.300' }} fontSize="sm" mb={4}>
-                  {t('transferWatch.confirmTransferAction.description')}
-                </Text>
-                <Flex gap={3}>
-                  <Button
-                    bg="red.500"
-                    color="white"
-                    loading={transferring}
-                    onClick={handleTransfer}
-                    flex={1}
-                  >
-                    {t('transferWatch.confirmTransferAction.accept')}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    color={{ base: 'gray.600', _dark: 'gray.300' }}
-                    borderColor={{ base: 'gray.400', _dark: 'gray.500' }}
-                    onClick={() => setShowConfirm(false)}
-                    flex={1}
-                  >
-                    {t('transferWatch.confirmTransferAction.cancel')}
-                  </Button>
-                </Flex>
-              </Box>
-            )}
+            <Button
+              color="white"
+              className="brand-gradient-bg"
+              loading={creating}
+              disabled={!selectedWatchId || !newOwnerEmail}
+              onClick={handleSendRequest}
+            >
+              {t('transferWatch.form.sendRequest')}
+            </Button>
           </Flex>
         </Box>
+
+        {pendingRequests.length > 0 && (
+          <Box
+            className="soft-card fade-in-up stagger-2"
+            bg={{ base: 'white', _dark: 'gray.800' }}
+            p={6}
+            borderRadius="xl"
+            boxShadow="xl"
+          >
+            <Heading size="lg" mb={4} className="gradient-text">
+              {t('transferWatch.incomingRequests')}
+            </Heading>
+            <Flex direction="column" gap={4}>
+              {pendingRequests.map((req) => (
+                <Box key={req.id} p={4} bg={{ base: 'gray.50', _dark: 'gray.700' }} borderRadius="md">
+                  <Flex justify="space-between" align="center" mb={2}>
+                    <Text color={{ base: 'gray.900', _dark: 'white' }} fontWeight="bold">
+                      #{req.watch?.serialNum} {req.watch?.brand ? `- ${req.watch.brand}` : ''}
+                    </Text>
+                    <Badge colorPalette={statusColor[req.status]}>{req.status}</Badge>
+                  </Flex>
+                  <Text color={{ base: 'gray.600', _dark: 'gray.400' }} fontSize="sm" mb={3}>
+                    {t('transferWatch.from')}: {req.fromUser?.username} ({req.fromUser?.email})
+                  </Text>
+                  <Flex gap={3}>
+                    <Button
+                      size="sm"
+                      color="white"
+                      className="brand-gradient-bg"
+                      loading={respondingId === req.id}
+                      disabled={respondingId !== null && respondingId !== req.id}
+                      onClick={() => handleRespond(req.id, true)}
+                      flex={1}
+                    >
+                      {t('transferWatch.accept')}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      color="red.400"
+                      borderColor="red.400"
+                      loading={respondingId === req.id}
+                      disabled={respondingId !== null && respondingId !== req.id}
+                      onClick={() => handleRespond(req.id, false)}
+                      flex={1}
+                    >
+                      {t('transferWatch.reject')}
+                    </Button>
+                  </Flex>
+                </Box>
+              ))}
+            </Flex>
+          </Box>
+        )}
+
+        {sentRequests.length > 0 && (
+          <Box
+            className="soft-card fade-in-up stagger-3"
+            bg={{ base: 'white', _dark: 'gray.800' }}
+            p={6}
+            borderRadius="xl"
+            boxShadow="xl"
+          >
+            <Heading size="lg" mb={4} className="gradient-text">
+              {t('transferWatch.sentRequests')}
+            </Heading>
+            <Flex direction="column" gap={3}>
+              {sentRequests.map((req) => (
+                <Box key={req.id} p={4} bg={{ base: 'gray.50', _dark: 'gray.700' }} borderRadius="md">
+                  <Flex justify="space-between" align="center">
+                    <Flex direction="column">
+                      <Text color={{ base: 'gray.900', _dark: 'white' }} fontWeight="bold" fontSize="sm">
+                        #{req.watch?.serialNum}
+                      </Text>
+                      <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="xs">
+                        {t('transferWatch.to')}: {req.toUser?.username}
+                      </Text>
+                    </Flex>
+                    <Badge colorPalette={statusColor[req.status]}>{req.status}</Badge>
+                  </Flex>
+                </Box>
+              ))}
+            </Flex>
+          </Box>
+        )}
       </Flex>
     </Layout>
   );

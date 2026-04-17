@@ -1,0 +1,24 @@
+mutation createTransferRequest($data: CreateTransferRequestInput!) {
+  createTransferRequest(data: $data) {
+    id
+    watchId
+    fromUserId
+    toUserId
+    status
+    createdAt
+    watch {
+      serialNum
+      brand
+    }
+    fromUser {
+      id
+      username
+      email
+    }
+    toUser {
+      id
+      username
+      email
+    }
+  }
+}

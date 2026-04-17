@@ -22,6 +22,12 @@ export type ContactInput = {
   name: Scalars['String'];
 };
 
+export type CreateTransferRequestInput = {
+  fromUserId: Scalars['Int'];
+  toUserEmail: Scalars['String'];
+  watchId: Scalars['Int'];
+};
+
 export type ForgotPasswordInput = {
   email: Scalars['String'];
 };
@@ -46,17 +52,25 @@ export type LoginUserInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   changeWatchOwnership: Watch;
+  createTransferRequest: TransferRequest;
   createUser: User;
   createWatch: Watch;
   forgotPassword: Scalars['Boolean'];
   resetPassword: Scalars['Boolean'];
+  respondToTransferRequest: TransferRequest;
   sendContactMessage: Scalars['Boolean'];
   signup: User;
+  updateUser: User;
 };
 
 
 export type MutationChangeWatchOwnershipArgs = {
   data: WatchUpdateInput;
+};
+
+
+export type MutationCreateTransferRequestArgs = {
+  data: CreateTransferRequestInput;
 };
 
 
@@ -80,6 +94,11 @@ export type MutationResetPasswordArgs = {
 };
 
 
+export type MutationRespondToTransferRequestArgs = {
+  data: RespondTransferRequestInput;
+};
+
+
 export type MutationSendContactMessageArgs = {
   data: ContactInput;
 };
@@ -87,6 +106,11 @@ export type MutationSendContactMessageArgs = {
 
 export type MutationSignupArgs = {
   data: SignUpInput;
+};
+
+
+export type MutationUpdateUserArgs = {
+  data: UserUpdateInput;
 };
 
 export type OwnershipLog = {
@@ -110,8 +134,11 @@ export type Query = {
   __typename?: 'Query';
   OwnershipLogs: Array<OwnershipLog>;
   login: LoginOutput;
+  pendingTransferRequests: Array<TransferRequest>;
   refreshUser: LoginOutput;
+  sentTransferRequests: Array<TransferRequest>;
   user: User;
+  userActivity: Array<OwnershipLog>;
   watch: Watch;
   watches: Array<Watch>;
 };
@@ -127,13 +154,28 @@ export type QueryLoginArgs = {
 };
 
 
+export type QueryPendingTransferRequestsArgs = {
+  userId: Scalars['Int'];
+};
+
+
 export type QueryRefreshUserArgs = {
   data: Scalars['String'];
 };
 
 
+export type QuerySentTransferRequestsArgs = {
+  userId: Scalars['Int'];
+};
+
+
 export type QueryUserArgs = {
   where: UserWhereInput;
+};
+
+
+export type QueryUserActivityArgs = {
+  userId: Scalars['Int'];
 };
 
 
@@ -151,10 +193,29 @@ export type ResetPasswordInput = {
   token: Scalars['String'];
 };
 
+export type RespondTransferRequestInput = {
+  accept: Scalars['Boolean'];
+  transferRequestId: Scalars['Int'];
+  userId: Scalars['Int'];
+};
+
 export type SignUpInput = {
   email: Scalars['String'];
   password: Scalars['String'];
   username: Scalars['String'];
+};
+
+export type TransferRequest = {
+  __typename?: 'TransferRequest';
+  createdAt: Scalars['DateTime'];
+  fromUser?: Maybe<User>;
+  fromUserId: Scalars['Float'];
+  id: Scalars['Float'];
+  status: Scalars['String'];
+  toUser?: Maybe<User>;
+  toUserId: Scalars['Float'];
+  watch?: Maybe<Watch>;
+  watchId: Scalars['Float'];
 };
 
 export type User = {
@@ -173,6 +234,13 @@ export type UserCreateInput = {
   username: Scalars['String'];
 };
 
+export type UserUpdateInput = {
+  currentPassword?: InputMaybe<Scalars['String']>;
+  id: Scalars['Int'];
+  newPassword?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
+};
+
 export type UserWhereInput = {
   email?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['Float']>;
@@ -181,21 +249,31 @@ export type UserWhereInput = {
 
 export type Watch = {
   __typename?: 'Watch';
+  brand?: Maybe<Scalars['String']>;
   certificateUrl?: Maybe<Scalars['String']>;
   id: Scalars['Float'];
+  imageUrl?: Maybe<Scalars['String']>;
   lastSynced: Scalars['DateTime'];
   metadataURI?: Maybe<Scalars['String']>;
+  model?: Maybe<Scalars['String']>;
   ownerId: Scalars['Float'];
   ownershipLog?: Maybe<Array<OwnershipLog>>;
+  referenceNumber?: Maybe<Scalars['String']>;
   serialNum?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
+  yearOfProduction?: Maybe<Scalars['Float']>;
 };
 
 export type WatchCreateInput = {
+  brand?: InputMaybe<Scalars['String']>;
+  imageUrl?: InputMaybe<Scalars['String']>;
   lastSynced: Scalars['DateTime'];
   metadataURI?: InputMaybe<Scalars['String']>;
+  model?: InputMaybe<Scalars['String']>;
   ownerId: Scalars['Int'];
+  referenceNumber?: InputMaybe<Scalars['String']>;
   serialNum?: InputMaybe<Scalars['String']>;
+  yearOfProduction?: InputMaybe<Scalars['Int']>;
 };
 
 export type WatchUpdateInput = {
@@ -262,12 +340,54 @@ export type GetOwnershipLogsQueryVariables = Exact<{
 
 export type GetOwnershipLogsQuery = { __typename?: 'Query', OwnershipLogs: Array<{ __typename?: 'OwnershipLog', id: number, ownerId: number, watchId: number, timestamp: any }> };
 
+export type UserActivityQueryVariables = Exact<{
+  userId: Scalars['Int'];
+}>;
+
+
+export type UserActivityQuery = { __typename?: 'Query', userActivity: Array<{ __typename?: 'OwnershipLog', id: number, ownerId: number, watchId: number, timestamp: any, metadataURI?: string | null, certificateUrl?: string | null, watch?: { __typename?: 'Watch', serialNum?: string | null, brand?: string | null, model?: string | null } | null, owner?: { __typename?: 'User', id: number, username: string } | null }> };
+
+export type CreateTransferRequestMutationVariables = Exact<{
+  data: CreateTransferRequestInput;
+}>;
+
+
+export type CreateTransferRequestMutation = { __typename?: 'Mutation', createTransferRequest: { __typename?: 'TransferRequest', id: number, watchId: number, fromUserId: number, toUserId: number, status: string, createdAt: any, watch?: { __typename?: 'Watch', serialNum?: string | null, brand?: string | null } | null, fromUser?: { __typename?: 'User', id: number, username: string, email: string } | null, toUser?: { __typename?: 'User', id: number, username: string, email: string } | null } };
+
+export type PendingTransferRequestsQueryVariables = Exact<{
+  userId: Scalars['Int'];
+}>;
+
+
+export type PendingTransferRequestsQuery = { __typename?: 'Query', pendingTransferRequests: Array<{ __typename?: 'TransferRequest', id: number, watchId: number, fromUserId: number, toUserId: number, status: string, createdAt: any, watch?: { __typename?: 'Watch', serialNum?: string | null, brand?: string | null } | null, fromUser?: { __typename?: 'User', id: number, username: string, email: string } | null, toUser?: { __typename?: 'User', id: number, username: string, email: string } | null }> };
+
+export type RespondToTransferRequestMutationVariables = Exact<{
+  data: RespondTransferRequestInput;
+}>;
+
+
+export type RespondToTransferRequestMutation = { __typename?: 'Mutation', respondToTransferRequest: { __typename?: 'TransferRequest', id: number, watchId: number, fromUserId: number, toUserId: number, status: string, createdAt: any } };
+
+export type SentTransferRequestsQueryVariables = Exact<{
+  userId: Scalars['Int'];
+}>;
+
+
+export type SentTransferRequestsQuery = { __typename?: 'Query', sentTransferRequests: Array<{ __typename?: 'TransferRequest', id: number, watchId: number, fromUserId: number, toUserId: number, status: string, createdAt: any, watch?: { __typename?: 'Watch', serialNum?: string | null, brand?: string | null } | null, fromUser?: { __typename?: 'User', id: number, username: string, email: string } | null, toUser?: { __typename?: 'User', id: number, username: string, email: string } | null }> };
+
 export type GetUserQueryVariables = Exact<{
   where: UserWhereInput;
 }>;
 
 
 export type GetUserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, email: string, username: string, createdAt: any, language: Language, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, ownerId: number, lastSynced: any }> | null } };
+
+export type UpdateUserMutationVariables = Exact<{
+  data: UserUpdateInput;
+}>;
+
+
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any } };
 
 export type ChangeWatchOwnershipMutationVariables = Exact<{
   data: WatchUpdateInput;
@@ -565,6 +685,253 @@ export function useGetOwnershipLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type GetOwnershipLogsQueryHookResult = ReturnType<typeof useGetOwnershipLogsQuery>;
 export type GetOwnershipLogsLazyQueryHookResult = ReturnType<typeof useGetOwnershipLogsLazyQuery>;
 export type GetOwnershipLogsQueryResult = Apollo.QueryResult<GetOwnershipLogsQuery, GetOwnershipLogsQueryVariables>;
+export const UserActivityDocument = gql`
+    query userActivity($userId: Int!) {
+  userActivity(userId: $userId) {
+    id
+    ownerId
+    watchId
+    timestamp
+    metadataURI
+    certificateUrl
+    watch {
+      serialNum
+      brand
+      model
+    }
+    owner {
+      id
+      username
+    }
+  }
+}
+    `;
+
+/**
+ * __useUserActivityQuery__
+ *
+ * To run a query within a React component, call `useUserActivityQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserActivityQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserActivityQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useUserActivityQuery(baseOptions: Apollo.QueryHookOptions<UserActivityQuery, UserActivityQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserActivityQuery, UserActivityQueryVariables>(UserActivityDocument, options);
+      }
+export function useUserActivityLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserActivityQuery, UserActivityQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserActivityQuery, UserActivityQueryVariables>(UserActivityDocument, options);
+        }
+export type UserActivityQueryHookResult = ReturnType<typeof useUserActivityQuery>;
+export type UserActivityLazyQueryHookResult = ReturnType<typeof useUserActivityLazyQuery>;
+export type UserActivityQueryResult = Apollo.QueryResult<UserActivityQuery, UserActivityQueryVariables>;
+export const CreateTransferRequestDocument = gql`
+    mutation createTransferRequest($data: CreateTransferRequestInput!) {
+  createTransferRequest(data: $data) {
+    id
+    watchId
+    fromUserId
+    toUserId
+    status
+    createdAt
+    watch {
+      serialNum
+      brand
+    }
+    fromUser {
+      id
+      username
+      email
+    }
+    toUser {
+      id
+      username
+      email
+    }
+  }
+}
+    `;
+export type CreateTransferRequestMutationFn = Apollo.MutationFunction<CreateTransferRequestMutation, CreateTransferRequestMutationVariables>;
+
+/**
+ * __useCreateTransferRequestMutation__
+ *
+ * To run a mutation, you first call `useCreateTransferRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTransferRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTransferRequestMutation, { data, loading, error }] = useCreateTransferRequestMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateTransferRequestMutation(baseOptions?: Apollo.MutationHookOptions<CreateTransferRequestMutation, CreateTransferRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateTransferRequestMutation, CreateTransferRequestMutationVariables>(CreateTransferRequestDocument, options);
+      }
+export type CreateTransferRequestMutationHookResult = ReturnType<typeof useCreateTransferRequestMutation>;
+export type CreateTransferRequestMutationResult = Apollo.MutationResult<CreateTransferRequestMutation>;
+export type CreateTransferRequestMutationOptions = Apollo.BaseMutationOptions<CreateTransferRequestMutation, CreateTransferRequestMutationVariables>;
+export const PendingTransferRequestsDocument = gql`
+    query pendingTransferRequests($userId: Int!) {
+  pendingTransferRequests(userId: $userId) {
+    id
+    watchId
+    fromUserId
+    toUserId
+    status
+    createdAt
+    watch {
+      serialNum
+      brand
+    }
+    fromUser {
+      id
+      username
+      email
+    }
+    toUser {
+      id
+      username
+      email
+    }
+  }
+}
+    `;
+
+/**
+ * __usePendingTransferRequestsQuery__
+ *
+ * To run a query within a React component, call `usePendingTransferRequestsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePendingTransferRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePendingTransferRequestsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function usePendingTransferRequestsQuery(baseOptions: Apollo.QueryHookOptions<PendingTransferRequestsQuery, PendingTransferRequestsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PendingTransferRequestsQuery, PendingTransferRequestsQueryVariables>(PendingTransferRequestsDocument, options);
+      }
+export function usePendingTransferRequestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PendingTransferRequestsQuery, PendingTransferRequestsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PendingTransferRequestsQuery, PendingTransferRequestsQueryVariables>(PendingTransferRequestsDocument, options);
+        }
+export type PendingTransferRequestsQueryHookResult = ReturnType<typeof usePendingTransferRequestsQuery>;
+export type PendingTransferRequestsLazyQueryHookResult = ReturnType<typeof usePendingTransferRequestsLazyQuery>;
+export type PendingTransferRequestsQueryResult = Apollo.QueryResult<PendingTransferRequestsQuery, PendingTransferRequestsQueryVariables>;
+export const RespondToTransferRequestDocument = gql`
+    mutation respondToTransferRequest($data: RespondTransferRequestInput!) {
+  respondToTransferRequest(data: $data) {
+    id
+    watchId
+    fromUserId
+    toUserId
+    status
+    createdAt
+  }
+}
+    `;
+export type RespondToTransferRequestMutationFn = Apollo.MutationFunction<RespondToTransferRequestMutation, RespondToTransferRequestMutationVariables>;
+
+/**
+ * __useRespondToTransferRequestMutation__
+ *
+ * To run a mutation, you first call `useRespondToTransferRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRespondToTransferRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [respondToTransferRequestMutation, { data, loading, error }] = useRespondToTransferRequestMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useRespondToTransferRequestMutation(baseOptions?: Apollo.MutationHookOptions<RespondToTransferRequestMutation, RespondToTransferRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RespondToTransferRequestMutation, RespondToTransferRequestMutationVariables>(RespondToTransferRequestDocument, options);
+      }
+export type RespondToTransferRequestMutationHookResult = ReturnType<typeof useRespondToTransferRequestMutation>;
+export type RespondToTransferRequestMutationResult = Apollo.MutationResult<RespondToTransferRequestMutation>;
+export type RespondToTransferRequestMutationOptions = Apollo.BaseMutationOptions<RespondToTransferRequestMutation, RespondToTransferRequestMutationVariables>;
+export const SentTransferRequestsDocument = gql`
+    query sentTransferRequests($userId: Int!) {
+  sentTransferRequests(userId: $userId) {
+    id
+    watchId
+    fromUserId
+    toUserId
+    status
+    createdAt
+    watch {
+      serialNum
+      brand
+    }
+    fromUser {
+      id
+      username
+      email
+    }
+    toUser {
+      id
+      username
+      email
+    }
+  }
+}
+    `;
+
+/**
+ * __useSentTransferRequestsQuery__
+ *
+ * To run a query within a React component, call `useSentTransferRequestsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSentTransferRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSentTransferRequestsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useSentTransferRequestsQuery(baseOptions: Apollo.QueryHookOptions<SentTransferRequestsQuery, SentTransferRequestsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SentTransferRequestsQuery, SentTransferRequestsQueryVariables>(SentTransferRequestsDocument, options);
+      }
+export function useSentTransferRequestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SentTransferRequestsQuery, SentTransferRequestsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SentTransferRequestsQuery, SentTransferRequestsQueryVariables>(SentTransferRequestsDocument, options);
+        }
+export type SentTransferRequestsQueryHookResult = ReturnType<typeof useSentTransferRequestsQuery>;
+export type SentTransferRequestsLazyQueryHookResult = ReturnType<typeof useSentTransferRequestsLazyQuery>;
+export type SentTransferRequestsQueryResult = Apollo.QueryResult<SentTransferRequestsQuery, SentTransferRequestsQueryVariables>;
 export const GetUserDocument = gql`
     query getUser($where: UserWhereInput!) {
   user(where: $where) {
@@ -611,6 +978,43 @@ export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
 export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
 export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;
+export const UpdateUserDocument = gql`
+    mutation updateUser($data: UserUpdateInput!) {
+  updateUser(data: $data) {
+    id
+    email
+    username
+    language
+    createdAt
+  }
+}
+    `;
+export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
+
+/**
+ * __useUpdateUserMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options);
+      }
+export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
+export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
 export const ChangeWatchOwnershipDocument = gql`
     mutation changeWatchOwnership($data: WatchUpdateInput!) {
   changeWatchOwnership(data: $data) {

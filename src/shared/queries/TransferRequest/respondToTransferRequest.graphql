@@ -1,0 +1,10 @@
+mutation respondToTransferRequest($data: RespondTransferRequestInput!) {
+  respondToTransferRequest(data: $data) {
+    id
+    watchId
+    fromUserId
+    toUserId
+    status
+    createdAt
+  }
+}

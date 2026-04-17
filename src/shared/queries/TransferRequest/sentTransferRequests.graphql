@@ -1,0 +1,24 @@
+query sentTransferRequests($userId: Int!) {
+  sentTransferRequests(userId: $userId) {
+    id
+    watchId
+    fromUserId
+    toUserId
+    status
+    createdAt
+    watch {
+      serialNum
+      brand
+    }
+    fromUser {
+      id
+      username
+      email
+    }
+    toUser {
+      id
+      username
+      email
+    }
+  }
+}

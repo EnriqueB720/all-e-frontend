@@ -1,0 +1,19 @@
+query userActivity($userId: Int!) {
+  userActivity(userId: $userId) {
+    id
+    ownerId
+    watchId
+    timestamp
+    metadataURI
+    certificateUrl
+    watch {
+      serialNum
+      brand
+      model
+    }
+    owner {
+      id
+      username
+    }
+  }
+}

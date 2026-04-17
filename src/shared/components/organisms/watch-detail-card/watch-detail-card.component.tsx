@@ -23,11 +23,45 @@ const WatchDetailCard: React.FC<WatchDetailCardProps> = ({
       boxShadow={{ base: 'sm', _dark: 'none' }}
     >
       <Flex direction="column" gap={4}>
+        {watch.imageUrl && (
+          <Flex justify="center" mb={2}>
+            <img
+              src={watch.imageUrl}
+              alt={`${watch.brand ?? ''} ${watch.model ?? ''}`}
+              style={{ maxHeight: 200, borderRadius: 8, objectFit: 'contain' }}
+            />
+          </Flex>
+        )}
+
         <DetailRow label={t('seeAWatch.serialNumber')} showSeparator={false}>
           <Text color={{ base: 'gray.900', _dark: 'white' }} fontWeight="bold" fontSize="xl">
             #{watch.serialNum}
           </Text>
         </DetailRow>
+
+        {watch.brand && (
+          <DetailRow label={t('watchRegistry.brand')}>
+            <Text color={{ base: 'gray.900', _dark: 'white' }}>{watch.brand}</Text>
+          </DetailRow>
+        )}
+
+        {watch.model && (
+          <DetailRow label={t('watchRegistry.model')}>
+            <Text color={{ base: 'gray.900', _dark: 'white' }}>{watch.model}</Text>
+          </DetailRow>
+        )}
+
+        {watch.referenceNumber && (
+          <DetailRow label={t('watchRegistry.referenceNumber')}>
+            <Text color={{ base: 'gray.900', _dark: 'white' }}>{watch.referenceNumber}</Text>
+          </DetailRow>
+        )}
+
+        {watch.yearOfProduction && (
+          <DetailRow label={t('watchRegistry.yearOfProduction')}>
+            <Text color={{ base: 'gray.900', _dark: 'white' }}>{watch.yearOfProduction}</Text>
+          </DetailRow>
+        )}
 
         <DetailRow label={t('seeAWatch.currentOwner')}>
           <Flex align="center" gap={2}>

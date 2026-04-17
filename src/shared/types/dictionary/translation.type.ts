@@ -138,6 +138,11 @@ export interface Dictionary {
     title: string;
     serialNumber: string;
     username: string;
+    brand: string;
+    model: string;
+    referenceNumber: string;
+    yearOfProduction: string;
+    imageUrl: string;
     form:{
       register: string;
       cancel: string;
@@ -147,8 +152,17 @@ export interface Dictionary {
     selectAWatch: string;
     serialNumber: string;
     newOwnerAccount: string;
+    sendRequest: string;
+    requestSent: string;
+    incomingRequests: string;
+    sentRequests: string;
+    from: string;
+    to: string;
+    accept: string;
+    reject: string;
     form:{
       transfer: string;
+      sendRequest: string;
       cancel: string;
     }
     confirmTransferAction:{
@@ -210,10 +224,57 @@ export interface Dictionary {
     metadataURI: string;
     ownershipHistoryPlaceholder: string;
     lookupError: string;
+    searchPlaceholder: string;
+    sortNewest: string;
+    sortOldest: string;
+    sortSerial: string;
+    noResults: string;
   };
   profile: {
+    title: string;
     cancel: string;
     email: string;
+    username: string;
+    totalWatches: string;
+    joinDate: string;
+    changePassword: string;
+    currentPassword: string;
+    newPassword: string;
+    save: string;
+    saved: string;
+    error: string;
+    passwordRequirements: string;
+    rules: {
+      minLength: string;
+      lowercase: string;
+      uppercase: string;
+      digit: string;
+    };
+  };
+  qrCode: {
+    title: string;
+    description: string;
+    download: string;
+  };
+  certificate: {
+    subtitle: string;
+    download: string;
+    date: string;
+  };
+  activity: {
+    title: string;
+    empty: string;
+    registered: string;
+    received: string;
+    sent: string;
+  };
+  notifications: {
+    transferAccepted: string;
+    transferRejected: string;
+    yourTransferAccepted: string;
+    yourTransferRejected: string;
+    newPendingTransfer: string;
+    pendingCount: string;
   };
   registerAWatchButton: string;
   transferAWatchButton: string;

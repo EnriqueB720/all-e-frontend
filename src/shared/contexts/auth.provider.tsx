@@ -53,7 +53,8 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
   const login = useCallback(async ({ credentials }: AuthCredentials): Promise<boolean> => {
     try {
-      const { email, password } = credentials;
+      const { email: rawEmail, password } = credentials;
+      const email = rawEmail.toLowerCase();
 
       setIsLoading(true);
       setError(undefined);
@@ -100,7 +101,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
       let result = await signupQuery({
         variables: {
-          data
+          data: { ...data, email: data.email.toLowerCase() }
         }
       });
 

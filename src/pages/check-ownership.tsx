@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { Heading, Separator, Link } from '@chakra-ui/react';
 
 import { Layout, Box, Flex, Button, Input, CopyableText, Text, DetailRow, ExternalLink } from '@components';
@@ -9,13 +10,25 @@ type SearchType = 'serialNum' | 'username';
 
 export default function CheckOwnership() {
   const { t } = useTranslation();
+  const router = useRouter();
   const [searchType, setSearchType] = useState<SearchType>('serialNum');
   const [searchValue, setSearchValue] = useState('');
+  const [autoSearched, setAutoSearched] = useState(false);
 
   const [getWatch, { data: singleData, loading: singleLoading, error: singleError }] =
     useGetWatchLazyQuery({ fetchPolicy: 'network-only' });
   const [getWatches, { data: multiData, loading: multiLoading, error: multiError }] =
     useGetWatchesLazyQuery({ fetchPolicy: 'network-only' });
+
+  useEffect(() => {
+    const qsSerial = router.query.serialNum as string | undefined;
+    if (qsSerial && !autoSearched) {
+      setSearchValue(qsSerial);
+      setSearchType('serialNum');
+      getWatch({ variables: { where: { serialNum: qsSerial } } });
+      setAutoSearched(true);
+    }
+  }, [router.query.serialNum]);
 
   const loading = singleLoading || multiLoading;
   const error = singleError || multiError;
