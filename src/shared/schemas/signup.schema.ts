@@ -1,11 +1,23 @@
 import * as yup from "yup";
 
-const passwordRules =  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-//TODO: add translation hook once done!
+import { Translator } from "@types";
 
-export const signUpSchema = yup.object().shape({
-  email: yup.string().email().required("Email is required"),
-  username: yup.string().required('Username is required'),
-  password: yup.string().min(8, 'Password must be at least 8 characters').required('Password is required').matches(passwordRules, 'Password must have characters lowercase and uppercase and numbers'),
-  repeatPassword: yup.string().required('Re-type your password').oneOf([yup.ref('password')], 'Passwords must match'),
-})
+const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+
+export const createSignUpSchema = (t: Translator) =>
+  yup.object().shape({
+    email: yup
+      .string()
+      .email(t('global.error.invalidEmail'))
+      .required(t('global.error.required')),
+    username: yup.string().required(t('global.error.required')),
+    password: yup
+      .string()
+      .min(8, t('global.error.tooShort'))
+      .required(t('global.error.required'))
+      .matches(passwordRules, t('global.error.invalidPassword')),
+    repeatPassword: yup
+      .string()
+      .required(t('global.error.required'))
+      .oneOf([yup.ref('password')], t('global.error.invalidConfirmPassword')),
+  });

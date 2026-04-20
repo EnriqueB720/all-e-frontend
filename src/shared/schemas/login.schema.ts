@@ -1,7 +1,15 @@
 import * as yup from "yup";
 
-//TODO: add translation hook once done!
-export const loginSchema = yup.object().shape({
-  email: yup.string().email().required("Email is required"),
-  password: yup.string().min(8, 'Password must be at least 8 characters').required('Password is required')
-})
+import { Translator } from "@types";
+
+export const createLoginSchema = (t: Translator) =>
+  yup.object().shape({
+    email: yup
+      .string()
+      .email(t('global.error.invalidEmail'))
+      .required(t('global.error.required')),
+    password: yup
+      .string()
+      .min(8, t('global.error.tooShort'))
+      .required(t('global.error.required')),
+  });

@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { Heading, Link as CKLink } from '@chakra-ui/react';
 import NextLink from 'next/link';
@@ -6,7 +6,7 @@ import NextLink from 'next/link';
 import { AuthContext } from '@contexts';
 import { Box, Flex, Form, Text } from '@components';
 import { useTranslation } from '@hooks';
-import { signUpSchema } from '@schemas';
+import { createSignUpSchema } from '@schemas';
 import { SignUpUser } from '@model';
 import { FieldProps } from '@types';
 
@@ -28,6 +28,7 @@ export default function Signup() {
   const { register, isLoading, isAuthenticated, error, clearError } = useContext(AuthContext);
   const { t } = useTranslation();
   const router = useRouter();
+  const signUpSchema = useMemo(() => createSignUpSchema(t), [t]);
 
   useEffect(() => {
     if (isAuthenticated) {

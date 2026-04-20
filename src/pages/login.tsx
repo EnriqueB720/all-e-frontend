@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { Heading, Link as CKLink } from '@chakra-ui/react';
 import NextLink from 'next/link';
@@ -6,7 +6,7 @@ import NextLink from 'next/link';
 import { AuthContext } from '@contexts';
 import { Box, Flex, Form, Text } from '@components';
 import { useTranslation } from '@hooks';
-import { loginSchema } from '@schemas';
+import { createLoginSchema } from '@schemas';
 import { AuthCredentials, ICredentials } from '@model';
 import { FieldProps } from '@types';
 
@@ -19,6 +19,7 @@ export default function Login() {
   const { login, isLoading, isAuthenticated, error, clearError } = useContext(AuthContext);
   const { t } = useTranslation();
   const router = useRouter();
+  const loginSchema = useMemo(() => createLoginSchema(t), [t]);
 
   useEffect(() => {
     if (isAuthenticated) {
