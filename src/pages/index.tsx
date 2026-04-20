@@ -243,17 +243,17 @@ export default function Home() {
                   <Badge colorPalette="green">{t('dashboard.owned')}</Badge>
                 </Flex>
                 {(watch.data.brand || watch.data.model) && (
-                  <Text color={{ base: 'gray.600', _dark: 'gray.400' }} fontSize="sm" mb={1}>
+                  <Text color={{ base: 'gray.600', _dark: 'gray.400' }} fontSize="sm" mb={1} mr={1}>
                     {[watch.data.brand, watch.data.model].filter(Boolean).join(' ')}
                   </Text>
                 )}
                 {watch.data.referenceNumber && (
-                  <Text color={{ base: 'gray.500', _dark: 'gray.500' }} fontSize="xs" mb={1}>
+                  <Text color={{ base: 'gray.500', _dark: 'gray.500' }} fontSize="xs" mb={1} mr={1}>
                     Ref. {watch.data.referenceNumber}
                   </Text>
                 )}
                 {watch.certificateUrl && (
-                  <Text color={{ base: 'gray.500', _dark: 'gray.500' }} fontSize="xs" truncate>
+                  <Text color={{ base: 'gray.500', _dark: 'gray.500' }} fontSize="xs" fontWeight={'bold'} truncate>
                     {t('seeAWatch.ipfsCertificate')}
                   </Text>
                 )}

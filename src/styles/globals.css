@@ -147,11 +147,11 @@
 }
 
 .app-bg-light {
-  background-color: #eef5f3;
+  background-color: #e3f3ee;
   background-image:
-    radial-gradient(800px 600px at 15% 20%, rgba(0, 168, 132, 0.22), transparent 55%),
-    radial-gradient(600px 500px at 85% 30%, rgba(79, 209, 197, 0.22), transparent 55%),
-    radial-gradient(700px 500px at 50% 100%, rgba(0, 217, 168, 0.18), transparent 60%);
+    radial-gradient(800px 600px at 15% 20%, rgba(0, 168, 132, 0.38), transparent 55%),
+    radial-gradient(600px 500px at 85% 30%, rgba(79, 209, 197, 0.38), transparent 55%),
+    radial-gradient(700px 500px at 50% 100%, rgba(0, 217, 168, 0.32), transparent 60%);
   background-attachment: fixed;
 }
 
@@ -182,7 +182,7 @@
   height: 520px;
   top: -140px;
   left: -140px;
-  background: radial-gradient(circle, rgba(0, 168, 132, 0.55), transparent 70%);
+  background: radial-gradient(circle, rgba(0, 168, 132, 0.72), transparent 70%);
   animation: orbFloat1 18s ease-in-out infinite;
 }
 
@@ -191,7 +191,7 @@
   height: 460px;
   bottom: -120px;
   right: -100px;
-  background: radial-gradient(circle, rgba(79, 209, 197, 0.50), transparent 70%);
+  background: radial-gradient(circle, rgba(0, 200, 165, 0.85), transparent 70%);
   animation: orbFloat2 22s ease-in-out infinite;
 }
 

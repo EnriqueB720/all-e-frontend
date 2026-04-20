@@ -141,6 +141,8 @@ export const EnglishDictionary: Dictionary = {
     requestSent: 'Transfer request sent successfully!',
     incomingRequests: 'Incoming Requests',
     sentRequests: 'Sent Requests',
+    noIncomingRequests: 'No incoming transfer requests.',
+    noSentRequests: 'You have not sent any transfer requests.',
     from: 'From',
     to: 'To',
     accept: 'Accept',

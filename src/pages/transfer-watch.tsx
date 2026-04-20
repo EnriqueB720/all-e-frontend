@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
   Heading,
   NativeSelect,
@@ -46,15 +46,23 @@ export default function TransferWatch() {
   const { data: pendingData, refetch: refetchPending } = usePendingTransferRequestsQuery({
     variables: { userId: user?.id ?? 0 },
     skip: !user,
-    pollInterval: 2000,
-    fetchPolicy: 'network-only',
+    pollInterval: 1000,
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-and-network',
   });
 
   const { data: sentData, refetch: refetchSent } = useSentTransferRequestsQuery({
     variables: { userId: user?.id ?? 0 },
     skip: !user,
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-and-network',
   });
+
+  useEffect(() => {
+    if (!user?.id) return;
+    refetchPending();
+    refetchSent();
+  }, [user?.id, refetchPending, refetchSent]);
 
   if (!isReady || !user) return null;
 
@@ -81,10 +89,10 @@ export default function TransferWatch() {
           },
         },
       });
+      await refetchSent();
       setSuccess(t('transferWatch.requestSent'));
       setSelectedWatchId('');
       setNewOwnerEmail('');
-      refetchSent();
     } catch (err: any) {
       setError(err.message || t('transferWatch.errors.transferFailed'));
     }
@@ -104,8 +112,7 @@ export default function TransferWatch() {
         },
       });
       if (accept) await refreshUserToken();
-      refetchPending();
-      refetchSent();
+      await Promise.all([refetchPending(), refetchSent()]);
     } catch (err: any) {
       setError(err.message || t('transferWatch.errors.transferFailed'));
     } finally {
@@ -120,7 +127,7 @@ export default function TransferWatch() {
       await cancelTransfer({
         variables: { data: { transferRequestId, userId: user.id } },
       });
-      refetchSent();
+      await refetchSent();
     } catch (err: any) {
       setError(err.message || t('transferWatch.errors.cancelFailed'));
     } finally {
@@ -201,17 +208,21 @@ export default function TransferWatch() {
           </Flex>
         </Box>
 
-        {pendingRequests.length > 0 && (
-          <Box
-            className="soft-card fade-in-up stagger-2"
-            bg={{ base: 'white', _dark: 'gray.800' }}
-            p={6}
-            borderRadius="xl"
-            boxShadow="xl"
-          >
-            <Heading size="lg" mb={4} className="gradient-text">
-              {t('transferWatch.incomingRequests')}
-            </Heading>
+        <Box
+          className="soft-card fade-in-up stagger-2"
+          bg={{ base: 'white', _dark: 'gray.800' }}
+          p={6}
+          borderRadius="xl"
+          boxShadow="xl"
+        >
+          <Heading size="lg" mb={4} className="gradient-text">
+            {t('transferWatch.incomingRequests')}
+          </Heading>
+          {pendingRequests.length === 0 ? (
+            <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="sm">
+              {t('transferWatch.noIncomingRequests')}
+            </Text>
+          ) : (
             <Flex direction="column" gap={4}>
               {pendingRequests.map((req) => (
                 <Box key={req.id} p={4} bg={{ base: 'gray.50', _dark: 'gray.700' }} borderRadius="md">
@@ -252,20 +263,24 @@ export default function TransferWatch() {
                 </Box>
               ))}
             </Flex>
-          </Box>
-        )}
+          )}
+        </Box>
 
-        {sentRequests.length > 0 && (
-          <Box
-            className="soft-card fade-in-up stagger-3"
-            bg={{ base: 'white', _dark: 'gray.800' }}
-            p={6}
-            borderRadius="xl"
-            boxShadow="xl"
-          >
-            <Heading size="lg" mb={4} className="gradient-text">
-              {t('transferWatch.sentRequests')}
-            </Heading>
+        <Box
+          className="soft-card fade-in-up stagger-3"
+          bg={{ base: 'white', _dark: 'gray.800' }}
+          p={6}
+          borderRadius="xl"
+          boxShadow="xl"
+        >
+          <Heading size="lg" mb={4} className="gradient-text">
+            {t('transferWatch.sentRequests')}
+          </Heading>
+          {sentRequests.length === 0 ? (
+            <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="sm">
+              {t('transferWatch.noSentRequests')}
+            </Text>
+          ) : (
             <Flex direction="column" gap={3}>
               {sentRequests.map((req) => (
                 <Box key={req.id} p={4} bg={{ base: 'gray.50', _dark: 'gray.700' }} borderRadius="md">
@@ -298,8 +313,8 @@ export default function TransferWatch() {
                 </Box>
               ))}
             </Flex>
-          </Box>
-        )}
+          )}
+        </Box>
       </Flex>
 
       <DialogRoot

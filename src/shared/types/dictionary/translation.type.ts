@@ -157,6 +157,8 @@ export interface Dictionary {
     requestSent: string;
     incomingRequests: string;
     sentRequests: string;
+    noIncomingRequests: string;
+    noSentRequests: string;
     from: string;
     to: string;
     accept: string;

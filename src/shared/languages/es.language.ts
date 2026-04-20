@@ -141,6 +141,8 @@ export const SpanishDictionary: Dictionary = {
     requestSent: '¡Solicitud de transferencia enviada con éxito!',
     incomingRequests: 'Solicitudes recibidas',
     sentRequests: 'Solicitudes enviadas',
+    noIncomingRequests: 'No hay solicitudes de transferencia recibidas.',
+    noSentRequests: 'No has enviado ninguna solicitud de transferencia.',
     from: 'De',
     to: 'Para',
     accept: 'Aceptar',
