@@ -212,9 +212,6 @@ export const SpanishDictionary: Dictionary = {
       watchesFound: 'relojes encontrados',
     },
   },
-  email: {
-    //TODO definir múltiples asuntos y cuerpos de correos para enviar al usuario
-  },
   dashboard: {
     noWatches: 'Aún no tienes relojes registrados.',
     backToDashboard: 'Volver al panel',

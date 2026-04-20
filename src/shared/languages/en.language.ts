@@ -211,9 +211,6 @@ export const EnglishDictionary: Dictionary = {
       watchesFound: 'watches found',
     },
   },
-  email: {
-    //TODO define multiple email subjects and bodies to send to the user
-  },
   dashboard: {
     noWatches: "You don't have any watches registered yet.",
     backToDashboard: 'Back to Dashboard',

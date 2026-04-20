@@ -225,9 +225,6 @@ export interface Dictionary {
       watchesFound: string;
     }
   };
-  email:{
-    //TODO define multiple email subjects and bodies to send to the user
-  };
   dashboard: {
     noWatches: string;
     backToDashboard: string;
