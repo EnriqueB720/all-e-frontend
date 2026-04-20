@@ -98,6 +98,13 @@ export const SpanishDictionary: Dictionary = {
       scanToConnect: 'Escanea para conectar en LinkedIn',
       openLinkedIn: 'Abrir perfil de LinkedIn',
     },
+    contributor: {
+      name: "D'Andre Wolbrom-Highfield",
+      role: 'Colaborador y contribuidor',
+      bio: 'Ayudó a dar forma a All-E con ideas y comentarios. Conéctate con él en LinkedIn.',
+      scanToConnect: 'Escanea para conectar en LinkedIn',
+      openLinkedIn: 'Abrir perfil de LinkedIn',
+    },
   },
   login: {
     title: 'Iniciar sesión',

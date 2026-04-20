@@ -1,9 +1,10 @@
-import {LanguageDictionary, Translator, Dictionary} from './dictionary/index'
+import {LanguageDictionary, Translator, Dictionary, DictionaryLeaves} from './dictionary/index'
 
 export type {
   LanguageDictionary,
   Translator,
-  Dictionary
+  Dictionary,
+  DictionaryLeaves
 }
 
 export * from './auth-provider.type';

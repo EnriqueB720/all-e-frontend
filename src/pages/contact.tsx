@@ -7,9 +7,10 @@ import { Layout, Box, Flex, Form, Text } from '@components';
 import { useTranslation } from '@hooks';
 import { useSendContactMessageMutation } from '@generated';
 import { contactSchema } from '@schemas';
-import { FieldProps } from '@types';
+import { DictionaryLeaves, FieldProps } from '@types';
 
 const LINKEDIN_URL = 'https://www.linkedin.com/in/enrique-barroso/';
+const LINKEDIN_URL_2 = 'https://www.linkedin.com/in/d-andre-wolbrom-highfield-2060321b7/';
 
 interface ContactValues {
   name: string;
@@ -18,6 +19,16 @@ interface ContactValues {
 }
 
 const initialValues: ContactValues = { name: '', email: '', message: '' };
+
+interface PersonCardProps {
+  namePath: DictionaryLeaves;
+  rolePath: DictionaryLeaves;
+  bioPath: DictionaryLeaves;
+  scanPath: DictionaryLeaves;
+  linkPath: DictionaryLeaves;
+  linkedInUrl: string;
+  stagger: 'stagger-2' | 'stagger-3';
+}
 
 export default function Contact() {
   const { t } = useTranslation();
@@ -34,12 +45,82 @@ export default function Contact() {
     try {
       await sendContact({ variables: { data: values } });
       setSent(true);
-    } catch {}
+    } catch { }
   };
 
   const cardBg = { base: 'white', _dark: 'gray.800' };
   const cardBorder = { base: 'gray.200', _dark: 'whiteAlpha.200' };
   const mutedText = { base: 'gray.600', _dark: 'gray.400' };
+
+  const PersonCard = ({ namePath, rolePath, bioPath, scanPath, linkPath, linkedInUrl, stagger }: PersonCardProps) => (
+    <Box
+      className={`soft-card fade-in-up ${stagger}`}
+      w={{ base: '100%', md: '320px' }}
+      bg={cardBg}
+      borderWidth="1px"
+      borderColor={cardBorder}
+      borderRadius="xl"
+      p={6}
+      boxShadow="sm"
+    >
+      <Flex direction="column" gap={4} align="center" textAlign="center">
+        <Flex
+          w="56px"
+          h="56px"
+          borderRadius="full"
+          bg="#00a88422"
+          align="center"
+          justify="center"
+        >
+          <CKIcon boxSize={7} color="#00a884">
+            <MdMail />
+          </CKIcon>
+        </Flex>
+
+        <Flex direction="column" gap={1}>
+          <Heading size="md" color={{ base: 'gray.900', _dark: 'white' }}>
+            {t(namePath)}
+          </Heading>
+          <Text fontSize="sm" color="#00a884" fontWeight="medium">
+            {t(rolePath)}
+          </Text>
+        </Flex>
+
+        <Text fontSize="sm" color={mutedText}>
+          {t(bioPath)}
+        </Text>
+
+        <Box pt={2}>
+          <QrCode.Root value={linkedInUrl} encoding={{ ecc: 'H' }} size="md">
+            <QrCode.Frame>
+              <QrCode.Pattern />
+            </QrCode.Frame>
+          </QrCode.Root>
+        </Box>
+
+        <Text fontSize="xs" color={mutedText}>
+          {t(scanPath)}
+        </Text>
+
+        <Link
+          href={linkedInUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          color="#00a884"
+          fontSize="sm"
+          fontWeight="medium"
+          display="inline-flex"
+          alignItems="center"
+          gap={2}
+        >
+          <CKIcon boxSize={4}>
+            <FaLinkedin />
+          </CKIcon>
+          {t(linkPath)}
+        </Link>
+      </Flex>
+    </Box>
+  );
 
   return (
     <Layout>
@@ -57,12 +138,15 @@ export default function Contact() {
           direction={{ base: 'column', md: 'row' }}
           gap={6}
           w="100%"
-          maxW="960px"
+          maxW="1200px"
           align="stretch"
+          justify="center"
+          wrap="wrap"
         >
           <Box
             className="soft-card fade-in-up stagger-1"
             flex="1"
+            minW={{ base: '100%', md: '360px' }}
             bg={cardBg}
             borderWidth="1px"
             borderColor={cardBorder}
@@ -72,7 +156,9 @@ export default function Contact() {
           >
             {sent ? (
               <Flex direction="column" align="center" justify="center" gap={4} py={10}>
-                <CKIcon as={MdCheckCircle} boxSize={16} color="#00a884" />
+                <CKIcon boxSize={16} color="#00a884">
+                  <MdCheckCircle />
+                </CKIcon>
                 <Heading size="lg" color={{ base: 'gray.900', _dark: 'white' }}>
                   {t('contact.sentTitle')}
                 </Heading>
@@ -94,69 +180,24 @@ export default function Contact() {
             )}
           </Box>
 
-          <Box
-            className="soft-card fade-in-up stagger-2"
-            w={{ base: '100%', md: '320px' }}
-            bg={cardBg}
-            borderWidth="1px"
-            borderColor={cardBorder}
-            borderRadius="xl"
-            p={6}
-            boxShadow="sm"
-          >
-            <Flex direction="column" gap={4} align="center" textAlign="center">
-              <Flex
-                w="56px"
-                h="56px"
-                borderRadius="full"
-                bg="#00a88422"
-                align="center"
-                justify="center"
-              >
-                <CKIcon as={MdMail} boxSize={7} color="#00a884" />
-              </Flex>
-
-              <Flex direction="column" gap={1}>
-                <Heading size="md" color={{ base: 'gray.900', _dark: 'white' }}>
-                  {t('contact.creator.name')}
-                </Heading>
-                <Text fontSize="sm" color="#00a884" fontWeight="medium">
-                  {t('contact.creator.role')}
-                </Text>
-              </Flex>
-
-              <Text fontSize="sm" color={mutedText}>
-                {t('contact.creator.bio')}
-              </Text>
-
-              <Box pt={2}>
-                <QrCode.Root value={LINKEDIN_URL} encoding={{ ecc: 'H' }} size="md">
-                  <QrCode.Frame>
-                    <QrCode.Pattern />
-                  </QrCode.Frame>
-                </QrCode.Root>
-              </Box>
-
-              <Text fontSize="xs" color={mutedText}>
-                {t('contact.creator.scanToConnect')}
-              </Text>
-
-              <Link
-                href={LINKEDIN_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                color="#00a884"
-                fontSize="sm"
-                fontWeight="medium"
-                display="inline-flex"
-                alignItems="center"
-                gap={2}
-              >
-                <CKIcon as={FaLinkedin} boxSize={4} />
-                {t('contact.creator.openLinkedIn')}
-              </Link>
-            </Flex>
-          </Box>
+          <PersonCard
+            namePath="contact.creator.name"
+            rolePath="contact.creator.role"
+            bioPath="contact.creator.bio"
+            scanPath="contact.creator.scanToConnect"
+            linkPath="contact.creator.openLinkedIn"
+            linkedInUrl={LINKEDIN_URL}
+            stagger="stagger-2"
+          />
+          <PersonCard
+            namePath="contact.contributor.name"
+            rolePath="contact.contributor.role"
+            bioPath="contact.contributor.bio"
+            scanPath="contact.contributor.scanToConnect"
+            linkPath="contact.contributor.openLinkedIn"
+            linkedInUrl={LINKEDIN_URL_2}
+            stagger="stagger-3"
+          />
         </Flex>
       </Flex>
     </Layout>

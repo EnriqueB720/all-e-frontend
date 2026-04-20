@@ -98,6 +98,13 @@ export const EnglishDictionary: Dictionary = {
       scanToConnect: 'Scan to connect on LinkedIn',
       openLinkedIn: 'Open LinkedIn profile',
     },
+    contributor: {
+      name: "D'Andre Wolbrom-Highfield",
+      role: 'Contributor & collaborator',
+      bio: 'Helped shape All-E along the way with ideas and feedback. Reach out on LinkedIn to connect.',
+      scanToConnect: 'Scan to connect on LinkedIn',
+      openLinkedIn: 'Open LinkedIn profile',
+    },
   },
   login: {
     title: 'Log in',

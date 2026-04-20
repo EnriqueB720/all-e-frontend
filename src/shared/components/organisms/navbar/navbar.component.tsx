@@ -48,6 +48,7 @@ const Navbar: React.FC = () => {
 
   const handleLogout = async () => {
     await logout();
+    router.push('/');
   };
 
   const handleLanguageToggle = () => {

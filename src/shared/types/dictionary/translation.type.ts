@@ -114,6 +114,13 @@ export interface Dictionary {
       scanToConnect: string;
       openLinkedIn: string;
     };
+    contributor: {
+      name: string;
+      role: string;
+      bio: string;
+      scanToConnect: string;
+      openLinkedIn: string;
+    };
   };
   login: {
     title: string;
