@@ -31,13 +31,14 @@ export default function WatchDetail() {
     (w) => w.serialNum === (serialNum as string)
   );
 
-  const { data } = useGetWatchQuery({
+  const { data, previousData } = useGetWatchQuery({
     variables: { where: { serialNum: serialNum as string } },
     skip: !serialNum,
     fetchPolicy: 'cache-and-network',
   });
 
-  const watch = data?.watch ? new WatchModel(data.watch as any) : cachedWatch;
+  const watchData = data?.watch ?? previousData?.watch;
+  const watch = watchData ? new WatchModel(watchData as any) : cachedWatch;
 
   const downloadCertificate = useCallback(() => {
     if (!watch || !user) return;
@@ -128,9 +129,9 @@ export default function WatchDetail() {
       doc.setFillColor(255, 255, 255);
       doc.setDrawColor(220, 220, 220);
       doc.setLineWidth(0.5);
-      doc.roundedRect(w / 2 - 38, y - 2, 76, 76, 4, 4, 'FD');
-      doc.addImage(qrData, 'PNG', w / 2 - 30, y + 6, 60, 60);
-      y += 82;
+      doc.roundedRect(w / 2 - 28, y - 2, 56, 56, 4, 4, 'FD');
+      doc.addImage(qrData, 'PNG', w / 2 - 22, y + 4, 44, 44);
+      y += 60;
       doc.setFontSize(8);
       doc.setTextColor(150, 150, 150);
       doc.text('Scan to verify ownership', w / 2, y, { align: 'center' });
@@ -195,7 +196,7 @@ export default function WatchDetail() {
           isCurrentUserOwner
         />
 
-        <OwnershipHistoryCard entries={data?.watch?.ownershipLog ?? []} />
+        <OwnershipHistoryCard entries={watchData?.ownershipLog ?? []} />
 
         <Box
           className="soft-card"

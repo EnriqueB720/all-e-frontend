@@ -8,6 +8,7 @@ import {
   Text,
   CopyableText,
   ExternalLink,
+  UserAvatar,
  } from "@atoms";
 
 import {
@@ -46,4 +47,5 @@ export {
   Text,
   CopyableText,
   ExternalLink,
+  UserAvatar,
 }

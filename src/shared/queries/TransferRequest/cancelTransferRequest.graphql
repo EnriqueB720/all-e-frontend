@@ -1,0 +1,10 @@
+mutation cancelTransferRequest($data: CancelTransferRequestInput!) {
+  cancelTransferRequest(data: $data) {
+    id
+    watchId
+    fromUserId
+    toUserId
+    status
+    createdAt
+  }
+}

@@ -26,7 +26,7 @@ import { useColorMode } from '@/shared/contexts/color-mode.context';
 import NextLink from 'next/link';
 
 import { AuthContext } from '@contexts';
-import { Box, Flex, Button, Text } from '@components';
+import { Box, Flex, Button, Text, UserAvatar } from '@components';
 import { useTranslation } from '@hooks';
 import { Language, usePendingTransferRequestsQuery } from '@generated';
 
@@ -158,14 +158,15 @@ const Navbar: React.FC = () => {
 
               <PopoverRoot>
                 <PopoverTrigger asChild>
-                  <Text
-                    color={{ base: 'gray.500', _dark: 'gray.400' }}
-                    fontSize="sm"
-                    cursor="pointer"
-                    _hover={{ color: '#00a884' }}
-                  >
-                    {user?.username}
-                  </Text>
+                  <Flex align="center" gap={2} cursor="pointer" _hover={{ color: '#00a884' }}>
+                    <UserAvatar seed={user?.username || user?.email || ''} size={28} />
+                    <Text
+                      color={{ base: 'gray.500', _dark: 'gray.400' }}
+                      fontSize="sm"
+                    >
+                      {user?.username}
+                    </Text>
+                  </Flex>
                 </PopoverTrigger>
                 <PopoverPositioner>
                   <PopoverContent
@@ -180,9 +181,12 @@ const Navbar: React.FC = () => {
                       <PopoverArrowTip />
                     </PopoverArrow>
                     <Flex direction="column" gap={3}>
-                      <Text color={{ base: 'gray.900', _dark: 'white' }} fontWeight="bold" fontSize="md">
-                        {user?.username}
-                      </Text>
+                      <Flex align="center" gap={3}>
+                        <UserAvatar seed={user?.username || user?.email || ''} size={40} />
+                        <Text color={{ base: 'gray.900', _dark: 'white' }} fontWeight="bold" fontSize="md">
+                          {user?.username}
+                        </Text>
+                      </Flex>
 
                       <Separator borderColor={{ base: 'gray.200', _dark: 'gray.600' }} />
 
@@ -273,13 +277,16 @@ const Navbar: React.FC = () => {
               <Flex direction="column" gap={4}>
                 {isAuthenticated ? (
                   <>
-                    <Flex direction="column" gap={1} mb={2}>
-                      <Text color={{ base: 'gray.900', _dark: 'white' }} fontWeight="bold" fontSize="md">
-                        {user?.username}
-                      </Text>
-                      <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="xs">
-                        {user?.email}
-                      </Text>
+                    <Flex align="center" gap={3} mb={2}>
+                      <UserAvatar seed={user?.username || user?.email || ''} size={40} />
+                      <Flex direction="column" gap={1}>
+                        <Text color={{ base: 'gray.900', _dark: 'white' }} fontWeight="bold" fontSize="md">
+                          {user?.username}
+                        </Text>
+                        <Text color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="xs">
+                          {user?.email}
+                        </Text>
+                      </Flex>
                     </Flex>
 
                     <Separator borderColor={{ base: 'gray.200', _dark: 'gray.600' }} />

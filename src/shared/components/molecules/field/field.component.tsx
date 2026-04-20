@@ -21,6 +21,7 @@ const Field: React.FC<FieldProps> = ({
   isPassword,
   isTextarea,
   rows,
+  helperText,
   onChange,
   onBlur
 }) => {
@@ -63,6 +64,11 @@ const Field: React.FC<FieldProps> = ({
           value={inputValue}
           color={resolvedColor as any}
         />
+      )}
+      {helperText && !isErrors && (
+        <CKField.HelperText color={{ base: 'gray.500', _dark: 'gray.400' }} fontSize="xs">
+          {helperText}
+        </CKField.HelperText>
       )}
       {isErrors && <CKField.ErrorText>{errorMessage}</CKField.ErrorText>}
     </CKField.Root>

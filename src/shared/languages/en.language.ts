@@ -127,6 +127,7 @@ export const EnglishDictionary: Dictionary = {
     referenceNumber: 'Reference Number',
     yearOfProduction: 'Year of Production',
     imageUrl: 'Image URL',
+    imageUrlHelper: 'Paste a direct image link (e.g. a public Google Drive share link, Imgur, or any image-hosting URL).',
     form: {
       register: 'Register Watch',
       cancel: 'Cancel',
@@ -157,11 +158,15 @@ export const EnglishDictionary: Dictionary = {
       cancel: 'Cancel',
     },
     confirmReject: 'Are you sure you want to reject this transfer request?',
+    cancelRequest: 'Cancel request',
+    confirmCancel: 'Are you sure you want to cancel this pending transfer?',
+    requestCancelled: 'Transfer request cancelled',
     errors: {
       selectWatch: 'Please select a watch',
       enterNewOwner: 'Please enter the new owner email',
       userNotFound: 'User not found with that email',
       transferFailed: 'Transfer failed, please try again',
+      cancelFailed: 'Could not cancel the request, please try again',
     },
   },
   ownershipHistory: {
@@ -184,13 +189,17 @@ export const EnglishDictionary: Dictionary = {
   },
   checkAWatchOwnership: {
     title: 'Check Watch Ownership',
-    description: 'Search by serial number or username',
+    description: 'Search by serial number, username, brand or model',
     serialNumber: 'Serial Number',
     check: 'Check',
     searchBy: {
       serialNum: 'Serial Number',
       username: 'Username',
+      brand: 'Brand',
+      model: 'Model',
       usernamePlaceholder: 'Enter username',
+      brandPlaceholder: 'e.g. Rolex',
+      modelPlaceholder: 'e.g. Submariner',
     },
     result: {
       username: 'Username',
@@ -216,6 +225,16 @@ export const EnglishDictionary: Dictionary = {
     sortOldest: 'Oldest first',
     sortSerial: 'Serial number',
     noResults: 'No watches match your search.',
+    stats: {
+      totalWatches: 'Watches owned',
+      incomingPending: 'Incoming transfers',
+      outgoingPending: 'Outgoing transfers',
+    },
+  },
+  pagination: {
+    previous: 'Previous',
+    next: 'Next',
+    page: 'Page',
   },
   profile: {
     title: 'My Profile',

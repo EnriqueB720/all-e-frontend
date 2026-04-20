@@ -7,6 +7,7 @@ import IconButton from './icon-button/icon-button.component';
 import Text from './text/text.component';
 import CopyableText from './copyText/copy-text.component';
 import ExternalLink from './external-link/external-link.component';
+import UserAvatar from './avatar/user-avatar.component';
 
 
 export {
@@ -19,4 +20,5 @@ export {
   Text,
   CopyableText,
   ExternalLink,
+  UserAvatar,
 }

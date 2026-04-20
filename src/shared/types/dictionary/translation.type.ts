@@ -143,6 +143,7 @@ export interface Dictionary {
     referenceNumber: string;
     yearOfProduction: string;
     imageUrl: string;
+    imageUrlHelper: string;
     form:{
       register: string;
       cancel: string;
@@ -172,11 +173,15 @@ export interface Dictionary {
       cancel: string;
     };
     confirmReject: string;
+    cancelRequest: string;
+    confirmCancel: string;
+    requestCancelled: string;
     errors: {
       selectWatch: string;
       enterNewOwner: string;
       userNotFound: string;
       transferFailed: string;
+      cancelFailed: string;
     }
   };
   ownershipHistory: {
@@ -204,7 +209,11 @@ export interface Dictionary {
     searchBy: {
       serialNum: string;
       username: string;
+      brand: string;
+      model: string;
       usernamePlaceholder: string;
+      brandPlaceholder: string;
+      modelPlaceholder: string;
     };
     result:{
       username: string;
@@ -230,6 +239,16 @@ export interface Dictionary {
     sortOldest: string;
     sortSerial: string;
     noResults: string;
+    stats: {
+      totalWatches: string;
+      incomingPending: string;
+      outgoingPending: string;
+    };
+  };
+  pagination: {
+    previous: string;
+    next: string;
+    page: string;
   };
   profile: {
     title: string;

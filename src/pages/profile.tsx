@@ -2,10 +2,10 @@ import { useContext, useMemo, useState } from 'react';
 import { Heading, Separator, Badge } from '@chakra-ui/react';
 
 import { AuthContext } from '@contexts';
-import { Layout, Box, Flex, Button, Input, Text, PasswordInput } from '@components';
+import { Layout, Box, Flex, Button, Input, Text, PasswordInput, UserAvatar } from '@components';
 import { useTranslation, useRequireAuth } from '@hooks';
 import { useUpdateUserMutation, useUserActivityQuery } from '@generated';
-import { toaster } from '@/components/ui/toaster';
+
 
 export default function Profile() {
   const { isReady, user } = useRequireAuth();
@@ -71,7 +71,6 @@ export default function Profile() {
       setCurrentPassword('');
       setNewPassword('');
       setMessage(t('profile.saved'));
-      toaster.create({ title: t('profile.saved'), type: 'success' });
     } catch (err: any) {
       setError(err.message || t('profile.error'));
     }
@@ -92,6 +91,10 @@ export default function Profile() {
           <Heading as="h1" size="2xl" mb={6} textAlign="center" className="gradient-text" letterSpacing="tight">
             {t('profile.title')}
           </Heading>
+
+          <Flex justify="center" mb={4}>
+            <UserAvatar seed={user.username || user.email} size={96} />
+          </Flex>
 
           <Flex direction="column" gap={4}>
             <Flex justify="space-between" align="center">

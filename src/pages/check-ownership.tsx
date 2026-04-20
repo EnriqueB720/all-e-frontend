@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { Heading, Separator, Link } from '@chakra-ui/react';
 
@@ -6,7 +6,7 @@ import { Layout, Box, Flex, Button, Input, CopyableText, Text, DetailRow, Extern
 import { useTranslation } from '@hooks';
 import { useGetWatchLazyQuery, useGetWatchesLazyQuery } from '@generated';
 
-type SearchType = 'serialNum' | 'username';
+type SearchType = 'serialNum' | 'username' | 'brand' | 'model';
 
 export default function CheckOwnership() {
   const { t } = useTranslation();
@@ -14,6 +14,8 @@ export default function CheckOwnership() {
   const [searchType, setSearchType] = useState<SearchType>('serialNum');
   const [searchValue, setSearchValue] = useState('');
   const [autoSearched, setAutoSearched] = useState(false);
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 6;
 
   const [getWatch, { data: singleData, loading: singleLoading, error: singleError }] =
     useGetWatchLazyQuery({ fetchPolicy: 'network-only' });
@@ -35,6 +37,7 @@ export default function CheckOwnership() {
 
   const handleCheck = async () => {
     if (!searchValue) return;
+    setPage(1);
 
     if (searchType === 'serialNum') {
       await getWatch({
@@ -50,14 +53,27 @@ export default function CheckOwnership() {
   const singleWatch = singleData?.watch;
   const multiWatches = multiData?.watches;
 
-  const showSingle = searchType === 'serialNum' && singleWatch;
-  const showMulti = searchType !== 'serialNum' && multiWatches && multiWatches.length > 0;
+  const isMultiSearch = searchType !== 'serialNum';
+  const showSingle = !isMultiSearch && singleWatch;
+  const showMulti = isMultiSearch && multiWatches && multiWatches.length > 0;
   const showNoResults =
-    searchType !== 'serialNum' && multiData && (!multiWatches || multiWatches.length === 0);
+    isMultiSearch && multiData && (!multiWatches || multiWatches.length === 0);
+
+  const multiTotalPages = useMemo(
+    () => Math.max(1, Math.ceil((multiWatches?.length ?? 0) / PAGE_SIZE)),
+    [multiWatches]
+  );
+  const multiCurrentPage = Math.min(page, multiTotalPages);
+  const pagedMultiWatches = useMemo(
+    () => (multiWatches ?? []).slice((multiCurrentPage - 1) * PAGE_SIZE, multiCurrentPage * PAGE_SIZE),
+    [multiWatches, multiCurrentPage]
+  );
 
   const placeholderMap: Record<SearchType, string> = {
     serialNum: t('checkAWatchOwnership.serialNumber'),
     username: t('checkAWatchOwnership.searchBy.usernamePlaceholder'),
+    brand: t('checkAWatchOwnership.searchBy.brandPlaceholder'),
+    model: t('checkAWatchOwnership.searchBy.modelPlaceholder'),
   };
 
   const renderWatchCard = (watch: any) => (
@@ -140,8 +156,8 @@ export default function CheckOwnership() {
           {t('checkAWatchOwnership.description')}
         </Text>
 
-        <Flex gap={2} w="100%" maxW="500px" justify="center">
-          {(['serialNum', 'username'] as SearchType[]).map((type) => (
+        <Flex gap={2} w="100%" maxW="500px" justify="center" wrap="wrap">
+          {(['serialNum', 'username', 'brand', 'model'] as SearchType[]).map((type) => (
             <Button
               key={type}
               size="sm"
@@ -200,7 +216,34 @@ export default function CheckOwnership() {
                 ? t('checkAWatchOwnership.result.watchFound')
                 : t('checkAWatchOwnership.result.watchesFound')}
             </Text>
-            {multiWatches.map(renderWatchCard)}
+            {pagedMultiWatches.map(renderWatchCard)}
+            {multiTotalPages > 1 && (
+              <Flex align="center" gap={3} mt={2}>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  color="#00a884"
+                  borderColor="#00a884"
+                  disabled={multiCurrentPage === 1}
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                >
+                  {t('pagination.previous')}
+                </Button>
+                <Text color={{ base: 'gray.600', _dark: 'gray.400' }} fontSize="sm">
+                  {t('pagination.page')} {multiCurrentPage} / {multiTotalPages}
+                </Text>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  color="#00a884"
+                  borderColor="#00a884"
+                  disabled={multiCurrentPage === multiTotalPages}
+                  onClick={() => setPage((p) => Math.min(multiTotalPages, p + 1))}
+                >
+                  {t('pagination.next')}
+                </Button>
+              </Flex>
+            )}
           </Flex>
         )}
 

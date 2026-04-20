@@ -75,6 +75,7 @@ export default function RegisterWatch() {
       label: t('watchRegistry.imageUrl'),
       name: 'imageUrl',
       inputPlaceholder: 'https://...',
+      helperText: t('watchRegistry.imageUrlHelper'),
     },
   ];
 

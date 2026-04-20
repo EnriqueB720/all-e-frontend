@@ -20,10 +20,10 @@ import { useTranslation, useRequireAuth } from '@hooks';
 import {
   useCreateTransferRequestMutation,
   useRespondToTransferRequestMutation,
+  useCancelTransferRequestMutation,
   usePendingTransferRequestsQuery,
   useSentTransferRequestsQuery,
 } from '@generated';
-import { toaster } from '@/components/ui/toaster';
 
 export default function TransferWatch() {
   const { isReady, user } = useRequireAuth();
@@ -36,13 +36,17 @@ export default function TransferWatch() {
   const [success, setSuccess] = useState('');
   const [respondingId, setRespondingId] = useState<number | null>(null);
   const [confirmAction, setConfirmAction] = useState<{ id: number; accept: boolean } | null>(null);
+  const [cancellingId, setCancellingId] = useState<number | null>(null);
+  const [confirmCancelId, setConfirmCancelId] = useState<number | null>(null);
 
   const [createTransfer, { loading: creating }] = useCreateTransferRequestMutation();
   const [respondTransfer] = useRespondToTransferRequestMutation();
+  const [cancelTransfer] = useCancelTransferRequestMutation();
 
   const { data: pendingData, refetch: refetchPending } = usePendingTransferRequestsQuery({
     variables: { userId: user?.id ?? 0 },
     skip: !user,
+    pollInterval: 2000,
     fetchPolicy: 'network-only',
   });
 
@@ -80,10 +84,6 @@ export default function TransferWatch() {
       setSuccess(t('transferWatch.requestSent'));
       setSelectedWatchId('');
       setNewOwnerEmail('');
-      toaster.create({
-        title: t('transferWatch.requestSent'),
-        type: 'success',
-      });
       refetchSent();
     } catch (err: any) {
       setError(err.message || t('transferWatch.errors.transferFailed'));
@@ -104,10 +104,6 @@ export default function TransferWatch() {
         },
       });
       if (accept) await refreshUserToken();
-      toaster.create({
-        title: accept ? t('notifications.transferAccepted') : t('notifications.transferRejected'),
-        type: accept ? 'success' : 'info',
-      });
       refetchPending();
       refetchSent();
     } catch (err: any) {
@@ -117,10 +113,26 @@ export default function TransferWatch() {
     }
   };
 
+  const handleCancel = async (transferRequestId: number) => {
+    setConfirmCancelId(null);
+    setCancellingId(transferRequestId);
+    try {
+      await cancelTransfer({
+        variables: { data: { transferRequestId, userId: user.id } },
+      });
+      refetchSent();
+    } catch (err: any) {
+      setError(err.message || t('transferWatch.errors.cancelFailed'));
+    } finally {
+      setCancellingId(null);
+    }
+  };
+
   const statusColor: Record<string, string> = {
     PENDING: 'yellow',
     ACCEPTED: 'green',
     REJECTED: 'red',
+    CANCELLED: 'gray',
   };
 
   return (
@@ -257,8 +269,8 @@ export default function TransferWatch() {
             <Flex direction="column" gap={3}>
               {sentRequests.map((req) => (
                 <Box key={req.id} p={4} bg={{ base: 'gray.50', _dark: 'gray.700' }} borderRadius="md">
-                  <Flex justify="space-between" align="center">
-                    <Flex direction="column">
+                  <Flex justify="space-between" align="center" gap={3}>
+                    <Flex direction="column" flex={1}>
                       <Text color={{ base: 'gray.900', _dark: 'white' }} fontWeight="bold" fontSize="sm">
                         #{req.watch?.serialNum}
                       </Text>
@@ -266,7 +278,22 @@ export default function TransferWatch() {
                         {t('transferWatch.to')}: {req.toUser?.username}
                       </Text>
                     </Flex>
-                    <Badge colorPalette={statusColor[req.status]}>{req.status}</Badge>
+                    <Flex gap={2} align="center">
+                      <Badge colorPalette={statusColor[req.status]}>{req.status}</Badge>
+                      {req.status === 'PENDING' && (
+                        <Button
+                          size="xs"
+                          variant="outline"
+                          color="red.400"
+                          borderColor="red.400"
+                          loading={cancellingId === req.id}
+                          disabled={cancellingId !== null && cancellingId !== req.id}
+                          onClick={() => setConfirmCancelId(req.id)}
+                        >
+                          {t('transferWatch.cancelRequest')}
+                        </Button>
+                      )}
+                    </Flex>
                   </Flex>
                 </Box>
               ))}
@@ -274,6 +301,50 @@ export default function TransferWatch() {
           </Box>
         )}
       </Flex>
+
+      <DialogRoot
+        open={confirmCancelId !== null}
+        onOpenChange={(e) => { if (!e.open) setConfirmCancelId(null); }}
+      >
+        <DialogBackdrop />
+        <DialogPositioner>
+          <DialogContent bg={{ base: 'white', _dark: 'gray.800' }} borderRadius="xl" p={2}>
+            <DialogHeader>
+              <DialogTitle color={{ base: 'gray.900', _dark: 'white' }}>
+                {t('transferWatch.cancelRequest')}
+              </DialogTitle>
+            </DialogHeader>
+            <DialogBody>
+              <Text color={{ base: 'gray.600', _dark: 'gray.300' }} fontSize="sm">
+                {t('transferWatch.confirmCancel')}
+              </Text>
+            </DialogBody>
+            <DialogFooter>
+              <Flex gap={3} w="100%">
+                <Button
+                  flex={1}
+                  variant="outline"
+                  color={{ base: 'gray.600', _dark: 'gray.300' }}
+                  borderColor={{ base: 'gray.300', _dark: 'gray.600' }}
+                  onClick={() => setConfirmCancelId(null)}
+                >
+                  {t('transferWatch.form.cancel')}
+                </Button>
+                <Button
+                  flex={1}
+                  color="white"
+                  bg="red.500"
+                  _hover={{ bg: 'red.600' }}
+                  onClick={() => { if (confirmCancelId) handleCancel(confirmCancelId); }}
+                >
+                  {t('transferWatch.cancelRequest')}
+                </Button>
+              </Flex>
+            </DialogFooter>
+            <DialogCloseTrigger />
+          </DialogContent>
+        </DialogPositioner>
+      </DialogRoot>
 
       <DialogRoot
         open={confirmAction !== null}

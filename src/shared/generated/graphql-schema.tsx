@@ -16,6 +16,11 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type CancelTransferRequestInput = {
+  transferRequestId: Scalars['Int'];
+  userId: Scalars['Int'];
+};
+
 export type ContactInput = {
   email: Scalars['String'];
   message: Scalars['String'];
@@ -51,6 +56,7 @@ export type LoginUserInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  cancelTransferRequest: TransferRequest;
   changeWatchOwnership: Watch;
   createTransferRequest: TransferRequest;
   createUser: User;
@@ -61,6 +67,11 @@ export type Mutation = {
   sendContactMessage: Scalars['Boolean'];
   signup: User;
   updateUser: User;
+};
+
+
+export type MutationCancelTransferRequestArgs = {
+  data: CancelTransferRequestInput;
 };
 
 
@@ -285,7 +296,9 @@ export type WatchUpdateInput = {
 };
 
 export type WatchWhereInput = {
+  brand?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['Int']>;
+  model?: InputMaybe<Scalars['String']>;
   ownerId?: InputMaybe<Scalars['Int']>;
   serialNum?: InputMaybe<Scalars['String']>;
   username?: InputMaybe<Scalars['String']>;
@@ -303,14 +316,14 @@ export type LoginQueryVariables = Exact<{
 }>;
 
 
-export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any }> | null } } };
+export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, brand?: string | null, model?: string | null, referenceNumber?: string | null, yearOfProduction?: number | null, imageUrl?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any }> | null } } };
 
 export type RefreshUserQueryVariables = Exact<{
   data: Scalars['String'];
 }>;
 
 
-export type RefreshUserQuery = { __typename?: 'Query', refreshUser: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any }> | null } } };
+export type RefreshUserQuery = { __typename?: 'Query', refreshUser: { __typename?: 'LoginOutput', access_token: string, expiresAt: any, user: { __typename?: 'User', id: number, email: string, username: string, language: Language, createdAt: any, watch?: Array<{ __typename?: 'Watch', id: number, serialNum?: string | null, brand?: string | null, model?: string | null, referenceNumber?: string | null, yearOfProduction?: number | null, imageUrl?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any }> | null } } };
 
 export type ResetPasswordMutationVariables = Exact<{
   data: ResetPasswordInput;
@@ -346,6 +359,13 @@ export type UserActivityQueryVariables = Exact<{
 
 
 export type UserActivityQuery = { __typename?: 'Query', userActivity: Array<{ __typename?: 'OwnershipLog', id: number, ownerId: number, watchId: number, timestamp: any, metadataURI?: string | null, certificateUrl?: string | null, watch?: { __typename?: 'Watch', serialNum?: string | null, brand?: string | null, model?: string | null } | null, owner?: { __typename?: 'User', id: number, username: string } | null }> };
+
+export type CancelTransferRequestMutationVariables = Exact<{
+  data: CancelTransferRequestInput;
+}>;
+
+
+export type CancelTransferRequestMutation = { __typename?: 'Mutation', cancelTransferRequest: { __typename?: 'TransferRequest', id: number, watchId: number, fromUserId: number, toUserId: number, status: string, createdAt: any } };
 
 export type CreateTransferRequestMutationVariables = Exact<{
   data: CreateTransferRequestInput;
@@ -408,7 +428,7 @@ export type GetWatchQueryVariables = Exact<{
 }>;
 
 
-export type GetWatchQuery = { __typename?: 'Query', watch: { __typename?: 'Watch', id: number, serialNum?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any, user?: { __typename?: 'User', id: number, username: string, email: string, createdAt: any, language: Language } | null, ownershipLog?: Array<{ __typename?: 'OwnershipLog', id: number, watchId: number, ownerId: number, timestamp: any, metadataURI?: string | null, certificateUrl?: string | null, owner?: { __typename?: 'User', id: number, username: string } | null }> | null } };
+export type GetWatchQuery = { __typename?: 'Query', watch: { __typename?: 'Watch', id: number, serialNum?: string | null, brand?: string | null, model?: string | null, referenceNumber?: string | null, yearOfProduction?: number | null, imageUrl?: string | null, metadataURI?: string | null, certificateUrl?: string | null, ownerId: number, lastSynced: any, user?: { __typename?: 'User', id: number, username: string, email: string, createdAt: any, language: Language } | null, ownershipLog?: Array<{ __typename?: 'OwnershipLog', id: number, watchId: number, ownerId: number, timestamp: any, metadataURI?: string | null, certificateUrl?: string | null, owner?: { __typename?: 'User', id: number, username: string } | null }> | null } };
 
 export type GetWatchesQueryVariables = Exact<{
   where: WatchWhereInput;
@@ -463,6 +483,11 @@ export const LoginDocument = gql`
       watch {
         id
         serialNum
+        brand
+        model
+        referenceNumber
+        yearOfProduction
+        imageUrl
         metadataURI
         certificateUrl
         ownerId
@@ -514,6 +539,11 @@ export const RefreshUserDocument = gql`
       watch {
         id
         serialNum
+        brand
+        model
+        referenceNumber
+        yearOfProduction
+        imageUrl
         metadataURI
         certificateUrl
         ownerId
@@ -734,6 +764,44 @@ export function useUserActivityLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type UserActivityQueryHookResult = ReturnType<typeof useUserActivityQuery>;
 export type UserActivityLazyQueryHookResult = ReturnType<typeof useUserActivityLazyQuery>;
 export type UserActivityQueryResult = Apollo.QueryResult<UserActivityQuery, UserActivityQueryVariables>;
+export const CancelTransferRequestDocument = gql`
+    mutation cancelTransferRequest($data: CancelTransferRequestInput!) {
+  cancelTransferRequest(data: $data) {
+    id
+    watchId
+    fromUserId
+    toUserId
+    status
+    createdAt
+  }
+}
+    `;
+export type CancelTransferRequestMutationFn = Apollo.MutationFunction<CancelTransferRequestMutation, CancelTransferRequestMutationVariables>;
+
+/**
+ * __useCancelTransferRequestMutation__
+ *
+ * To run a mutation, you first call `useCancelTransferRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCancelTransferRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cancelTransferRequestMutation, { data, loading, error }] = useCancelTransferRequestMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCancelTransferRequestMutation(baseOptions?: Apollo.MutationHookOptions<CancelTransferRequestMutation, CancelTransferRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CancelTransferRequestMutation, CancelTransferRequestMutationVariables>(CancelTransferRequestDocument, options);
+      }
+export type CancelTransferRequestMutationHookResult = ReturnType<typeof useCancelTransferRequestMutation>;
+export type CancelTransferRequestMutationResult = Apollo.MutationResult<CancelTransferRequestMutation>;
+export type CancelTransferRequestMutationOptions = Apollo.BaseMutationOptions<CancelTransferRequestMutation, CancelTransferRequestMutationVariables>;
 export const CreateTransferRequestDocument = gql`
     mutation createTransferRequest($data: CreateTransferRequestInput!) {
   createTransferRequest(data: $data) {
@@ -1095,6 +1163,11 @@ export const GetWatchDocument = gql`
   watch(where: $where) {
     id
     serialNum
+    brand
+    model
+    referenceNumber
+    yearOfProduction
+    imageUrl
     metadataURI
     certificateUrl
     ownerId

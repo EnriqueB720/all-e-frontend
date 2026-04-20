@@ -6,7 +6,6 @@ import { ApolloClient, HttpLink, InMemoryCache, from } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { ApolloProvider } from "@apollo/client/react";
 import { ColorModeProvider, useColorMode } from '@/shared/contexts/color-mode.context';
-import { Toaster } from '@/components/ui/toaster';
 import '@/styles/globals.css';
 
 const httpLink = new HttpLink({ uri: "http://localhost:5000/graphql" });
@@ -37,7 +36,6 @@ function AppContent({ Component, pageProps }: AppProps) {
     >
       <AuthProvider>
         <Component {...pageProps} />
-        <Toaster />
       </AuthProvider>
     </Theme>
   );

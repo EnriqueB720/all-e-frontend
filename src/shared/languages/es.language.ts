@@ -127,6 +127,7 @@ export const SpanishDictionary: Dictionary = {
     referenceNumber: 'Número de referencia',
     yearOfProduction: 'Año de producción',
     imageUrl: 'URL de la imagen',
+    imageUrlHelper: 'Pega un enlace directo a la imagen (por ejemplo, un enlace público de Google Drive, Imgur o cualquier servicio de alojamiento de imágenes).',
     form: {
       register: 'Registrar reloj',
       cancel: 'Cancelar',
@@ -157,11 +158,15 @@ export const SpanishDictionary: Dictionary = {
       cancel: 'Cancelar',
     },
     confirmReject: '¿Estás seguro de que deseas rechazar esta solicitud de transferencia?',
+    cancelRequest: 'Cancelar solicitud',
+    confirmCancel: '¿Estás seguro de que deseas cancelar esta transferencia pendiente?',
+    requestCancelled: 'Solicitud de transferencia cancelada',
     errors: {
       selectWatch: 'Por favor selecciona un reloj',
       enterNewOwner: 'Por favor ingresa el correo del nuevo propietario',
       userNotFound: 'No se encontró un usuario con ese correo',
       transferFailed: 'La transferencia falló, por favor intenta de nuevo',
+      cancelFailed: 'No se pudo cancelar la solicitud, inténtalo de nuevo',
     },
   },
   ownershipHistory: {
@@ -185,13 +190,17 @@ export const SpanishDictionary: Dictionary = {
   checkAWatchOwnership: {
     title: 'Verificar propiedad de un reloj',
     description:
-      'Busca por número de serie o nombre de usuario',
+      'Busca por número de serie, usuario, marca o modelo',
     serialNumber: 'Número de serie',
     check: 'Verificar',
     searchBy: {
       serialNum: 'Número de serie',
       username: 'Usuario',
+      brand: 'Marca',
+      model: 'Modelo',
       usernamePlaceholder: 'Ingresa nombre de usuario',
+      brandPlaceholder: 'Ej. Rolex',
+      modelPlaceholder: 'Ej. Submariner',
     },
     result: {
       username: 'Nombre de usuario',
@@ -217,6 +226,16 @@ export const SpanishDictionary: Dictionary = {
     sortOldest: 'Más antiguos',
     sortSerial: 'Número de serie',
     noResults: 'Ningún reloj coincide con tu búsqueda.',
+    stats: {
+      totalWatches: 'Relojes en propiedad',
+      incomingPending: 'Transferencias entrantes',
+      outgoingPending: 'Transferencias salientes',
+    },
+  },
+  pagination: {
+    previous: 'Anterior',
+    next: 'Siguiente',
+    page: 'Página',
   },
   profile: {
     title: 'Mi Perfil',
